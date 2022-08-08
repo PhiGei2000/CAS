@@ -15,6 +15,8 @@ struct BinaryExpression : public Expression {
     ~BinaryExpression();
 
     virtual bool dependsOn(const Variable& var) const override;
+
+    virtual std::unordered_set<char> getVariables() const override;
 };
 
 } // namespace cas::math

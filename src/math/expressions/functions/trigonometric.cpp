@@ -34,6 +34,10 @@ namespace cas::math {
     std::string Sin::toString() const {
         return getName() + "(" + argument->toString() + ")";
     }
+
+    std::unordered_set<char> Sin::getVariables() const {
+        return argument->getVariables();
+    }
 #pragma endregion
 
 #pragma region Cos
@@ -65,6 +69,10 @@ namespace cas::math {
 
     std::string Cos::toString() const {
         return getName() + "(" + argument->toString() + ")";
+    }
+
+    std::unordered_set<char> Cos::getVariables() const {
+        return argument->getVariables();
     }
 #pragma endregion
 } // namespace cas::math

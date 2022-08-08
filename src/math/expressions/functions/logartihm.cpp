@@ -32,4 +32,8 @@ namespace cas::math {
     std::string Ln::toString() const {
         return getName() + "(" + argument->toString() + ")";
     }
+
+    std::unordered_set<char> Ln::getVariables() const {
+        return argument->getVariables();
+    }
 } // namespace cas::math

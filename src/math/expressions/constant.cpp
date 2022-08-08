@@ -25,7 +25,7 @@ namespace cas::math {
         std::string str = std::to_string(value);
 
         // remove leading zeros
-        while(str.back() == '0') {
+        while (str.back() == '0') {
             str.pop_back();
         }
 
@@ -34,6 +34,10 @@ namespace cas::math {
         }
 
         return str;
+    }
+
+    std::unordered_set<char> Constant::getVariables() const {
+        return {};
     }
 
 } // namespace cas::math

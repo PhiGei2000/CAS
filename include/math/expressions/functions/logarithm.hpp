@@ -20,6 +20,8 @@ namespace cas::math {
         // virtual Expression* simplify() const;
 
         virtual std::string toString() const override;
+
+        virtual std::unordered_set<char> getVariables() const override;
     };
 
     // class Logarithm : public Ln {

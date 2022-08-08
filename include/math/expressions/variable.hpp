@@ -20,6 +20,8 @@ struct Variable : public Expression {
     virtual ExpressionType getType() const override;
 
     virtual std::string toString() const override;
+
+    virtual std::unordered_set<char> getVariables() const override;
 };
 
 }

@@ -14,12 +14,8 @@ int main(int argCnt, char** args) {
 
         Expression* expr = Parser::parse(function);
 
-        Expression* derivativeX = D(expr, Variable('x'));
-        Expression* derivativeY = D(expr, Variable('y'));
-        Expression* simplifiedX = derivativeX->simplify();
-        Expression* simplifiedY = derivativeY->simplify();
+        Expression* differential = D(expr);
 
-        std::cout << "df/dx=" << simplifiedX->toString() << std::endl;
-        std::cout << "df/dy=" << simplifiedY->toString() << std::endl;
+        std::cout << "df=" << differential->toString() << std::endl;
     }
 }

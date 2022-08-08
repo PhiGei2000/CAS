@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <unordered_set>
 
 namespace cas::math
 {
@@ -11,7 +12,8 @@ enum class ExpressionType
     Exponentiation,
     Function,
     Constant,
-    Variable
+    Variable,
+    Differential
 };
 
 struct Variable;
@@ -27,5 +29,7 @@ struct Expression {
     virtual Expression* simplify() const;
 
     virtual std::string toString() const = 0;
+
+    virtual std::unordered_set<char> getVariables() const = 0;
 };
 } // namespace cas::math

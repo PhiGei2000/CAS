@@ -18,6 +18,8 @@ namespace cas::math {
         virtual bool dependsOn(const Variable& var) const override;
 
         virtual std::string toString() const override;
+
+        virtual std::unordered_set<char> getVariables() const override;
     };
 
     struct Cos : public Function {
@@ -35,5 +37,7 @@ namespace cas::math {
         virtual bool dependsOn(const Variable& var) const override;
 
         virtual std::string toString() const override;
+
+        virtual std::unordered_set<char> getVariables() const override;
     };
 } // namespace cas::math

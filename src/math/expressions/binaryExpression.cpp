@@ -24,4 +24,14 @@ bool BinaryExpression::dependsOn(const Variable& var) const {
     return left->dependsOn(var) || right->dependsOn(var);
 }
 
+std::unordered_set<char> BinaryExpression::getVariables() const {
+    std::unordered_set<char> leftVars = left->getVariables();
+    std::unordered_set<char> rightVars = right->getVariables();
+
+    std::unordered_set<char> vars = leftVars;
+    vars.merge(rightVars);
+
+    return vars;
+}
+
 } // namespace cas::math

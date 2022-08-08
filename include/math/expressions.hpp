@@ -5,6 +5,7 @@
 #include "expressions/exponentiation.hpp"
 #include "expressions/multiplication.hpp"
 #include "expressions/variable.hpp"
+#include "expressions/differential.hpp"
 
 #include "expressions/functions.hpp"
 
