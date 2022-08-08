@@ -1,20 +1,25 @@
 #include <iostream>
 
 #include "math/differential.hpp"
+#include "math/expressions/parser.hpp"
+#include "math/expressions/simplifier.hpp"
 
 using namespace cas::math;
 
 int main(int argCnt, char** args) {
-    Constant c1 = 5.0;
-    Constant c2 = 10;
-    Constant c3 = 2;
-    Variable v1 = 'x';
+    while (true) {
+        std::cout << "Enter a function f(x,y)=";
+        std::string function;
+        std::cin >> function;
 
-    auto x2 = Exponentiation(v1, c3);
-    auto sum = Addition(c1, x2);
-    auto expr = Sin(sum);
+        Expression* expr = Parser::parse(function);
 
-    auto derivative = D(&expr, Variable('x'))->simplify();
+        Expression* derivativeX = D(expr, Variable('x'));
+        Expression* derivativeY = D(expr, Variable('y'));
+        Expression* simplifiedX = derivativeX->simplify();
+        Expression* simplifiedY = derivativeY->simplify();
 
-    std::cout << "d/dx(" << expr.toString() << ")=" << derivative->toString() << std::endl;
+        std::cout << "df/dx=" << simplifiedX->toString() << std::endl;
+        std::cout << "df/dy=" << simplifiedY->toString() << std::endl;
+    }
 }

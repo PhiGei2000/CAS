@@ -1,5 +1,7 @@
 #include "math/expressions.hpp"
 
+#include "math/expressions/simplifier.hpp"
+
 #include <math.h>
 #include <sstream>
 
@@ -25,23 +27,7 @@ namespace cas::math {
     }
 
     Expression* Exponentiation::simplify() const {
-        Expression* left = this->left->simplify();
-        Expression* right = this->right->simplify();
-
-        if (right->getType() == ExpressionType::Constant) {
-            double value = right->getValue();
-
-            if (left->getType() == ExpressionType::Constant) {
-                return new Constant(pow(left->getValue(), value));
-            }
-
-            if (value == 0)
-                return new Constant(1);
-            else if (value == 1)
-                return left;
-        }
-
-        return new Exponentiation(left, right);
+        return Simplifier::simplifyExponentiation(this);        
     }
 
     std::string Exponentiation::toString() const {

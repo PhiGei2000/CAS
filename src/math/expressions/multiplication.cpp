@@ -49,14 +49,13 @@ namespace cas::math {
                     if (value != -1) {
                         result += "^" + exp->right->toString();
                     }
-                }
 
-                return result;
+                    return result;
+                }
             }
         }
-        else {
-            result += "*";
-        }
+
+        result += "*";
 
         if (right->getType() < ExpressionType::Multiplication) {
             result += "(" + right->toString() + ")";
