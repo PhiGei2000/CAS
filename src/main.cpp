@@ -6,7 +6,7 @@
 
 using namespace cas::math;
 
-int main(int argCnt, char** args) {
+int main(int argCnt, char** args) { 
     while (true) {
         std::cout << "Enter a function f(x,y)=";
         std::string function;

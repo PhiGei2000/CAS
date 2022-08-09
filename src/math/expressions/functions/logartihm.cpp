@@ -1,5 +1,6 @@
 #include "math/expressions/functions/logarithm.hpp"
 
+#include "math/expressions/constant.hpp"
 #include <cmath>
 
 namespace cas::math {
@@ -27,6 +28,17 @@ namespace cas::math {
 
     bool Ln::dependsOn(const Variable& var) const {
         return argument->dependsOn(var);
+    }
+
+    Expression* Ln::simplify() const {
+        Expression* argument = this->argument->simplify();
+
+        if (NamedConstant* c = dynamic_cast<NamedConstant*>(argument)) {
+            if (c->toString() == "e")
+                return new Constant(1);
+        }
+
+        return new Ln(argument);
     }
 
     std::string Ln::toString() const {

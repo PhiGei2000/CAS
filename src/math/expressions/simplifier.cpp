@@ -72,8 +72,13 @@ namespace cas::math {
 
             case ExpressionType::Exponentiation: {
                 Exponentiation* exp = reinterpret_cast<Exponentiation*>(prod->left);
-                ProductParts leftParts = getExpProductParts(exp);
-                parts.multiply(leftParts);
+                try {
+                    ProductParts leftParts = getExpProductParts(exp);
+                    parts.multiply(leftParts);
+                }
+                catch (const std::runtime_error&) {
+                    parts.restTerms.push_back(exp);
+                }
 
             } break;
 
@@ -87,7 +92,9 @@ namespace cas::math {
                 parts.variables[v->getCharacter()] += 1;
             } break;
 
-            default: break;
+            default: {
+                parts.restTerms.push_back(prod->left->copy());
+            } break;
         }
 
         switch (rightType) {
@@ -117,7 +124,9 @@ namespace cas::math {
                 parts.variables[v->getCharacter()] += 1;
             } break;
 
-            default: break;
+            default: {
+                parts.restTerms.push_back(prod->right->copy());
+            } break;
         }
 
         return parts;
@@ -166,10 +175,69 @@ namespace cas::math {
             } break;
 
             default:
+                parts.restTerms.push_back(exp->left);
                 break;
         }
 
         return parts;
+    }
+
+    Expression* Simplifier::getProductFromParts(const Simplifier::ProductParts& parts) {
+        if (parts.variables.size() == 0 && parts.restTerms.size() == 0) {
+            return new Constant(parts.coefficient);
+        }
+
+        Expression* result = nullptr;
+        if (parts.variables.size() > 0) {
+            auto getTerm = [&](std::unordered_map<char, double>::const_iterator it) -> Expression* {
+                double exp = (*it).second;
+                if (exp == 1) {
+                    return new Variable((*it).first);
+                }
+                else if (exp == 0) {
+                    return new Constant(0);
+                }
+
+                Constant* exponent = new Constant(exp);
+                Variable* variable = new Variable((*it).first);
+
+                return new Exponentiation(variable, exponent);
+            };
+
+            auto it = parts.variables.begin();
+
+            while (it != parts.variables.end()) {
+                if (result == nullptr) {
+                    result = getTerm(it);
+                }
+                else {
+                    Multiplication* p = new Multiplication(getTerm(it), result);
+                    result = p;
+                }
+                it++;
+            }
+        }
+
+        if (parts.restTerms.size() > 0) {
+            auto it = parts.restTerms.begin();
+            while (it != parts.restTerms.end()) {
+                if (result == nullptr) {
+                    result = (*it)->copy();
+                }
+                else {
+                    Multiplication* p = new Multiplication(*it, result);
+                    result = p;
+                }
+                it++;
+            }
+        }
+
+        if (parts.coefficient != 1) {
+            Constant* coefficient = new Constant(parts.coefficient);
+            Multiplication* p = new Multiplication(coefficient, result);
+            result = p;
+        }
+        return result;
     }
 
     void Simplifier::getSummands(const Expression* expr, std::vector<Expression*>* summands) {
@@ -259,7 +327,6 @@ namespace cas::math {
             getSummands(simplifiedSum, &summands);
 
             std::vector<ProductParts> combinedTerms = {};
-            std::vector<Expression*> restTerms = {};
             for (const auto& summand : summands) {
                 ExpressionType type = summand->getType();
 
@@ -285,7 +352,7 @@ namespace cas::math {
                             }
                         }
                         catch (const std::runtime_error&) {
-                            restTerms.push_back(summand);
+                            combinedTerms.push_back(ProductParts{1, {}, {summand}});
                         }
                     } break;
                     case ExpressionType::Multiplication: {
@@ -324,13 +391,15 @@ namespace cas::math {
                         }
                     } break;
 
+                    case ExpressionType::NamedConstant:
                     case ExpressionType::Variable: {
                         const Variable* var = reinterpret_cast<const Variable*>(summand);
-                        ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getCharacter(), 1}}};
+                        ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getCharacter(), 1}}, {}};
 
                         auto it = combinedTerms.begin();
-                        while (it != combinedTerms.end() || ProductParts::areLike(*it, parts)) {
-                            it++;
+                        while (it != combinedTerms.end()) {
+                            if (!ProductParts::areLike(*it, parts))
+                                it++;
                         }
 
                         if (it == combinedTerms.end()) {
@@ -341,62 +410,24 @@ namespace cas::math {
                         }
                     } break;
                     default: {
-                        restTerms.push_back(summand);
+                        combinedTerms.push_back(ProductParts{1, {}, {summand}});
                     } break;
                 }
             }
 
-            auto getFactor = [&](const std::unordered_map<char, double>::const_iterator& it) -> Expression* {
-                double exp = (*it).second;
-                if (exp == 1) {
-                    return new Variable((*it).first);
-                }
-                else if (exp == 0) {
-                    return new Constant(0);
-                }
-
-                Constant* exponent = new Constant(exp);
-                Variable* variable = new Variable((*it).first);
-
-                return new Exponentiation(variable, exponent);
-            };
-            auto getTerm = [&](const ProductParts& parts) -> Expression* {
-                if (parts.variables.size() == 0) {
-                    return new Constant(parts.coefficient);
-                }
-
-                auto it = parts.variables.begin();
-                Expression* result = getFactor(it);
-                it++;
-                while (it != parts.variables.end()) {
-                    Multiplication* prod = new Multiplication(getFactor(it), result);
-                    result = prod;
-
-                    it++;
-                }
-
-                if (parts.coefficient == 1) {
-                    return result;
-                }
-
-                Constant* coefficient = new Constant(parts.coefficient);
-                return new Multiplication(coefficient, result);
-            };
-
+            Expression* result = nullptr;
             auto it = combinedTerms.rbegin();
-            Expression* result = getTerm(*it);
-            it++;
 
             while (it != combinedTerms.rend()) {
-                Addition* sum = new Addition(getTerm(*it), result);
-                result = sum;
+                if (result == nullptr) {
+                    result = getProductFromParts(*it);
+                }
+                else {
+                    Addition* sum = new Addition(getProductFromParts(*it), result);
+                    result = sum;
+                }
 
                 it++;
-            }
-
-            for (auto it = restTerms.begin(); it != restTerms.end(); it++) {
-                Addition* sum = new Addition(*it, result);
-                result = sum;
             }
 
             return result;
@@ -454,45 +485,7 @@ namespace cas::math {
             ProductParts parts = getProductParts(simplifiedProduct);
             delete simplifiedProduct;
 
-            if (parts.variables.size() > 0) {
-                Expression* result;
-
-                auto getTerm = [&](std::unordered_map<char, double>::iterator it) -> Expression* {
-                    double exp = (*it).second;
-                    if (exp == 1) {
-                        return new Variable((*it).first);
-                    }
-                    else if (exp == 0) {
-                        return new Constant(0);
-                    }
-
-                    Constant* exponent = new Constant(exp);
-                    Variable* variable = new Variable((*it).first);
-
-                    return new Exponentiation(variable, exponent);
-                };
-
-                auto it = parts.variables.begin();
-                result = getTerm(it);
-                it++;
-
-                while (it != parts.variables.end()) {
-                    Multiplication* p = new Multiplication(getTerm(it), result);
-                    result = p;
-
-                    it++;
-                }
-
-                if (parts.coefficient != 1) {
-                    Constant* coefficient = new Constant(parts.coefficient);
-                    Multiplication* p = new Multiplication(coefficient, result);
-                    result = p;
-                }
-                return result;
-            }
-            else {
-                return new Constant(parts.coefficient);
-            }
+            return getProductFromParts(parts);
         }
         catch (const std::runtime_error&) {
             return simplifiedProduct;

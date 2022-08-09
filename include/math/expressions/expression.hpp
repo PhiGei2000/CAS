@@ -12,6 +12,7 @@ enum class ExpressionType
     Exponentiation,
     Function,
     Constant,
+    NamedConstant,
     Variable,
     Differential
 };

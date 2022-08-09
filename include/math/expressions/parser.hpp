@@ -9,7 +9,7 @@ namespace cas::math {
             static Expression* parseMultiplication(const std::string& str);
             static Expression* parseExponentiation(const std::string& str);
 
-            static Variable* parseVariable(const std::string& str);
+            static Expression* parseSymbol(const std::string& str);
             static Constant* parseConstant(const std::string& str);
 
         public:

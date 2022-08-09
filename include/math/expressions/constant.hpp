@@ -3,23 +3,41 @@
 #include "expression.hpp"
 
 namespace cas::math {
-    
-struct Constant : public Expression {
-  protected:
-    double value;
 
-  public:
-    Constant(double value);
+    struct Constant : public Expression {
+      protected:
+        double value;
 
-    virtual double getValue() const override;
-    virtual Expression* copy() const override;
-    virtual ExpressionType getType() const override;
+      public:
+        Constant(double value);
 
-    virtual bool dependsOn(const Variable& var) const override;
+        virtual double getValue() const override;
+        virtual Expression* copy() const override;
+        virtual ExpressionType getType() const override;
 
-    virtual std::string toString() const override;
+        virtual bool dependsOn(const Variable& var) const override;
 
-    virtual std::unordered_set<char> getVariables() const override;
-};
+        virtual std::string toString() const override;
 
-}
+        virtual std::unordered_set<char> getVariables() const override;
+    };
+
+    struct NamedConstant : public Constant {
+      protected:
+        std::string symbol;
+
+      public:
+        NamedConstant(const std::string& symbol, double value);
+
+        virtual Expression* copy() const override;
+        virtual ExpressionType getType() const override;
+
+        virtual std::string toString() const override;        
+    };
+
+    struct E : public NamedConstant {
+      public:
+        E();
+    };
+
+} // namespace cas::math

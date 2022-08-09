@@ -112,7 +112,7 @@ namespace cas::math {
             if (str.length() == 1) {
                 char character = str.front();
                 if (('A' <= character && character <= 'Z') || ('a' <= character && character <= 'z')) {
-                    return parseVariable(str);
+                    return parseSymbol(str);
                 }
             }
 
@@ -130,7 +130,11 @@ namespace cas::math {
         return new Exponentiation(left, right);
     }
 
-    Variable* Parser::parseVariable(const std::string& str) {
+    Expression* Parser::parseSymbol(const std::string& str) {
+        if (str == "e") {
+            return new E();
+        }
+        
         return new Variable(str.front());
     }
 

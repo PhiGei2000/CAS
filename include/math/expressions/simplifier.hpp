@@ -11,6 +11,7 @@ namespace cas::math {
         struct ProductParts {
             double coefficient = 1;
             std::unordered_map<char, double> variables = {};
+            std::vector<Expression*> restTerms = {};
 
             void multiply(const ProductParts& parts);
             void power(double exp);
@@ -20,6 +21,8 @@ namespace cas::math {
 
         static ProductParts getProductParts(const Multiplication* prod) noexcept(false);
         static ProductParts getExpProductParts(const Exponentiation* exp) noexcept(false);
+
+        static Expression* getProductFromParts(const ProductParts& parts );
 
         static void getSummands(const Expression* sum, std::vector<Expression*>* summands);
 

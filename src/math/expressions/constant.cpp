@@ -1,5 +1,7 @@
 #include "math/expressions/constant.hpp"
 
+#include <cmath>
+
 namespace cas::math {
     Constant::Constant(double value)
         : value(value) {
@@ -25,10 +27,11 @@ namespace cas::math {
         std::string str = std::to_string(value);
 
         // remove leading zeros
-        while (str.back() == '0') {
-            str.pop_back();
+        if (str.find('.') != std::string::npos) {
+            while (str.back() == '0') {
+                str.pop_back();
+            }
         }
-
         if (str.back() == '.') {
             str.pop_back();
         }
@@ -40,4 +43,26 @@ namespace cas::math {
         return {};
     }
 
+#pragma region NamedConstants
+    NamedConstant::NamedConstant(const std::string& symbol, double value)
+        : symbol(symbol), Constant(value) {
+    }
+
+    Expression* NamedConstant::copy() const {
+        return new NamedConstant(symbol, value);
+    }
+
+    ExpressionType NamedConstant::getType() const {
+        return ExpressionType::NamedConstant;
+    }
+
+    std::string NamedConstant::toString() const {
+        return symbol;
+    }
+
+    E::E()
+        : NamedConstant("e", std::numbers::e) {
+    }
+
+#pragma endregion
 } // namespace cas::math
