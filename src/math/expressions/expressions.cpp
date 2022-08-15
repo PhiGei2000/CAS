@@ -1,4 +1,4 @@
-#include "math/expressions.hpp"
+#include "math/expressions/expressions.hpp"
 
 namespace cas::math
 {

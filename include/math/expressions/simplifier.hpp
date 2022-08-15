@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../expressions.hpp"
+#include "expressions.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -16,7 +16,7 @@ namespace cas::math {
             void multiply(const ProductParts& parts);
             void power(double exp);
 
-            static bool areLike(const ProductParts& first, const ProductParts& second);            
+            static bool areLike(const ProductParts& first, const ProductParts& second);
         };
 
         static ProductParts getProductParts(const Multiplication* prod) noexcept(false);

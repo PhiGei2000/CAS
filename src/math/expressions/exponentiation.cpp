@@ -1,4 +1,4 @@
-#include "math/expressions.hpp"
+#include "math/expressions/expressions.hpp"
 
 #include "math/expressions/simplifier.hpp"
 
@@ -27,7 +27,7 @@ namespace cas::math {
     }
 
     Expression* Exponentiation::simplify() const {
-        return Simplifier::simplifyExponentiation(this);        
+        return Simplifier::simplifyExponentiation(this);
     }
 
     std::string Exponentiation::toString() const {

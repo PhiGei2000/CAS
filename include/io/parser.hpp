@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../expressions.hpp"
+#include "math/expressions/expressions.hpp"
 
 namespace cas::math {
     class Parser {

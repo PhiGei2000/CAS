@@ -1,13 +1,12 @@
 #pragma once
 
-#include "expressions/addition.hpp"
-#include "expressions/constant.hpp"
-#include "expressions/exponentiation.hpp"
-#include "expressions/multiplication.hpp"
-#include "expressions/variable.hpp"
-#include "expressions/differential.hpp"
-
-#include "expressions/functions.hpp"
+#include "addition.hpp"
+#include "constant.hpp"
+#include "exponentiation.hpp"
+#include "multiplication.hpp"
+#include "variable.hpp"
+#include "differential.hpp"
+#include "functions.hpp"
 
 namespace cas::math {
     Addition operator+(const Expression& left, const Expression& right);
