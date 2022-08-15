@@ -52,7 +52,7 @@ namespace cas::math {
         auto it = str.begin();
         while (!(it == str.end() || ((*it) == '*' || (*it) == '/') && bracketCounter == 0)) {
             ss << *it;
-                
+
             if (*it == '(')
                 bracketCounter++;
             else if (*it == ')')
@@ -116,7 +116,13 @@ namespace cas::math {
                 }
             }
 
-            return parseConstant(str);
+            char front = str.front();
+            if (front <= '9' && front >= '0') {
+                return parseConstant(str);
+            }
+            else {
+                return parseFunction(str);
+            }
         }
 
         // extract parts from the string
@@ -134,7 +140,7 @@ namespace cas::math {
         if (str == "e") {
             return new E();
         }
-        
+
         return new Variable(str.front());
     }
 
@@ -144,7 +150,71 @@ namespace cas::math {
         return new Constant(value);
     }
 
-    Expression* Parser::parse(const std::string& str) {        
+    Function* Parser::parseFunction(const std::string& str) {
+        std::stringstream ss;
+
+        // extract function symbol
+        auto it = str.begin();
+        while (!(it == str.end() || *it == '(')) {
+            ss << *it;
+
+            it++;
+        }
+
+        const std::string& symbol = ss.str();
+        const std::string& argument = getBracketContent(str, it);
+
+        if (symbol == "sin") {
+            return new Sin(parse(argument));
+        }
+        else if (symbol == "cos") {
+            return new Cos(parse(argument));
+        }
+        else if (symbol == "ln") {
+            return new Ln(parse(argument));
+        }
+
+        throw new std::runtime_error("Function " + symbol + " is not defined");
+    }
+
+    std::string Parser::getBracketContent(const std::string& str, int begin) {
+        auto it = str.begin() + begin;
+
+        return getBracketContent(str, it);
+    }
+
+    std::string Parser::getBracketContent(const std::string& str, std::string::const_iterator it) {
+        int bracketCounter = 0;
+
+        std::stringstream content;
+        while (!(it == str.end() || *it == ')' && bracketCounter == 0)) {
+            char character = *it;
+
+            switch (character) {
+                case '(':
+                    if (bracketCounter > 0) {
+                        content << character;
+                    }
+                    bracketCounter++;
+                    break;
+                case ')':
+                    bracketCounter--;
+                    if (bracketCounter > 0) {
+                        content << character;
+                    }
+                    break;
+                default:
+                    content << character;
+                    break;
+            }
+
+            it++;
+        }
+
+        return content.str();
+    }
+
+    Expression* Parser::parse(const std::string& str) {
         return parseAddition(str);
     }
 } // namespace cas::math
