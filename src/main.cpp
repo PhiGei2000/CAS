@@ -1,22 +1,19 @@
 #include <iostream>
 
-#include "math/operators/differential.hpp"
-#include "io/parser.hpp"
-#include "math/expressions/simplifier.hpp"
+#include "io/engine.hpp"
+#include "io/commands.hpp"
 
-using namespace cas::math;
+using namespace cas;
+
+
+void setupCommands(Engine* engine) {
+    engine->addCommand("D", commands::D);
+}
 
 int main(int argCnt, char** args) {
-    std::string function;
+    Engine engine;
 
-    while (true) {
-        std::cout << "Enter a function f(x,y)=";
-        std::cin >> function;
+    setupCommands(&engine);
 
-        Expression* expr = Parser::parse(function);
-
-        Expression* differential = D(expr);
-
-        std::cout << "df=" << differential->toString() << std::endl;
-    }
+    engine.run();
 }

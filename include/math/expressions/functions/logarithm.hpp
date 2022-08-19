@@ -17,7 +17,7 @@ namespace cas::math {
 
         virtual bool dependsOn(const Variable& var) const override;
 
-        virtual Expression* simplify() const;
+        virtual Expression* simplify() const override;
 
         virtual std::string toString() const override;
 

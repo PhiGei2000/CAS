@@ -2,11 +2,12 @@
 
 #include "math/expressions/variable.hpp"
 
-namespace cas::math
-{
+namespace cas::math {
+    Expression::~Expression() {
+    }
 
-Expression* Expression::simplify() const {
-    return this->copy();
-}
+    Expression* Expression::simplify() const {
+        return this->copy();
+    }
 
 } // namespace cas::math

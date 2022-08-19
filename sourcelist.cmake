@@ -1,5 +1,6 @@
 SET(SOURCES ${SOURCES}
 ./src/io/parser.cpp
+./src/io/engine.cpp
 ./src/math/expressions/exponentiation.cpp
 ./src/math/expressions/multiplication.cpp
 ./src/math/expressions/variable.cpp

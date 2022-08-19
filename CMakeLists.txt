@@ -9,6 +9,7 @@ include_directories(./include)
 include(sourcelist.cmake)
 
 add_executable(cas ${SOURCES})
+target_link_libraries(cas ${GTK4_LIBRARIES})
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 

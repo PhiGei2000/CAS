@@ -21,6 +21,8 @@ struct Variable;
 
 struct Expression {
   public:
+    virtual ~Expression();
+
     virtual double getValue() const = 0;
     virtual Expression* copy() const = 0;
     virtual ExpressionType getType() const = 0;
