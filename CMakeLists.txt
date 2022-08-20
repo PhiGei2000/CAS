@@ -6,7 +6,7 @@ enable_testing()
 
 include_directories(./include)
 
-include(sourcelist.cmake)
+file(GLOB_RECURSE SOURCES ./src/**.cpp)
 
 add_executable(cas ${SOURCES})
 target_link_libraries(cas ${GTK4_LIBRARIES})
