@@ -2,7 +2,9 @@
 
 #include <sstream>
 
-namespace cas::math {
+using namespace cas::math;
+
+namespace cas::io {
     Expression* Parser::parseAddition(const std::string& str) {
         std::stringstream ss;
 

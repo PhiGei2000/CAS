@@ -2,7 +2,9 @@
 
 #include "math/expressions/expressions.hpp"
 
-namespace cas::math {
+using namespace cas::math;
+
+namespace cas::io {
     class Parser {
         private:
             static Expression* parseAddition(const std::string& str);

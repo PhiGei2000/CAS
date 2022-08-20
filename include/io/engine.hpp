@@ -3,25 +3,18 @@
 #include <string>
 #include <unordered_map>
 
-// #include "commandInterpreter.hpp"
+#include "commands/commandDelegate.hpp"
 
-namespace cas {
-    struct CommandData {
-        std::string alias;
-        std::vector<std::string> arguments;
-    };
+using namespace cas::commands;
 
-    typedef std::function<std::string(const CommandData&)> CommandDelegate;
+namespace cas {    
 
     class Engine {
-      private:
-        // CommandInterpreter interpreter;
+      private:        
         std::unordered_map<std::string, CommandDelegate> commands;
 
-        static CommandData parseCommand(const std::string& input);
       public:
-        void
-        addCommand(const std::string& alias, CommandDelegate delegate);
+        void addCommand(const std::string& alias, CommandDelegate delegate);
 
         void run() const;
     };
