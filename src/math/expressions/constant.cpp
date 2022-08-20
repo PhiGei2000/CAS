@@ -1,6 +1,10 @@
 #include "math/expressions/constant.hpp"
 
+#if WIN32
+#include <numbers>
+#endif
 #include <cmath>
+
 
 namespace cas::math {
     Constant::Constant(double value)
@@ -60,8 +64,8 @@ namespace cas::math {
         return symbol;
     }
 
-    E::E()
-        : NamedConstant("e", std::numbers::e) {
+    E::E()        
+        : NamedConstant("e", std::numbers::e) {        
     }
 
 #pragma endregion

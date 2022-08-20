@@ -58,7 +58,7 @@ namespace cas::math {
                 dLeft = D(multiplication->left, var);
                 dRight = D(multiplication->right, var);
 
-                result = new Addition(new Multiplication(dLeft, multiplication->right), new Multiplication(multiplication->left, dRight));
+                result = new Addition(new Multiplication(dLeft, multiplication->right->copy()), new Multiplication(multiplication->left->copy(), dRight));
                 break;
             case ExpressionType::Variable:
                 variable = reinterpret_cast<Variable*>(expr);
@@ -77,18 +77,18 @@ namespace cas::math {
                         return new Constant(0);
                     }
                     else {
-                        result = new Multiplication(new Constant(exponentValue), new Multiplication(new Exponentiation(exponentiation->left, new Constant(exponentValue - 1)), D(exponentiation->left, var)));
+                        result = new Multiplication(new Constant(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Constant(exponentValue - 1)), D(exponentiation->left, var)));
                     }
                 }
-                else {
-                    // D(a^b) = a^b*(D(b)*ln a+b/a*D(a))
+                else {                    
+                    // base transform (a^b = e^(ln(a)*b))
+                    Expression* baseLn = new Ln(exponentiation->left->copy());
+                    Expression* eExponent = new Multiplication(baseLn, exponentiation->right->copy());
 
-                    result = new Multiplication(exponentiation->copy(),
-                                                new Addition(
-                                                    new Multiplication(D(exponentiation->right, var), new Ln(exponentiation->left->copy())),
-                                                    new Multiplication(
-                                                        new Multiplication(exponentiation->right->copy(), new Exponentiation(exponentiation->left->copy(), new Constant(-1))),
-                                                        D(exponentiation->left, var))));
+                    result = new Multiplication(exponentiation->copy(), D(eExponent, var));
+
+                    // delete eExponent and baseLn (baseLn is left of eExponent and gets deleted if the destructor of eExponent is called)
+                    delete eExponent;
                 }
                 break;
             case ExpressionType::Function:

@@ -77,7 +77,7 @@ namespace cas::math {
                     parts.multiply(leftParts);
                 }
                 catch (const std::runtime_error&) {
-                    parts.restTerms.push_back(exp);
+                    parts.restTerms.push_back(exp->copy());
                 }
 
             } break;
