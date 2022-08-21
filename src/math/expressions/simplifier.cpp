@@ -12,6 +12,10 @@ namespace cas::math {
         for (const auto& [var, exp] : parts.variables) {
             variables[var] += exp;
         }
+
+        for (const auto& term : parts.restTerms) {
+            restTerms.push_back(term);
+        }
     }
 
     void Simplifier::ProductParts::power(double exponent) {
@@ -20,6 +24,15 @@ namespace cas::math {
         for (const auto& [var, _] : variables) {
             variables[var] *= exponent;
         }
+
+        std::vector<Expression*> poweredTerms;
+        for (auto term : restTerms) {
+            Exponentiation* power = new Exponentiation(term, new Constant(exponent));
+
+            poweredTerms.push_back(power);
+        }
+
+        restTerms = poweredTerms;
     }
 
     bool Simplifier::ProductParts::areLike(const Simplifier::ProductParts& first, const Simplifier::ProductParts& second) {

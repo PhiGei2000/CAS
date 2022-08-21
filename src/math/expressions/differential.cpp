@@ -5,6 +5,10 @@ namespace cas::math {
         : Variable(variable) {
     }
 
+    Expression* Differential::copy() const {
+        return new Differential(character);
+    }
+
     ExpressionType Differential::getType() const {
         return ExpressionType::Differential;
     }
