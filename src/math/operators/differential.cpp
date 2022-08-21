@@ -80,7 +80,7 @@ namespace cas::math {
                         result = new Multiplication(new Constant(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Constant(exponentValue - 1)), D(exponentiation->left, var)));
                     }
                 }
-                else {                    
+                else {
                     // base transform (a^b = e^(ln(a)*b))
                     Expression* baseLn = new Ln(exponentiation->left->copy());
                     Expression* eExponent = new Multiplication(baseLn, exponentiation->right->copy());
@@ -123,6 +123,6 @@ namespace cas::math {
             return new Multiplication(new Multiplication(new Constant(-1), new Sin(argument)), D(argument, var));
         }
 
-        throw new std::runtime_error("Function derivative not implemated");
+        throw new std::runtime_error("Function derivative not implemented");
     }
 } // namespace cas::math

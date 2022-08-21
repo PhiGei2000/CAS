@@ -8,30 +8,47 @@
 using namespace cas::math;
 using namespace cas::io;
 
-namespace cas {
-    namespace commands {
-        CommandDelegate D = [](const CommandArgs& args) {
-            Expression* input = Parser::parse(args.arguments[0]);
-            Expression* simplifiedInput = input->simplify();
+namespace cas::commands {
+    CommandDelegate D = [](const CommandArgs& args) {
+        // parse arguments and simplify the input
+        Expression* input = args.getArg<Expression*>(0);
+        Expression* simplifiedInput = input->simplify();
+        Variable* var = args.getArg<Variable*>(1);
 
-            if (args.arguments[1].length() != 1) {
-                throw new std::runtime_error("Required variable name");
-            }
+        // execute the command and simplify the result
+        Expression* result = cas::math::D(simplifiedInput, *var);
+        Expression* simplifiedResult = result->simplify();
 
-            Variable var = Variable(args.arguments[1].front());
+        // convert the result into a string
+        const std::string& out = simplifiedResult->toString();
+        // const std::string& out = result->toString();
 
-            Expression* result = math::D(simplifiedInput, var);
-            Expression* simplifiedResult = result->simplify();
-           
-            const std::string& out = result->toString() + "=" + simplifiedResult->toString();
+        // Clean up memory
+        delete var;
+        delete input;
+        delete simplifiedInput;
+        delete result;
+        delete simplifiedResult;
 
-            // TODO: Clean up memory
-            delete input;
-            delete simplifiedInput;
-            delete result;
-            delete simplifiedResult;
+        // return result
+        return out;
+    };
 
-            return out;
-        };
-    }
-} // namespace cas
+    CommandDelegate Df = [](const CommandArgs& args) {
+        Expression* function = args.getArg<Expression*>(0);
+        Expression* simplified = function->simplify();
+
+        Expression* differential = cas::math::D(function);
+        Expression* simplifiedDifferential = differential->simplify();
+
+        const std::string& out = simplifiedDifferential->toString();
+
+        // clean up memory
+        delete function;
+        delete simplified;
+        delete differential;
+        delete simplifiedDifferential;
+
+        return out;
+    };
+} // namespace cas::commands
