@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../expression.hpp"
+#include "../terms/expression.hpp"
 
 namespace cas::math {
     struct Function : public Expression {

@@ -1,6 +1,6 @@
-#include "math/expressions/expression.hpp"
+#include "math/expressions/terms/expression.hpp"
 
-#include "math/expressions/variable.hpp"
+#include "math/expressions/terms/variable.hpp"
 
 namespace cas::math {
     Expression::~Expression() {

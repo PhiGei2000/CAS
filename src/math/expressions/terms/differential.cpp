@@ -1,4 +1,4 @@
-#include "math/expressions/differential.hpp"
+#include "math/expressions/terms/differential.hpp"
 
 namespace cas::math {
     Differential::Differential(char variable)

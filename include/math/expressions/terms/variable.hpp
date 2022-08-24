@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/expressions/expression.hpp"
+#include "math/expressions/terms/expression.hpp"
 
 namespace cas::math {
 

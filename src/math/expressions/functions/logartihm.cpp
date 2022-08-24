@@ -1,6 +1,6 @@
 #include "math/expressions/functions/logarithm.hpp"
 
-#include "math/expressions/constant.hpp"
+#include "math/expressions/terms/constant.hpp"
 #include <cmath>
 
 namespace cas::math {

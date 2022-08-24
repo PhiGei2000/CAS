@@ -1,4 +1,4 @@
-#include "math/expressions/binaryExpression.hpp"
+#include "math/expressions/terms/binaryExpression.hpp"
 
 #include <iostream>
 

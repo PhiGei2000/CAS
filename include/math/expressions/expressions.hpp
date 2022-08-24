@@ -1,11 +1,11 @@
 #pragma once
 
-#include "addition.hpp"
-#include "constant.hpp"
-#include "exponentiation.hpp"
-#include "multiplication.hpp"
-#include "variable.hpp"
-#include "differential.hpp"
+#include "terms/addition.hpp"
+#include "terms/constant.hpp"
+#include "terms/exponentiation.hpp"
+#include "terms/multiplication.hpp"
+#include "terms/variable.hpp"
+#include "terms/differential.hpp"
 #include "functions.hpp"
 
 namespace cas::math {

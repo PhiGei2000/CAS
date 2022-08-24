@@ -1,4 +1,4 @@
-#include "math/expressions/constant.hpp"
+#include "math/expressions/terms/constant.hpp"
 
 #if WIN32
 #include <numbers>

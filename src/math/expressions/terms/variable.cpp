@@ -1,4 +1,4 @@
-#include "math/expressions/variable.hpp"
+#include "math/expressions/terms/variable.hpp"
 
 #include <stdexcept>
 
