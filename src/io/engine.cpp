@@ -18,7 +18,7 @@ namespace cas {
 
             std::cin >> input;
 
-            if (input == "stop") {
+            if (input == "exit") {
                 return;
             }
 
