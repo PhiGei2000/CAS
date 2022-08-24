@@ -27,8 +27,11 @@ namespace cas::math {
         ExpressionMatcher(Expression* pattern);
         ~ExpressionMatcher();
 
-        bool matches(Expression* expr);
+        bool matches(Expression* expression);
 
-        ExpressionMatch match(Expression* expr);
+        ExpressionMatch match(Expression* expression);
+
+        // Replaces subexpressions inside the expression with the specified subexpression
+        void replace(Expression* expression, Expression* subexpression);
     };
 } // namespace cas::math

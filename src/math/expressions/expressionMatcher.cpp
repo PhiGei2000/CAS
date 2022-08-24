@@ -29,15 +29,7 @@ namespace cas::math {
         }
 
         if (pattern->getType() == ExpressionType::Variable) {
-            Variable* patternVar = reinterpret_cast<Variable*>(pattern);
-            if (expr->getType() == ExpressionType::Variable) {
-                if (reinterpret_cast<Variable*>(expr)->getSymbol() == patternVar->getSymbol()) {
-                    variable_storage[*patternVar] = expr->copy();
-                    return true;
-                }
-
-                return false;
-            }
+            Variable* patternVar = reinterpret_cast<Variable*>(pattern);            
 
             if (variable_storage[*patternVar] == nullptr) {
                 variable_storage[*patternVar] = expr->copy();
@@ -92,5 +84,14 @@ namespace cas::math {
         bool success = matches(expr);
 
         return ExpressionMatch{success, variable_storage};
+    }
+
+    void ExpressionMatcher::replace(Expression* expr, Expression* subexpr) {
+        if (matches(expr)) {
+            Expression* parent = expr->parent;
+            parent->substitute(expr, subexpr);
+
+            return;
+        }
     }
 } // namespace cas::math

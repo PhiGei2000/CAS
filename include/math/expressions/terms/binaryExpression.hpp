@@ -17,6 +17,8 @@ struct BinaryExpression : public Expression {
 
     virtual bool dependsOn(const Variable& var) const override;
 
+    virtual void substitute(Expression* expression, Expression* newExpression) override;
+
     virtual std::unordered_set<Variable> getVariables() const override;
 };
 

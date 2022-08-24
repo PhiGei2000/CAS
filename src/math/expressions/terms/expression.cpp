@@ -14,4 +14,8 @@ namespace cas::math {
         return this->copy();
     }
 
+    void Expression::substitute(Expression* expr, Expression* newExpr) {
+
+    }
+
 } // namespace cas::math

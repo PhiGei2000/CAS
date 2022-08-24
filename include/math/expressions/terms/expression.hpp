@@ -24,6 +24,8 @@ namespace cas::math {
 
     struct Expression {
       public:
+        Expression* parent = nullptr;
+
         virtual ~Expression();
 
         virtual double getValue() const = 0;
@@ -33,6 +35,7 @@ namespace cas::math {
         virtual bool dependsOn(const Variable& var) const = 0;
 
         virtual Expression* simplify() const;
+        virtual void substitute(Expression* expression, Expression* newExpression);
 
         virtual std::string toString() const = 0;
 
