@@ -3,6 +3,10 @@
 #include "math/expressions/terms/variable.hpp"
 
 namespace cas::math {
+    no_value_error::no_value_error(const std::string& message)
+        : std::runtime_error(message) {
+    }
+
     Expression::~Expression() {
     }
 

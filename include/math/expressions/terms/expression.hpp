@@ -1,38 +1,41 @@
 #pragma once
 
+#include <stdexcept>
 #include <string>
 #include <unordered_set>
 
-namespace cas::math
-{
-enum class ExpressionType
-{
-    Addition,
-    Multiplication,
-    Exponentiation,
-    Function,
-    Constant,
-    NamedConstant,
-    Variable,
-    Differential
-};
+namespace cas::math {
+    enum class ExpressionType {
+        Addition,
+        Multiplication,
+        Exponentiation,
+        Function,
+        Constant,
+        NamedConstant,
+        Variable,
+        Differential
+    };
 
-struct Variable;
+    struct Variable;
 
-struct Expression {
-  public:
-    virtual ~Expression();
+    struct no_value_error : public std::runtime_error {
+        no_value_error(const std::string& message);
+    };
 
-    virtual double getValue() const = 0;
-    virtual Expression* copy() const = 0;
-    virtual ExpressionType getType() const = 0;
+    struct Expression {
+      public:
+        virtual ~Expression();
 
-    virtual bool dependsOn(const Variable& var) const = 0;
+        virtual double getValue() const = 0;
+        virtual Expression* copy() const = 0;
+        virtual ExpressionType getType() const = 0;
 
-    virtual Expression* simplify() const;
+        virtual bool dependsOn(const Variable& var) const = 0;
 
-    virtual std::string toString() const = 0;
+        virtual Expression* simplify() const;
 
-    virtual std::unordered_set<char> getVariables() const = 0;
-};
+        virtual std::string toString() const = 0;
+
+        virtual std::unordered_set<Variable> getVariables() const = 0;
+    };
 } // namespace cas::math

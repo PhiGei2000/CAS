@@ -9,14 +9,15 @@ struct BinaryExpression : public Expression {
   public:
     Expression* left = nullptr;
     Expression* right = nullptr;
+    const bool commutative;
 
-    BinaryExpression(const Expression& left, const Expression& right);
-    BinaryExpression(Expression* left, Expression* right);
+    BinaryExpression(const Expression& left, const Expression& right, bool commutative = true);
+    BinaryExpression(Expression* left, Expression* right, bool commutative = true);
     ~BinaryExpression();
 
     virtual bool dependsOn(const Variable& var) const override;
 
-    virtual std::unordered_set<char> getVariables() const override;
+    virtual std::unordered_set<Variable> getVariables() const override;
 };
 
 } // namespace cas::math

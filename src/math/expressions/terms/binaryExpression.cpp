@@ -1,37 +1,36 @@
 #include "math/expressions/terms/binaryExpression.hpp"
 
+#include "math/expressions/terms/variable.hpp"
+
 #include <iostream>
 
-namespace cas::math
-{
+namespace cas::math {
 
-BinaryExpression::BinaryExpression(const Expression& left, const Expression& right) {
-    this->left = left.copy();
-    this->right = right.copy();
-}
+    BinaryExpression::BinaryExpression(const Expression& left, const Expression& right, bool commutative)
+        : left(left.copy()), right(right.copy()), commutative(commutative) {
+    }
 
-BinaryExpression::BinaryExpression(Expression* left, Expression* right) :
-left(left), right(right){
+    BinaryExpression::BinaryExpression(Expression* left, Expression* right, bool commutative)
+        : left(left), right(right), commutative(commutative) {
+    }
 
-}
+    BinaryExpression::~BinaryExpression() {
+        delete left;
+        delete right;
+    }
 
-BinaryExpression::~BinaryExpression() {
-    delete left;
-    delete right;
-}
+    bool BinaryExpression::dependsOn(const Variable& var) const {
+        return left->dependsOn(var) || right->dependsOn(var);
+    }
 
-bool BinaryExpression::dependsOn(const Variable& var) const {
-    return left->dependsOn(var) || right->dependsOn(var);
-}
+    std::unordered_set<Variable> BinaryExpression::getVariables() const {
+        std::unordered_set<Variable> leftVars = left->getVariables();
+        std::unordered_set<Variable> rightVars = right->getVariables();
 
-std::unordered_set<char> BinaryExpression::getVariables() const {
-    std::unordered_set<char> leftVars = left->getVariables();
-    std::unordered_set<char> rightVars = right->getVariables();
+        std::unordered_set<Variable> vars = leftVars;
+        vars.merge(rightVars);
 
-    std::unordered_set<char> vars = leftVars;
-    vars.merge(rightVars);
-
-    return vars;
-}
+        return vars;
+    }
 
 } // namespace cas::math

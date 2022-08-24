@@ -1,9 +1,11 @@
 #pragma once
 
-#include "engine.hpp"
 #include "io/parser.hpp"
 #include "math/expressions/expressions.hpp"
 #include "math/operators/differential.hpp"
+#include "math/expressions/expressionMatcher.hpp"
+
+#include <sstream>
 
 using namespace cas::math;
 using namespace cas::io;
@@ -50,5 +52,37 @@ namespace cas::commands {
         delete simplifiedDifferential;
 
         return out;
+    };
+
+    CommandDelegate Matches = [](const CommandArgs& args) {
+        Expression* expression = args.getArg<Expression*>(0);
+        Expression* pattern = args.getArg<Expression*>(1);
+
+        ExpressionMatcher matcher = ExpressionMatcher(pattern);
+        bool match = matcher.matches(expression);
+
+        return match ? "true" : "false";        
+    };
+
+    CommandDelegate Match = [](const CommandArgs& args) {
+        Expression* expression = args.getArg<Expression*>(0);
+        Expression* pattern = args.getArg<Expression*>(1);
+
+        ExpressionMatcher matcher = ExpressionMatcher(pattern);
+        ExpressionMatch match = matcher.match(expression);
+
+        std::stringstream ss;
+        ss << "{ success: ";
+        ss << (match.success ? "true" : "false");
+
+        ss << ", variables: [";
+
+        for (const auto [var, expr] : match.variables) {
+            ss << var.getSymbol() << "=" << expr->toString() << ",";                        
+        }
+
+        ss << "]}";
+
+        return ss.str();
     };
 } // namespace cas::commands

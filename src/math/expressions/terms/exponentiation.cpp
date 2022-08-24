@@ -7,11 +7,11 @@
 
 namespace cas::math {
     Exponentiation::Exponentiation(const Expression& left, const Expression& right)
-        : BinaryExpression(left, right) {
+        : BinaryExpression(left, right, false) {
     }
 
     Exponentiation::Exponentiation(Expression* base, Expression* exponent)
-        : BinaryExpression(base, exponent) {
+        : BinaryExpression(base, exponent, false) {
     }
 
     double Exponentiation::getValue() const {

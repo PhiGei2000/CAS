@@ -4,7 +4,7 @@
 
 namespace cas::math {
     struct Differential : public Variable {
-        Differential(char variable);
+        Differential(VariableSymbol symbol);
 
         virtual Expression* copy() const override;
 

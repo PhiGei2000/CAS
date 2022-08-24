@@ -19,7 +19,7 @@ namespace cas::math {
 
         virtual std::string toString() const override;
 
-        virtual std::unordered_set<char> getVariables() const override;
+        virtual std::unordered_set<Variable> getVariables() const override;
     };
 
     struct Cos : public Function {
@@ -38,6 +38,6 @@ namespace cas::math {
 
         virtual std::string toString() const override;
 
-        virtual std::unordered_set<char> getVariables() const override;
+        virtual std::unordered_set<Variable> getVariables() const override;
     };
 } // namespace cas::math

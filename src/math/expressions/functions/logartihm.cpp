@@ -1,6 +1,7 @@
 #include "math/expressions/functions/logarithm.hpp"
 
 #include "math/expressions/terms/constant.hpp"
+#include "math/expressions/terms/variable.hpp"
 #include <cmath>
 
 namespace cas::math {
@@ -45,7 +46,7 @@ namespace cas::math {
         return getName() + "(" + argument->toString() + ")";
     }
 
-    std::unordered_set<char> Ln::getVariables() const {
+    std::unordered_set<Variable> Ln::getVariables() const {
         return argument->getVariables();
     }
 } // namespace cas::math

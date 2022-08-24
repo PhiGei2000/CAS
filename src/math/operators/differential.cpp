@@ -5,9 +5,9 @@
 
 namespace cas::math {
     Expression* D(Expression* expr) {
-        std::unordered_set<char> variables = expr->getVariables();
+        std::unordered_set<Variable> variables = expr->getVariables();
 
-        std::unordered_map<char, Expression*> derivatives;
+        std::unordered_map<Variable, Expression*> derivatives;
 
         for (const auto& var : variables) {
             derivatives[var] = D(expr, Variable(var))->simplify();
@@ -16,12 +16,12 @@ namespace cas::math {
         if (derivatives.size() > 0) {
             auto it = derivatives.begin();
 
-            Differential* d = new Differential((*it).first);
+            Differential* d = new Differential((*it).first.getSymbol());
             Expression* result = new Multiplication((*it).second, d);
             it++;
 
             while (it != derivatives.end()) {
-                Differential* d = new Differential((*it).first);
+                Differential* d = new Differential((*it).first.getSymbol());
                 Expression* prod = new Multiplication((*it).second, d);
 
                 Expression* sum = new Addition(prod, result);
@@ -62,7 +62,7 @@ namespace cas::math {
                 break;
             case ExpressionType::Variable:
                 variable = reinterpret_cast<Variable*>(expr);
-                if (variable->getCharacter() == var.getCharacter()) {
+                if (variable->getSymbol() == var.getSymbol()) {
                     result = new Constant(1);
                 }
                 else {

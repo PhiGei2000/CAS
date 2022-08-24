@@ -1,12 +1,12 @@
 #include "math/expressions/terms/differential.hpp"
 
 namespace cas::math {
-    Differential::Differential(char variable)
+    Differential::Differential(VariableSymbol variable)
         : Variable(variable) {
     }
 
     Expression* Differential::copy() const {
-        return new Differential(character);
+        return new Differential(this->symbol);
     }
 
     ExpressionType Differential::getType() const {
@@ -15,7 +15,7 @@ namespace cas::math {
 
     std::string Differential::toString() const {
         std::string result = "d";
-        result += character;
+        result += symbol;
 
         return result;
     }

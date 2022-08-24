@@ -1,5 +1,7 @@
 #include "math/expressions/terms/constant.hpp"
 
+#include "math/expressions/terms/variable.hpp"
+
 #if WIN32
 #include <numbers>
 #endif
@@ -43,7 +45,7 @@ namespace cas::math {
         return str;
     }
 
-    std::unordered_set<char> Constant::getVariables() const {
+    std::unordered_set<Variable> Constant::getVariables() const {
         return {};
     }
 

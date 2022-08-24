@@ -1,5 +1,7 @@
 #include "math/expressions/functions/trigonometric.hpp"
 
+#include "math/expressions/terms/variable.hpp"
+
 #include <cmath>
 
 namespace cas::math {
@@ -35,7 +37,7 @@ namespace cas::math {
         return getName() + "(" + argument->toString() + ")";
     }
 
-    std::unordered_set<char> Sin::getVariables() const {
+    std::unordered_set<Variable> Sin::getVariables() const {
         return argument->getVariables();
     }
 #pragma endregion
@@ -71,7 +73,7 @@ namespace cas::math {
         return getName() + "(" + argument->toString() + ")";
     }
 
-    std::unordered_set<char> Cos::getVariables() const {
+    std::unordered_set<Variable> Cos::getVariables() const {
         return argument->getVariables();
     }
 #pragma endregion

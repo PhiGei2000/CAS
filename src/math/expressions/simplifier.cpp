@@ -102,7 +102,7 @@ namespace cas::math {
 
             case ExpressionType::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(prod->left);
-                parts.variables[v->getCharacter()] += 1;
+                parts.variables[v->getSymbol()] += 1;
             } break;
 
             default: {
@@ -134,7 +134,7 @@ namespace cas::math {
 
             case ExpressionType::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(prod->right);
-                parts.variables[v->getCharacter()] += 1;
+                parts.variables[v->getSymbol()] += 1;
             } break;
 
             default: {
@@ -184,7 +184,7 @@ namespace cas::math {
             case ExpressionType::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(exp->left);
 
-                parts.variables[v->getCharacter()] += exponent;
+                parts.variables[v->getSymbol()] += exponent;
             } break;
 
             default:
@@ -407,7 +407,7 @@ namespace cas::math {
                     case ExpressionType::NamedConstant:
                     case ExpressionType::Variable: {
                         const Variable* var = reinterpret_cast<const Variable*>(summand);
-                        ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getCharacter(), 1}}, {}};
+                        ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getSymbol(), 1}}, {}};
 
                         auto it = combinedTerms.begin();
                         while (it != combinedTerms.end()) {
