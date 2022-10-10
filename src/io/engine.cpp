@@ -5,9 +5,10 @@
 #include <stdexcept>
 
 namespace cas {
-    
-    void Engine::addCommand(const std::string& alias, CommandDelegate delegate) {
-        commands[alias] = delegate;
+
+    template<typename... TArgs, CommandType<TArgs...> TCommand>
+    void Engine::addCommand(const std::string& alias, TCommand command) {
+        commands[alias] = command;
     }
 
     void Engine::run() const {
@@ -26,8 +27,8 @@ namespace cas {
                 const CommandArgs& data = parseCommand(input);
 
                 try {
-                    const CommandDelegate& delegate = commands.at(data.alias);
-                    std::cout << delegate(data) << std::endl;
+                    const basic_command& command = commands.at(data.alias);
+                    std::cout << command.execute(data) << std::endl;
                 }
                 catch (const std::out_of_range&) {
                     std::cout << "Command \"" << data.alias << "\" not found" << std::endl;

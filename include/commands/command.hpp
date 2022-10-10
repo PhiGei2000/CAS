@@ -1,4 +1,5 @@
 #pragma once
+#include <concepts>
 
 #include "commandArgs.hpp"
 
@@ -8,6 +9,7 @@ namespace cas::math {
 
 namespace cas::commands {
     class basic_command {
+      public:
         virtual cas::math::Expression* execute(const CommandArgs& args) const = 0;
     };
 
@@ -22,4 +24,7 @@ namespace cas::commands {
       public:
         cas::math::Expression* execute(const CommandArgs& args) const override;
     };
+
+    template<typename... TArgs, typename T>
+    concept CommandType = std::derived_from<Command<TArgs...>, T>;
 } // namespace cas::commands
