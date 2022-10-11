@@ -49,18 +49,18 @@ namespace cas::math {
         Expression* dRight;
         switch (expr->getType()) {
 
-            case ExpressionType::Addition:
+            case ExpressionTypes::Addition:
                 addition = reinterpret_cast<Addition*>(expr);
                 result = new Addition(D(addition->left, var), D(addition->right, var));
                 break;
-            case ExpressionType::Multiplication:
+            case ExpressionTypes::Multiplication:
                 multiplication = reinterpret_cast<Multiplication*>(expr);
                 dLeft = D(multiplication->left, var);
                 dRight = D(multiplication->right, var);
 
                 result = new Addition(new Multiplication(dLeft, multiplication->right->copy()), new Multiplication(multiplication->left->copy(), dRight));
                 break;
-            case ExpressionType::Variable:
+            case ExpressionTypes::Variable:
                 variable = reinterpret_cast<Variable*>(expr);
                 if (variable->getSymbol() == var.getSymbol()) {
                     result = new Constant(1);
@@ -69,9 +69,9 @@ namespace cas::math {
                     result = new Constant(0);
                 }
                 break;
-            case ExpressionType::Exponentiation:
+            case ExpressionTypes::Exponentiation:
                 exponentiation = reinterpret_cast<Exponentiation*>(expr);
-                if (exponentiation->right->getType() == ExpressionType::Constant) {
+                if (exponentiation->right->getType() == ExpressionTypes::Constant) {
                     double exponentValue = exponentiation->right->getValue();
                     if (exponentValue == 0) {
                         return new Constant(0);
@@ -91,7 +91,7 @@ namespace cas::math {
                     delete eExponent;
                 }
                 break;
-            case ExpressionType::Function:
+            case ExpressionTypes::Function:
                 result = DFunction(reinterpret_cast<Function*>(expr), var);
                 break;
             default:

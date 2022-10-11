@@ -21,8 +21,8 @@ namespace cas::math {
         return new Constant(value);
     }
 
-    ExpressionType Constant::getType() const {
-        return ExpressionType::Constant;
+    ExpressionTypes Constant::getType() const {
+        return ExpressionTypes::Constant;
     }
 
     bool Constant::dependsOn(const Variable& var) const {
@@ -58,8 +58,8 @@ namespace cas::math {
         return new NamedConstant(symbol, value);
     }
 
-    ExpressionType NamedConstant::getType() const {
-        return ExpressionType::NamedConstant;
+    ExpressionTypes NamedConstant::getType() const {
+        return ExpressionTypes::NamedConstant;
     }
 
     std::string NamedConstant::toString() const {

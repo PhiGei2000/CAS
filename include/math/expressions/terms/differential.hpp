@@ -8,7 +8,7 @@ namespace cas::math {
 
         virtual Expression* copy() const override;
 
-        virtual ExpressionType getType() const override;
+        virtual ExpressionTypes getType() const override;
         virtual std::string toString() const override;
     };
 } // namespace cas::math

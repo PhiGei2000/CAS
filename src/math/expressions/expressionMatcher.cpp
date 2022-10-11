@@ -28,7 +28,7 @@ namespace cas::math {
         catch (no_value_error) {
         }
 
-        if (pattern->getType() == ExpressionType::Variable) {
+        if (pattern->getType() == ExpressionTypes::Variable) {
             Variable* patternVar = reinterpret_cast<Variable*>(pattern);            
 
             if (variable_storage[*patternVar] == nullptr) {

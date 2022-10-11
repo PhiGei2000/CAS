@@ -10,7 +10,7 @@ struct std::hash<cas::math::Variable> {
 };
 
 namespace cas::math {
-    typedef char VariableSymbol;
+    using VariableSymbol = char;
 
     struct Variable : public Expression {
       protected:
@@ -25,7 +25,7 @@ namespace cas::math {
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
-        virtual ExpressionType getType() const override;
+        virtual ExpressionTypes getType() const override;
 
         virtual std::string toString() const override;
 

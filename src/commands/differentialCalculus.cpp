@@ -4,13 +4,10 @@
 
 namespace cas::commands {
     Expression* D::operator()(Expression* input, Variable* var) const {
-        Expression* simplyfied = input->simplify();
+        return cas::math::D(input, *var);                
+    }
 
-        Expression* derivative = cas::math::D(simplyfied);
-        Expression* simplyfiedResult = derivative->simplify();
-
-        delete simplyfied;
-        delete derivative;
-        return simplyfiedResult;
+    Expression* Df::operator()(Expression* input) const {
+        return cas::math::D(input);
     }
 }

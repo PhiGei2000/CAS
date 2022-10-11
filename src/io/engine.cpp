@@ -4,11 +4,22 @@
 #include <sstream>
 #include <stdexcept>
 
-namespace cas {
+#include "commands/differentialCalculus.hpp"
 
-    template<typename... TArgs, CommandType<TArgs...> TCommand>
-    void Engine::addCommand(const std::string& alias, TCommand command) {
-        commands[alias] = command;
+namespace cas {
+    void Engine::setupCommands() {
+        this->addCommand<commands::D>("D");
+        this->addCommand<commands::Df>("Df");
+    }
+
+    Engine::Engine() {
+        setupCommands();
+    }
+
+
+    template<CommandType TCommand>
+    void Engine::addCommand(const std::string& alias) {
+        commands[alias] = new TCommand();
     }
 
     void Engine::run() const {
@@ -27,8 +38,14 @@ namespace cas {
                 const CommandArgs& data = parseCommand(input);
 
                 try {
-                    const basic_command& command = commands.at(data.alias);
-                    std::cout << command.execute(data) << std::endl;
+                    const basic_command* command = commands.at(data.alias);
+
+                    Expression* result = command->execute(data);
+                    Expression* simplified = result->simplify();
+                    std::cout << simplified->toString() << std::endl;
+
+                    delete result;
+                    delete simplified;
                 }
                 catch (const std::out_of_range&) {
                     std::cout << "Command \"" << data.alias << "\" not found" << std::endl;

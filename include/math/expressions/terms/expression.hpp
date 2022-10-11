@@ -5,7 +5,7 @@
 #include <unordered_set>
 
 namespace cas::math {
-    enum class ExpressionType {
+    enum class ExpressionTypes {
         Addition,
         Multiplication,
         Exponentiation,
@@ -30,7 +30,7 @@ namespace cas::math {
 
         virtual double getValue() const = 0;
         virtual Expression* copy() const = 0;
-        virtual ExpressionType getType() const = 0;
+        virtual ExpressionTypes getType() const = 0;
 
         virtual bool dependsOn(const Variable& var) const = 0;
 
@@ -41,4 +41,7 @@ namespace cas::math {
 
         virtual std::unordered_set<Variable> getVariables() const = 0;
     };
+
+    template<typename T>
+    concept ExpressionType = std::derived_from<T, Expression>;
 } // namespace cas::math

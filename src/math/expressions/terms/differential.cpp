@@ -9,8 +9,8 @@ namespace cas::math {
         return new Differential(this->symbol);
     }
 
-    ExpressionType Differential::getType() const {
-        return ExpressionType::Differential;
+    ExpressionTypes Differential::getType() const {
+        return ExpressionTypes::Differential;
     }
 
     std::string Differential::toString() const {

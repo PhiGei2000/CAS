@@ -8,14 +8,17 @@
 using namespace cas::commands;
 
 namespace cas {
-
     class Engine {
       private:
-        std::unordered_map<std::string, basic_command> commands;
+        std::unordered_map<std::string, basic_command*> commands;
+
+        void setupCommands();
 
       public:
-        template<typename... TArgs, CommandType<TArgs...> TCommand>
-        void addCommand(const std::string& alias, TCommand command);
+        Engine();
+
+        template<CommandType TCommand>        
+        void addCommand(const std::string& alias);
 
         void run() const;
     };

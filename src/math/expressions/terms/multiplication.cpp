@@ -19,8 +19,8 @@ namespace cas::math {
         return new Multiplication(left->copy(), right->copy());
     }
 
-    ExpressionType Multiplication::getType() const {
-        return ExpressionType::Multiplication;
+    ExpressionTypes Multiplication::getType() const {
+        return ExpressionTypes::Multiplication;
     }
 
     Expression* Multiplication::simplify() const {
@@ -29,17 +29,17 @@ namespace cas::math {
 
     std::string Multiplication::toString() const {
         std::string result;
-        if (left->getType() < ExpressionType::Multiplication) {
+        if (left->getType() < ExpressionTypes::Multiplication) {
             result += "(" + left->toString() + ")";
         }
         else {
             result += left->toString();
         }
 
-        if (right->getType() == ExpressionType::Exponentiation) {
+        if (right->getType() == ExpressionTypes::Exponentiation) {
             Exponentiation* exp = reinterpret_cast<Exponentiation*>(right);
 
-            if (exp->right->getType() == ExpressionType::Constant) {
+            if (exp->right->getType() == ExpressionTypes::Constant) {
                 double value = exp->right->getValue();
 
                 if (value < 0) {
@@ -57,7 +57,7 @@ namespace cas::math {
 
         result += "*";
 
-        if (right->getType() < ExpressionType::Multiplication) {
+        if (right->getType() < ExpressionTypes::Multiplication) {
             result += "(" + right->toString() + ")";
         }
         else {

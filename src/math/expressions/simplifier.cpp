@@ -55,12 +55,12 @@ namespace cas::math {
 #pragma endregion
 
     Expression* Simplifier::simplify(const Expression* expr) {
-        ExpressionType type = expr->getType();
+        ExpressionTypes type = expr->getType();
 
         switch (type) {
-            case ExpressionType::Addition:
+            case ExpressionTypes::Addition:
                 return simplifyAddition(reinterpret_cast<const Addition*>(expr));
-            case ExpressionType::Multiplication:
+            case ExpressionTypes::Multiplication:
                 return simplifyMultiplication(reinterpret_cast<const Multiplication*>(expr));
             default:
                 return expr->copy();
@@ -70,20 +70,20 @@ namespace cas::math {
     Simplifier::ProductParts Simplifier::getProductParts(const Multiplication* prod) noexcept(false) {
         ProductParts parts;
 
-        ExpressionType leftType = prod->left->getType();
-        ExpressionType rightType = prod->right->getType();
+        ExpressionTypes leftType = prod->left->getType();
+        ExpressionTypes rightType = prod->right->getType();
 
         switch (leftType) {
-            case ExpressionType::Addition:
+            case ExpressionTypes::Addition:
                 throw std::runtime_error("Can not get product parts if the product contains a addition as factor");
 
-            case ExpressionType::Multiplication: {
+            case ExpressionTypes::Multiplication: {
                 ProductParts leftParts = getProductParts(reinterpret_cast<Multiplication*>(prod->left));
 
                 parts.multiply(leftParts);
             } break;
 
-            case ExpressionType::Exponentiation: {
+            case ExpressionTypes::Exponentiation: {
                 Exponentiation* exp = reinterpret_cast<Exponentiation*>(prod->left);
                 try {
                     ProductParts leftParts = getExpProductParts(exp);
@@ -95,12 +95,12 @@ namespace cas::math {
 
             } break;
 
-            case ExpressionType::Constant: {
+            case ExpressionTypes::Constant: {
                 Constant* c = reinterpret_cast<Constant*>(prod->left);
                 parts.coefficient *= c->getValue();
             } break;
 
-            case ExpressionType::Variable: {
+            case ExpressionTypes::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(prod->left);
                 parts.variables[v->getSymbol()] += 1;
             } break;
@@ -111,28 +111,28 @@ namespace cas::math {
         }
 
         switch (rightType) {
-            case ExpressionType::Addition:
+            case ExpressionTypes::Addition:
                 throw std::runtime_error("Can not get product parts if the product contains a addition as factor");
 
-            case ExpressionType::Multiplication: {
+            case ExpressionTypes::Multiplication: {
                 ProductParts rightParts = getProductParts(reinterpret_cast<Multiplication*>(prod->right));
 
                 parts.multiply(rightParts);
             } break;
 
-            case ExpressionType::Exponentiation: {
+            case ExpressionTypes::Exponentiation: {
                 Exponentiation* exp = reinterpret_cast<Exponentiation*>(prod->right);
                 ProductParts rightParts = getExpProductParts(exp);
 
                 parts.multiply(rightParts);
             } break;
 
-            case ExpressionType::Constant: {
+            case ExpressionTypes::Constant: {
                 Constant* c = reinterpret_cast<Constant*>(prod->right);
                 parts.coefficient *= c->getValue();
             } break;
 
-            case ExpressionType::Variable: {
+            case ExpressionTypes::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(prod->right);
                 parts.variables[v->getSymbol()] += 1;
             } break;
@@ -155,19 +155,19 @@ namespace cas::math {
             throw std::runtime_error("Only constants are allowed as exponents");
         }
 
-        ExpressionType baseType = exp->left->getType();
+        ExpressionTypes baseType = exp->left->getType();
         switch (baseType) {
-            case ExpressionType::Addition:
+            case ExpressionTypes::Addition:
                 throw std::runtime_error("Can not get product parts if the product contains a addition as factor");
 
-            case ExpressionType::Multiplication: {
+            case ExpressionTypes::Multiplication: {
                 ProductParts baseParts = getProductParts(reinterpret_cast<Multiplication*>(exp->left));
                 baseParts.power(exponent);
 
                 parts.multiply(baseParts);
             } break;
 
-            case ExpressionType::Exponentiation: {
+            case ExpressionTypes::Exponentiation: {
                 Exponentiation* innerExp = reinterpret_cast<Exponentiation*>(exp->left);
                 ProductParts baseParts = getExpProductParts(innerExp);
 
@@ -175,13 +175,13 @@ namespace cas::math {
                 parts.multiply(baseParts);
             } break;
 
-            case ExpressionType::Constant: {
+            case ExpressionTypes::Constant: {
                 Constant* c = reinterpret_cast<Constant*>(exp->left);
 
                 parts.coefficient *= pow(c->getValue(), exponent);
             } break;
 
-            case ExpressionType::Variable: {
+            case ExpressionTypes::Variable: {
                 Variable* v = reinterpret_cast<Variable*>(exp->left);
 
                 parts.variables[v->getSymbol()] += exponent;
@@ -254,10 +254,10 @@ namespace cas::math {
     }
 
     void Simplifier::getSummands(const Expression* expr, std::vector<Expression*>* summands) {
-        if (expr->getType() == ExpressionType::Addition) {
+        if (expr->getType() == ExpressionTypes::Addition) {
             const Addition* sum = reinterpret_cast<const Addition*>(expr);
 
-            if (sum->left->getType() == ExpressionType::Addition) {
+            if (sum->left->getType() == ExpressionTypes::Addition) {
                 const Addition* leftSum = reinterpret_cast<const Addition*>(sum->left);
                 getSummands(leftSum, summands);
             }
@@ -265,7 +265,7 @@ namespace cas::math {
                 summands->push_back(sum->left->copy());
             }
 
-            if (sum->right->getType() == ExpressionType::Addition) {
+            if (sum->right->getType() == ExpressionTypes::Addition) {
                 const Addition* rightSum = reinterpret_cast<const Addition*>(sum->right);
                 getSummands(rightSum, summands);
             }
@@ -314,9 +314,9 @@ namespace cas::math {
         Expression* right = sum->right->simplify();
 
         // evaluate numerical values if the summands are constants
-        if (left->getType() == ExpressionType::Constant) {
+        if (left->getType() == ExpressionTypes::Constant) {
             double leftValue = left->getValue();
-            if (right->getType() == ExpressionType::Constant) {
+            if (right->getType() == ExpressionTypes::Constant) {
                 double value = leftValue + right->getValue();
 
                 return new Constant(value);
@@ -328,23 +328,23 @@ namespace cas::math {
         }
 
         // ignore second summand if it is zero
-        if (right->getType() == ExpressionType::Constant) {
+        if (right->getType() == ExpressionTypes::Constant) {
             double rightValue = right->getValue();
             if (rightValue == 0)
                 return left;
         }
 
         Addition* simplifiedSum = new Addition(left, right);
-        if (left->getType() == ExpressionType::Addition || right->getType() == ExpressionType::Addition) {
+        if (left->getType() == ExpressionTypes::Addition || right->getType() == ExpressionTypes::Addition) {
             std::vector<Expression*> summands;
             getSummands(simplifiedSum, &summands);
 
             std::vector<ProductParts> combinedTerms = {};
             for (const auto& summand : summands) {
-                ExpressionType type = summand->getType();
+                ExpressionTypes type = summand->getType();
 
                 switch (type) {
-                    case ExpressionType::Exponentiation: {
+                    case ExpressionTypes::Exponentiation: {
                         try {
                             ProductParts parts = getExpProductParts(reinterpret_cast<const Exponentiation*>(summand));
 
@@ -368,7 +368,7 @@ namespace cas::math {
                             combinedTerms.push_back(ProductParts{1, {}, {summand}});
                         }
                     } break;
-                    case ExpressionType::Multiplication: {
+                    case ExpressionTypes::Multiplication: {
                         ProductParts parts = getProductParts(reinterpret_cast<const Multiplication*>(summand));
 
                         auto it = combinedTerms.begin();
@@ -388,7 +388,7 @@ namespace cas::math {
                         }
                     } break;
 
-                    case ExpressionType::Constant: {
+                    case ExpressionTypes::Constant: {
                         double value = summand->getValue();
 
                         auto it = combinedTerms.begin();
@@ -404,8 +404,8 @@ namespace cas::math {
                         }
                     } break;
 
-                    case ExpressionType::NamedConstant:
-                    case ExpressionType::Variable: {
+                    case ExpressionTypes::NamedConstant:
+                    case ExpressionTypes::Variable: {
                         const Variable* var = reinterpret_cast<const Variable*>(summand);
                         ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getSymbol(), 1}}, {}};
 
@@ -455,9 +455,9 @@ namespace cas::math {
         Expression* right = prod->right->simplify();
 
         // evaluate numerical values if the factors are constants
-        if (left->getType() == ExpressionType::Constant) {
+        if (left->getType() == ExpressionTypes::Constant) {
             double leftValue = left->getValue();
-            if (right->getType() == ExpressionType::Constant) {
+            if (right->getType() == ExpressionTypes::Constant) {
                 double value = leftValue * right->getValue();
                 return new Constant(value);
             }
@@ -471,7 +471,7 @@ namespace cas::math {
             }
         }
 
-        if (right->getType() == ExpressionType::Constant) {
+        if (right->getType() == ExpressionTypes::Constant) {
             double rightValue = right->getValue();
 
             // ignore second factor if it is one
@@ -485,7 +485,7 @@ namespace cas::math {
         }
 
         // multiply out
-        if (left->getType() == ExpressionType::Addition || right->getType() == ExpressionType::Addition) {
+        if (left->getType() == ExpressionTypes::Addition || right->getType() == ExpressionTypes::Addition) {
             Expression* sum = multiplyOut(left, right);
 
             return sum->simplify();
@@ -509,10 +509,10 @@ namespace cas::math {
         Expression* left = exp->left->simplify();
         Expression* right = exp->right->simplify();
 
-        if (right->getType() == ExpressionType::Constant) {
+        if (right->getType() == ExpressionTypes::Constant) {
             double value = right->getValue();
 
-            if (left->getType() == ExpressionType::Constant) {
+            if (left->getType() == ExpressionTypes::Constant) {
                 return new Constant(pow(left->getValue(), value));
             }
 

@@ -22,8 +22,8 @@ namespace cas::math {
         return new Exponentiation(left->copy(), right->copy());
     }
 
-    ExpressionType Exponentiation::getType() const {
-        return ExpressionType::Exponentiation;
+    ExpressionTypes Exponentiation::getType() const {
+        return ExpressionTypes::Exponentiation;
     }
 
     Expression* Exponentiation::simplify() const {
@@ -32,7 +32,7 @@ namespace cas::math {
 
     std::string Exponentiation::toString() const {
         std::stringstream ss;
-        bool bracketsLeft = left->getType() <= ExpressionType::Exponentiation;
+        bool bracketsLeft = left->getType() <= ExpressionTypes::Exponentiation;
 
         if (bracketsLeft)
             ss << "(";
@@ -44,7 +44,7 @@ namespace cas::math {
 
         ss << "^";
 
-        bool bracketsRight = right->getType() < ExpressionType::Exponentiation;
+        bool bracketsRight = right->getType() < ExpressionTypes::Exponentiation;
         if (bracketsRight)
             ss << "(";
 

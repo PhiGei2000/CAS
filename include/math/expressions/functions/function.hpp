@@ -6,8 +6,8 @@ namespace cas::math {
     struct Function : public Expression {
       public:
         virtual std::string getName() const = 0;
-        virtual ExpressionType getType() const {
-            return ExpressionType::Function;
+        virtual ExpressionTypes getType() const {
+            return ExpressionTypes::Function;
         }
     };
 } // namespace cas::math

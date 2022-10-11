@@ -13,7 +13,7 @@ namespace cas::math {
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
-        virtual ExpressionType getType() const override;
+        virtual ExpressionTypes getType() const override;
 
         virtual bool dependsOn(const Variable& var) const override;
 
@@ -30,7 +30,7 @@ namespace cas::math {
         NamedConstant(const std::string& symbol, double value);
 
         virtual Expression* copy() const override;
-        virtual ExpressionType getType() const override;
+        virtual ExpressionTypes getType() const override;
 
         virtual std::string toString() const override;        
     };

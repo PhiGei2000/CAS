@@ -11,7 +11,7 @@ namespace cas::math {
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
-        virtual ExpressionType getType() const override;
+        virtual ExpressionTypes getType() const override;
 
         virtual Expression* simplify() const override;
 

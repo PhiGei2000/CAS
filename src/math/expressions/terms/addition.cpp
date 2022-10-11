@@ -22,8 +22,8 @@ namespace cas::math {
         return new Addition(left->copy(), right->copy());
     }
 
-    ExpressionType Addition::getType() const {
-        return ExpressionType::Addition;
+    ExpressionTypes Addition::getType() const {
+        return ExpressionTypes::Addition;
     }
 
     Expression* Addition::simplify() const {

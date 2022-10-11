@@ -28,8 +28,8 @@ namespace cas::math {
         return new Variable(*this);
     }
 
-    ExpressionType Variable::getType() const {
-        return ExpressionType::Variable;
+    ExpressionTypes Variable::getType() const {
+        return ExpressionTypes::Variable;
     }
 
     std::string Variable::toString() const {
