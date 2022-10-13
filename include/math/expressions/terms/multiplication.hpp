@@ -15,6 +15,8 @@ namespace cas::math {
 
         virtual Expression* simplify() const override;
 
+        virtual Expression* differentiate(const Variable* var) const override;
+
         virtual std::string toString() const override;
     };
 

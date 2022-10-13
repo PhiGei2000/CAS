@@ -27,6 +27,8 @@ namespace cas::math {
         virtual Expression* copy() const override;
         virtual ExpressionTypes getType() const override;
 
+        virtual Expression* differentiate(const Variable* var) const override;
+
         virtual std::string toString() const override;
 
         virtual std::unordered_set<Variable> getVariables() const override;

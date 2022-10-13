@@ -1,5 +1,7 @@
 #include "math/expressions/functions/trigonometric.hpp"
 
+#include "math/expressions/terms/constant.hpp"
+#include "math/expressions/terms/multiplication.hpp"
 #include "math/expressions/terms/variable.hpp"
 
 #include <cmath>
@@ -31,6 +33,12 @@ namespace cas::math {
 
     bool Sin::dependsOn(const Variable& var) const {
         return argument->dependsOn(var);
+    }
+
+    Expression* Sin::differentiate(const Variable* var) const {
+        Expression* dArg = argument->differentiate(var);
+
+        return new Multiplication(new Cos(argument), dArg);
     }
 
     std::string Sin::toString() const {
@@ -67,6 +75,12 @@ namespace cas::math {
 
     bool Cos::dependsOn(const Variable& var) const {
         return argument->dependsOn(var);
+    }
+
+    Expression* Cos::differentiate(const Variable* var) const {
+        Expression* dArg = argument->differentiate(var);
+
+        return new Multiplication(new Constant(-1), new Multiplication(new Sin(argument), dArg));
     }
 
     std::string Cos::toString() const {

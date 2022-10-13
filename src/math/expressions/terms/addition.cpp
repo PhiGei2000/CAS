@@ -30,6 +30,10 @@ namespace cas::math {
         return Simplifier::simplifyAddition(this);
     }
 
+    Expression* Addition::differentiate(const Variable* var) const {
+        return new Addition(left->differentiate(var), right->differentiate(var));
+    }
+
     std::string Addition::toString() const {
         return left->toString() + "+" + right->toString();
     }

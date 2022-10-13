@@ -27,6 +27,20 @@ namespace cas::math {
         return Simplifier::simplifyMultiplication(this);
     }
 
+    Expression* Multiplication::differentiate(const Variable* var) const {
+        Expression* dLeft = left->differentiate(var);
+        Expression* dRight = right->differentiate(var);
+
+        Expression* rLeft = new Multiplication(dLeft, right);
+        Expression* rRight = new Multiplication(left, dRight);
+
+        Expression* result = new Addition(rLeft, rRight);
+
+        delete dLeft, dRight, rLeft, rRight;
+
+        return result;
+    }
+
     std::string Multiplication::toString() const {
         std::string result;
         if (left->getType() < ExpressionTypes::Multiplication) {

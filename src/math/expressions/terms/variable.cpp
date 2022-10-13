@@ -1,5 +1,7 @@
 #include "math/expressions/terms/variable.hpp"
 
+#include "math/expressions/terms/constant.hpp"
+
 #include <stdexcept>
 
 std::size_t std::hash<cas::math::Variable>::operator()(const cas::math::Variable& var) const noexcept {
@@ -30,6 +32,14 @@ namespace cas::math {
 
     ExpressionTypes Variable::getType() const {
         return ExpressionTypes::Variable;
+    }
+
+    Expression* Variable::differentiate(const Variable* var) const {
+        if (*this == *var) {
+            return new Constant(1);
+        }
+
+        return new Constant(0);
     }
 
     std::string Variable::toString() const {

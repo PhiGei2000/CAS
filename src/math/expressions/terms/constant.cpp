@@ -29,6 +29,10 @@ namespace cas::math {
         return false;
     }
 
+    Expression* Constant::differentiate(const Variable* var) const {
+        return new Constant(0);
+    }
+
     std::string Constant::toString() const {
         std::string str = std::to_string(value);
 
@@ -66,8 +70,8 @@ namespace cas::math {
         return symbol;
     }
 
-    E::E()        
-        : NamedConstant("e", std::numbers::e) {        
+    E::E()
+        : NamedConstant("e", std::numbers::e) {
     }
 
 #pragma endregion

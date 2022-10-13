@@ -1,6 +1,8 @@
 #include "math/expressions/functions/logarithm.hpp"
 
 #include "math/expressions/terms/constant.hpp"
+#include "math/expressions/terms/exponentiation.hpp"
+#include "math/expressions/terms/multiplication.hpp"
 #include "math/expressions/terms/variable.hpp"
 #include <cmath>
 
@@ -40,6 +42,12 @@ namespace cas::math {
         }
 
         return new Ln(argument);
+    }
+
+    Expression* Ln::differentiate(const Variable* var) const {
+        Expression* dArg = argument->differentiate(var);
+
+        return new Multiplication(new Exponentiation(argument, new Constant(-1)), dArg);
     }
 
     std::string Ln::toString() const {

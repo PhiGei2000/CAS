@@ -23,13 +23,14 @@ namespace cas {
     }
 
     void Engine::run() const {
-        std::string input;
+        char buffer[bufferSize];
 
         while (true) {
             std::cout << ">";
 
-            std::cin >> input;
+            std::cin.getline(buffer, bufferSize);
 
+            std::string input = buffer;
             if (input == "exit") {
                 return;
             }

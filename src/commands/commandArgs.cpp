@@ -1,7 +1,8 @@
 #include "commands/commandArgs.hpp"
 
-#include "math/expressions/expressions.hpp"
 #include "io/parser.hpp"
+#include "math/expressions/expressions.hpp"
+#include "utility.hpp"
 
 #include <sstream>
 #include <stdexcept>
@@ -9,18 +10,21 @@
 namespace cas::commands {
     template<>
     cas::math::Expression* CommandArgs::getArg<cas::math::Expression*>(int index) const {
-        return cas::io::Parser::parse(arguments.at(index));
+        std::string arg = arguments.at(index);
+
+        return cas::io::Parser::parse(removeWhiteSpaces(arg));
     }
 
     template<>
     cas::math::Variable* CommandArgs::getArg<cas::math::Variable*>(int index) const {
         std::string arg = arguments.at(index);
 
+        removeWhiteSpaces(arg);
         if (arg.size() != 1) {
             throw command_arg_exception(alias, index, "Variable required");
         }
 
-    return new Variable(arg.front());
+        return new Variable(arg.front());
     }
 
     CommandArgs parseCommand(const std::string& input) {
@@ -55,5 +59,6 @@ namespace cas::commands {
     }
 
     command_arg_exception::command_arg_exception(const std::string& commandAlias, int argIndex, const std::string& message)
-    : std::runtime_error(message), commandAlias(commandAlias), argumentIndex(argIndex){}
-}
+        : std::runtime_error(message), commandAlias(commandAlias), argumentIndex(argIndex) {
+    }
+} // namespace cas::commands

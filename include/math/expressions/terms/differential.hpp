@@ -7,8 +7,10 @@ namespace cas::math {
         Differential(VariableSymbol symbol);
 
         virtual Expression* copy() const override;
-
         virtual ExpressionTypes getType() const override;
+
+        virtual Expression* differentiate(const Variable* var) const override;
+
         virtual std::string toString() const override;
     };
 } // namespace cas::math

@@ -30,6 +30,19 @@ namespace cas::math {
         return Simplifier::simplifyExponentiation(this);
     }
 
+    Expression* Exponentiation::differentiate(const Variable* var) const {
+        Expression* dBase = left->differentiate(var);
+        Expression* dExp = right->differentiate(var);
+
+        // d(a^b)=d(e^(b*ln(a)))=e^(b*ln(a))*d(b*ln(a))=a^b*(db*ln(a)+b*da/a)
+        return new Multiplication(this->copy(),
+            new Addition(new Multiplication(dExp, new Ln(left)),
+                new Multiplication(right,
+                    new Multiplication(dBase,
+                        new Exponentiation(left,
+                            new Constant(-1))))));
+    }
+
     std::string Exponentiation::toString() const {
         std::stringstream ss;
         bool bracketsLeft = left->getType() <= ExpressionTypes::Exponentiation;

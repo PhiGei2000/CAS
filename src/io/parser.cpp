@@ -219,4 +219,4 @@ namespace cas::io {
     Expression* Parser::parse(const std::string& str) {
         return parseAddition(str);
     }
-} // namespace cas::math
+} // namespace cas::io

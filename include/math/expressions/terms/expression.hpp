@@ -37,6 +37,8 @@ namespace cas::math {
         virtual Expression* simplify() const;
         virtual void substitute(Expression* expression, Expression* newExpression);
 
+        virtual Expression* differentiate(const Variable* var) const = 0;
+
         virtual std::string toString() const = 0;
 
         virtual std::unordered_set<Variable> getVariables() const = 0;
