@@ -13,9 +13,14 @@ namespace cas::math {
     }
 
     BinaryExpression::BinaryExpression(Expression* left, Expression* right, bool commutative)
-        : left(left), right(right), commutative(commutative) {
-        left->parent = this;
-        right->parent = this;
+        : commutative(commutative) {
+        // check if the child terms are already part of an expression and copy them if they are
+        this->left = left->parent == nullptr ? left : left->copy();
+        this->right = right->parent == nullptr ? right : right->copy();
+
+        // assign new parent        
+        this->left->parent = this;
+        this->right->parent = this;
     }
 
     BinaryExpression::~BinaryExpression() {

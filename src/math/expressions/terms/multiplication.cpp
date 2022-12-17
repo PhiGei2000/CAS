@@ -28,15 +28,15 @@ namespace cas::math {
     }
 
     Expression* Multiplication::differentiate(const Variable* var) const {
+        // calculate the derivative of the two factors
         Expression* dLeft = left->differentiate(var);
         Expression* dRight = right->differentiate(var);
 
+        // apply product rule
         Expression* rLeft = new Multiplication(dLeft, right);
         Expression* rRight = new Multiplication(left, dRight);
 
         Expression* result = new Addition(rLeft, rRight);
-
-        delete dLeft, dRight, rLeft, rRight;
 
         return result;
     }
