@@ -1,6 +1,7 @@
 #include "math/expressions/functions/trigonometric.hpp"
 
 #include "math/expressions/terms/constant.hpp"
+#include "math/expressions/terms/exponentiation.hpp"
 #include "math/expressions/terms/multiplication.hpp"
 #include "math/expressions/terms/variable.hpp"
 
@@ -9,12 +10,12 @@
 namespace cas::math {
 
 #pragma region Sin
-    Sin::Sin(const Expression& argument)
-        : argument(argument.copy()) {
+    Sin::Sin(const Expression& argument) {
+        arguments[0] = assign(argument.copy(), this);
     }
 
-    Sin::Sin(Expression* argument)
-        : argument(argument) {
+    Sin::Sin(Expression* argument) {
+        arguments[0] = assign(argument, this);
     }
 
     std::string Sin::getName() const {
@@ -22,41 +23,29 @@ namespace cas::math {
     }
 
     double Sin::getValue() const {
-        double argValue = argument->getValue();
+        double argValue = arguments[0]->getValue();
 
         return sin(argValue);
     }
 
     Expression* Sin::copy() const {
-        return new Sin(argument->copy());
-    }
-
-    bool Sin::dependsOn(const Variable& var) const {
-        return argument->dependsOn(var);
+        return new Sin(arguments[0]->copy());
     }
 
     Expression* Sin::differentiate(const Variable* var) const {
-        Expression* dArg = argument->differentiate(var);
+        Expression* dArg = arguments[0]->differentiate(var);
 
-        return new Multiplication(new Cos(argument), dArg);
-    }
-
-    std::string Sin::toString() const {
-        return getName() + "(" + argument->toString() + ")";
-    }
-
-    std::unordered_set<Variable> Sin::getVariables() const {
-        return argument->getVariables();
+        return new Multiplication(new Cos(arguments[0]), dArg);
     }
 #pragma endregion
 
 #pragma region Cos
-    Cos::Cos(const Expression& argument)
-        : argument(argument.copy()) {
+    Cos::Cos(const Expression& argument) {
+        arguments[0] = assign(argument.copy(), this);
     }
 
-    Cos::Cos(Expression* argument)
-        : argument(argument) {
+    Cos::Cos(Expression* argument) {
+        arguments[0] = assign(argument, this);
     }
 
     std::string Cos::getName() const {
@@ -64,31 +53,50 @@ namespace cas::math {
     }
 
     double Cos::getValue() const {
-        double argValue = argument->getValue();
+        double argValue = arguments[0]->getValue();
 
         return cos(argValue);
     }
 
     Expression* Cos::copy() const {
-        return new Cos(argument->copy());
-    }
-
-    bool Cos::dependsOn(const Variable& var) const {
-        return argument->dependsOn(var);
+        return new Cos(arguments[0]->copy());
     }
 
     Expression* Cos::differentiate(const Variable* var) const {
-        Expression* dArg = argument->differentiate(var);
+        Expression* dArg = arguments[0]->differentiate(var);
 
-        return new Multiplication(new Constant(-1), new Multiplication(new Sin(argument), dArg));
+        return new Multiplication(new Constant(-1), new Multiplication(new Sin(arguments[0]), dArg));
     }
 
-    std::string Cos::toString() const {
-        return getName() + "(" + argument->toString() + ")";
+#pragma endregion
+
+#pragma region Tan
+    Tan::Tan(const Expression& argument) {
+        arguments[0] = assign(argument.copy(), this);
     }
 
-    std::unordered_set<Variable> Cos::getVariables() const {
-        return argument->getVariables();
+    Tan::Tan(Expression* argument) {
+        arguments[0] = assign(argument, this);
+    }
+
+    std::string Tan::getName() const {
+        return "tan";
+    }
+
+    double Tan::getValue() const {
+        double argValue = arguments[0]->getValue();
+
+        return tan(argValue);
+    }
+
+    Expression* Tan::copy() const {
+        return new Tan(arguments[0]->copy());
+    }
+
+    Expression* Tan::differentiate(const Variable* var) const {
+        Expression* dArg = arguments[0]->differentiate(var);
+
+        return new Multiplication(dArg, new Exponentiation(new Cos(arguments[0]), new Constant(-2)));
     }
 #pragma endregion
 } // namespace cas::math

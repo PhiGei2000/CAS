@@ -4,8 +4,8 @@
 
 #include <stdexcept>
 
-std::size_t std::hash<cas::math::Variable>::operator()(const cas::math::Variable& var) const noexcept {
-    return std::hash<cas::math::VariableSymbol>{}(var.getSymbol());
+constexpr bool std::less<cas::math::Variable>::operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const {
+    return lhs.getSymbol() < rhs.getSymbol();
 }
 
 namespace cas::math {
@@ -46,7 +46,7 @@ namespace cas::math {
         return std::string(1, symbol);
     }
 
-    std::unordered_set<Variable> Variable::getVariables() const {
+    std::set<Variable> Variable::getVariables() const {
         return {Variable(symbol)};
     }
 

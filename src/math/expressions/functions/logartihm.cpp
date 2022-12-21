@@ -29,10 +29,6 @@ namespace cas::math {
         return new Ln(argument->copy());
     }
 
-    bool Ln::dependsOn(const Variable& var) const {
-        return argument->dependsOn(var);
-    }
-
     Expression* Ln::simplify() const {
         Expression* argument = this->argument->simplify();
 
@@ -48,13 +44,5 @@ namespace cas::math {
         Expression* dArg = argument->differentiate(var);
 
         return new Multiplication(new Exponentiation(argument, new Constant(-1)), dArg);
-    }
-
-    std::string Ln::toString() const {
-        return getName() + "(" + argument->toString() + ")";
-    }
-
-    std::unordered_set<Variable> Ln::getVariables() const {
-        return argument->getVariables();
     }
 } // namespace cas::math

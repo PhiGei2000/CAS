@@ -188,7 +188,7 @@ namespace cas::math {
             } break;
 
             default:
-                parts.restTerms.push_back(exp->left);
+                parts.restTerms.push_back(exp->copy());
                 break;
         }
 

@@ -49,7 +49,7 @@ namespace cas::math {
         return str;
     }
 
-    std::unordered_set<Variable> Constant::getVariables() const {
+    std::set<Variable> Constant::getVariables() const {
         return {};
     }
 

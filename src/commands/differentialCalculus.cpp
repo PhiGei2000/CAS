@@ -9,7 +9,7 @@ namespace cas::commands {
 
     Expression* Df::operator()(Expression* input) const {
         Expression* result = new Constant(0);
-        std::unordered_set<Variable> vars = input->getVariables();
+        std::set<Variable> vars = input->getVariables();
 
         if (vars.size() > 0) {
             delete result;

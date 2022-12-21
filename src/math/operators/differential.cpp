@@ -1,13 +1,13 @@
 #include "math/operators/differential.hpp"
 
-#include <unordered_map>
-#include <unordered_set>
+#include <map>
+#include <set>
 
 namespace cas::math {
     Expression* D(Expression* expr) {
-        std::unordered_set<Variable> variables = expr->getVariables();
+        std::set<Variable> variables = expr->getVariables();
 
-        std::unordered_map<Variable, Expression*> derivatives;
+        std::map<Variable, Expression*> derivatives;
 
         for (const auto& var : variables) {
             derivatives[var] = D(expr, Variable(var))->simplify();
@@ -92,7 +92,7 @@ namespace cas::math {
                 }
                 break;
             case ExpressionTypes::Function:
-                result = DFunction(reinterpret_cast<Function*>(expr), var);
+                result = DFunction(reinterpret_cast<BaseFunction*>(expr), var);
                 break;
             default:
                 return nullptr;
@@ -101,7 +101,7 @@ namespace cas::math {
         return result;
     }
 
-    Expression* DFunction(Function* function, const Variable& var) {
+    Expression* DFunction(BaseFunction* function, const Variable& var) {
         const std::string& functionName = function->getName();
 
         if (functionName == "ln") {
@@ -113,13 +113,13 @@ namespace cas::math {
         else if (functionName == "sin") {
             Sin* sin = reinterpret_cast<Sin*>(function);
 
-            Expression* argument = sin->argument->copy();
+            Expression* argument = sin->arguments[0]->copy();
             return new Multiplication(new Cos(argument), D(argument, var));
         }
         else if (functionName == "cos") {
             Cos* cos = reinterpret_cast<Cos*>(function);
 
-            Expression* argument = cos->argument->copy();
+            Expression* argument = cos->arguments[0]->copy();
             return new Multiplication(new Multiplication(new Constant(-1), new Sin(argument)), D(argument, var));
         }
 

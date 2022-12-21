@@ -4,12 +4,13 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "commands/differentialCalculus.hpp"
+#include "commands/commands.hpp"
 
 namespace cas {
     void Engine::setupCommands() {
         this->addCommand<commands::D>("D");
         this->addCommand<commands::Df>("Df");
+        this->addCommand<commands::Simplify>("Simplify");
     }
 
     Engine::Engine() {

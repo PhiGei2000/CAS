@@ -5,7 +5,7 @@
 namespace cas::math {
     ExpressionMatcher::ExpressionMatcher(Expression* pattern)
         : pattern(pattern) {
-        const std::unordered_set<Variable> vars = pattern->getVariables();
+        const std::set<Variable> vars = pattern->getVariables();
         for (const Variable& var : vars) {
             variable_storage[var] = nullptr;
         }

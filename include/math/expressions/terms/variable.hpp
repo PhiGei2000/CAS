@@ -5,8 +5,8 @@
 #include <functional>
 
 template<>
-struct std::hash<cas::math::Variable> {
-    std::size_t operator()(const cas::math::Variable& var) const noexcept;
+struct std::less<cas::math::Variable> {
+    constexpr bool operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const;
 };
 
 namespace cas::math {
@@ -31,9 +31,8 @@ namespace cas::math {
 
         virtual std::string toString() const override;
 
-        virtual std::unordered_set<Variable> getVariables() const override;
+        virtual std::set<Variable> getVariables() const override;
 
         bool operator==(const Variable& other) const;
     };
 } // namespace cas::math
-

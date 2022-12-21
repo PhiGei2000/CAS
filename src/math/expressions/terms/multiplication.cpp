@@ -61,7 +61,12 @@ namespace cas::math {
 
                     result += "(" + exp->left->toString() + ")";
                     if (value != -1) {
-                        result += "^" + exp->right->toString();
+                        Expression* negExp = new Multiplication(new Constant(-1), exp->right);
+                        Expression* simpNegExp = negExp->simplify();
+
+                        result += "^" + simpNegExp->toString();
+
+                        delete negExp, simpNegExp;
                     }
 
                     return result;

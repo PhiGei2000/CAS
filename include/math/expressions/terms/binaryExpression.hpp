@@ -19,7 +19,7 @@ struct BinaryExpression : public Expression {
 
     virtual void substitute(Expression* expression, Expression* newExpression) override;
 
-    virtual std::unordered_set<Variable> getVariables() const override;
+    virtual std::set<Variable> getVariables() const override;
 };
 
 } // namespace cas::math

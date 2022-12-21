@@ -15,7 +15,18 @@ namespace cas::math {
     }
 
     void Expression::substitute(Expression* expr, Expression* newExpr) {
+    }
 
+    Expression* assign(Expression* other, Expression* parent) {
+        Expression* expr;
+        if (other->parent == nullptr || other->parent == parent) {
+            expr = other;
+        }
+        else {
+            expr = other->copy();
+        }
+        expr->parent = parent;
+        return expr;
     }
 
 } // namespace cas::math

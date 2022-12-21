@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include <string>
-#include <unordered_set>
+#include <set>
 
 namespace cas::math {
     enum class ExpressionTypes {
@@ -41,9 +41,11 @@ namespace cas::math {
 
         virtual std::string toString() const = 0;
 
-        virtual std::unordered_set<Variable> getVariables() const = 0;
+        virtual std::set<Variable> getVariables() const = 0;
     };
 
     template<typename T>
     concept ExpressionType = std::derived_from<T, Expression>;
+
+    Expression* assign(Expression* other, Expression* parent);
 } // namespace cas::math

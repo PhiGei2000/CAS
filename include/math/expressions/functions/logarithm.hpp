@@ -3,7 +3,7 @@
 #include "function.hpp"
 
 namespace cas::math {
-    struct Ln : public Function {
+    struct Ln : public Function<1> {
       public:
         Expression* argument;
 
@@ -15,15 +15,9 @@ namespace cas::math {
         virtual double getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual bool dependsOn(const Variable& var) const override;
-
         virtual Expression* simplify() const override;
 
         virtual Expression* differentiate(const Variable* var) const override;
-
-        virtual std::string toString() const override;
-
-        virtual std::unordered_set<Variable> getVariables() const override;
     };
 
     // class Logarithm : public Ln {

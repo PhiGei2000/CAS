@@ -4,18 +4,18 @@
 
 #include "terms/variable.hpp"
 
-#include <unordered_map>
+#include <map>
 
 namespace cas::math {
 
     struct ExpressionMatch {
         bool success;
-        std::unordered_map<Variable, Expression*> variables;
+        std::map<Variable, Expression*> variables;
     };
 
     class ExpressionMatcher {
       private:
-        std::unordered_map<Variable, Expression*> variable_storage;
+        std::map<Variable, Expression*> variable_storage;
 
         bool matches(Expression* expr, Expression* pattern);
 

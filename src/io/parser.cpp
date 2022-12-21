@@ -11,7 +11,7 @@ namespace cas::io {
         // get first summand
         int bracketCounter = 0;
         auto it = str.begin();
-        while (!(it == str.end() || ((*it) == '+' || (*it) == '-') && bracketCounter == 0)) {
+        while (!(it == str.end() || ((*it) == '+' || ((*it) == '-' && it != str.begin())) && bracketCounter == 0)) {
             ss << *it;
 
             if (*it == '(')
@@ -52,7 +52,7 @@ namespace cas::io {
         // get first factor
         int bracketCounter = 0;
         auto it = str.begin();
-        while (!(it == str.end() || ((*it) == '*' || (*it) == '/') && bracketCounter == 0)) {
+        while (!(it == str.end() || (*it) == '*' && bracketCounter == 0)) {
             ss << *it;
 
             if (*it == '(')
@@ -65,24 +65,47 @@ namespace cas::io {
 
         // no multiplication symbol found
         if (it == str.end()) {
-            return parseExponentiation(str);
+            return parseDivision(str);
         }
 
-        // extract factors from the string
-        char op = *it;
-
+        // extract factors from the string        
         int index = it - str.begin();
         const std::string& leftStr = ss.str();
         const std::string& rightStr = str.substr(index + 1);
 
+        // create result
+        Expression* left = parseDivision(leftStr);
+        Expression* right = parseMultiplication(rightStr);
+
+        return new Multiplication(left, right);
+    }
+
+    Expression* Parser::parseDivision(const std::string& str) {
+        std::stringstream ss;
+        auto it = str.begin();
+        int bracketCounter = 0;
+
+        while (!(it == str.end() || (*it) == '/' && bracketCounter == 0)) {
+            ss << *it;
+
+            if (*it == '(')
+                bracketCounter++;
+            else if (*it == ')')
+                bracketCounter--;
+
+            it++;
+        }
+
+        if (it == str.end()) {
+            return parseExponentiation(str);
+        }
+
+        int index = it - str.begin();
+        std::string leftStr = ss.str();
+        std::string rightStr = str.substr(index + 1);
+
         Expression* left = parseExponentiation(leftStr);
-        Expression* right;
-        if (op == '*') {
-            right = parseMultiplication(rightStr);
-        }
-        else {
-            right = new Exponentiation(new Constant(-1), parseExponentiation(rightStr));
-        }
+        Expression* right = new Exponentiation(parseExponentiation(rightStr), new Constant(-1));
 
         return new Multiplication(left, right);
     }
@@ -104,7 +127,7 @@ namespace cas::io {
             it++;
         }
 
-        // no multiplication symbol found
+        // no exponentiation symbol found
         if (it == str.end()) {
             // inner expression
             if (str.front() == '(' && str.back() == ')') {
@@ -119,7 +142,7 @@ namespace cas::io {
             }
 
             char front = str.front();
-            if (front <= '9' && front >= '0') {
+            if ((front <= '9' && front >= '0') || front == '-') {
                 return parseConstant(str);
             }
             else {
@@ -133,7 +156,7 @@ namespace cas::io {
         const std::string& rightStr = str.substr(index + 1);
 
         Expression* left = parseExponentiation(leftStr);
-        Expression* right = parseAddition(rightStr);
+        Expression* right = parseAddition(getBracketContent(rightStr));
 
         return new Exponentiation(left, right);
     }
@@ -152,7 +175,7 @@ namespace cas::io {
         return new Constant(value);
     }
 
-    Function* Parser::parseFunction(const std::string& str) {
+    BaseFunction* Parser::parseFunction(const std::string& str) {
         std::stringstream ss;
 
         // extract function symbol
@@ -165,12 +188,22 @@ namespace cas::io {
 
         const std::string& symbol = ss.str();
         const std::string& argument = getBracketContent(str, it);
+        Expression* argumentExpr = parse(argument);
 
         if (symbol == "sin") {
-            return new Sin(parse(argument));
+            return new Sin(argumentExpr);
         }
         else if (symbol == "cos") {
-            return new Cos(parse(argument));
+            return new Cos(argumentExpr);
+        }
+        else if (symbol == "tan") {
+            return new Tan(argumentExpr);
+        }
+        else if (symbol == "sinh") {
+            return new Sinh(argumentExpr);
+        }
+        else if (symbol == "cosh") {
+            return new Cosh(argumentExpr);
         }
         else if (symbol == "ln") {
             return new Ln(parse(argument));
