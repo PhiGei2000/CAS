@@ -12,7 +12,7 @@ namespace cas::math {
         virtual double getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
     };
 
     struct Cosh : public Function<1> {
@@ -24,6 +24,6 @@ namespace cas::math {
         virtual double getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
     };
 }

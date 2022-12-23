@@ -1,9 +1,6 @@
 #include "math/expressions/functions/trigonometric.hpp"
 
-#include "math/expressions/terms/constant.hpp"
-#include "math/expressions/terms/exponentiation.hpp"
-#include "math/expressions/terms/multiplication.hpp"
-#include "math/expressions/terms/variable.hpp"
+#include "math/expressions/operations.hpp"
 
 #include <cmath>
 
@@ -29,14 +26,42 @@ namespace cas::math {
     }
 
     Expression* Sin::copy() const {
-        return new Sin(arguments[0]->copy());
+        return new Sin(arguments[0]);
     }
 
-    Expression* Sin::differentiate(const Variable* var) const {
-        Expression* dArg = arguments[0]->differentiate(var);
+    Expression* Sin::getDerivative() const {
+        return new Cos(arguments[0]);
+    }    
+#pragma endregion
 
-        return new Multiplication(new Cos(arguments[0]), dArg);
+#pragma region Arcsin
+    Arcsin::Arcsin(const Expression& argument) {
+        arguments[0] = assign(argument.copy(), this);
     }
+
+    Arcsin::Arcsin(Expression* argument) {
+        arguments[0] = assign(argument, this);
+    }
+
+    std::string Arcsin::getName() const {
+        return "arcsin";
+    }
+
+    double Arcsin::getValue() const {
+        double argumentValue = arguments[0]->getValue();
+
+        return asin(argumentValue);
+    }
+
+    Expression* Arcsin::copy() const {
+        return new Arcsin(arguments[0]);
+    }
+
+    Expression* Arcsin::getDerivative() const {
+        return divide(1, add(1, power(arguments[0], 2)));
+    }
+
+    
 #pragma endregion
 
 #pragma region Cos
@@ -59,15 +84,14 @@ namespace cas::math {
     }
 
     Expression* Cos::copy() const {
-        return new Cos(arguments[0]->copy());
+        return new Cos(arguments[0]);
     }
 
-    Expression* Cos::differentiate(const Variable* var) const {
-        Expression* dArg = arguments[0]->differentiate(var);
-
-        return new Multiplication(new Constant(-1), new Multiplication(new Sin(arguments[0]), dArg));
+    Expression* Cos::getDerivative() const {
+        return multiply(-1, new Sin(arguments[0]));
     }
 
+    
 #pragma endregion
 
 #pragma region Tan
@@ -90,13 +114,12 @@ namespace cas::math {
     }
 
     Expression* Tan::copy() const {
-        return new Tan(arguments[0]->copy());
+        return new Tan(arguments[0]);
     }
 
-    Expression* Tan::differentiate(const Variable* var) const {
-        Expression* dArg = arguments[0]->differentiate(var);
-
-        return new Multiplication(dArg, new Exponentiation(new Cos(arguments[0]), new Constant(-2)));
+    Expression* Tan::getDerivative() const {
+        return add(1, power(new Tan(arguments[0]->copy()), 2));
     }
+    
 #pragma endregion
 } // namespace cas::math

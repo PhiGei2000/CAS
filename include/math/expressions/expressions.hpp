@@ -1,16 +1,40 @@
 #pragma once
 
+#include "functions.hpp"
 #include "terms/addition.hpp"
 #include "terms/constant.hpp"
+#include "terms/differential.hpp"
 #include "terms/exponentiation.hpp"
 #include "terms/multiplication.hpp"
 #include "terms/variable.hpp"
-#include "terms/differential.hpp"
-#include "functions.hpp"
 
-namespace cas::math {
-    Addition operator+(const Expression& left, const Expression& right);
-    Addition operator-(const Expression& left, const Expression& right);
-    Multiplication operator*(const Expression& left, const Expression& right);
-    Multiplication operator/(const Expression& left, const Expression& right);
-} // namespace cas::math
+#include <concepts>
+
+namespace cas {
+    template<typename T>
+    concept ExpressionType = std::derived_from<T, math::Expression>;
+
+    template<typename T>
+    concept NumericType = std::is_floating_point_v<T> || std::is_integral_v<T>;
+
+    template<typename T>
+    concept VariableSymbolType = std::is_same_v<math::VariableSymbol, T>;
+
+    template<typename T>
+    concept MathType = ExpressionType<T> || std::is_integral_v<T> || std::is_floating_point_v<T> || std::is_same_v<char, T>;
+
+    template<NumericType T>
+    math::Expression* toExpression(T expr) {
+        return new math::Constant(expr);
+    }
+
+    template<VariableSymbolType T>
+    math::Expression* toExpression(T expr) {
+        return new math::Variable(expr);
+    }
+
+    template<ExpressionType T>
+    math::Expression* toExpression(T* expr) {
+        return expr;
+    }
+} // namespace cas

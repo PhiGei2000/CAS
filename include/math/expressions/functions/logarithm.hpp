@@ -17,7 +17,7 @@ namespace cas::math {
 
         virtual Expression* simplify() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
     };
 
     // class Logarithm : public Ln {

@@ -13,7 +13,20 @@ namespace cas::math {
         virtual double getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
+    };
+
+    struct Arcsin : public Function<1> {
+      public:
+        Arcsin(const Expression& argument);
+        Arcsin(Expression* argument);
+
+        virtual std::string getName() const override;
+
+        virtual double getValue() const override;
+        virtual Expression* copy() const override;
+
+        virtual Expression* getDerivative() const override;
     };
 
     struct Cos : public Function<1> {
@@ -24,9 +37,9 @@ namespace cas::math {
         virtual std::string getName() const override;
 
         virtual double getValue() const override;
-        virtual Expression* copy() const override;        
+        virtual Expression* copy() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
     };
 
     struct Tan : public Function<1> {
@@ -39,6 +52,6 @@ namespace cas::math {
         virtual double getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual Expression* differentiate(const Variable* var) const override;
+        virtual Expression* getDerivative() const override;
     };
 } // namespace cas::math

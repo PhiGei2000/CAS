@@ -1,12 +1,11 @@
 #include "math/expressions/functions/logarithm.hpp"
 
-#include "math/expressions/terms/constant.hpp"
-#include "math/expressions/terms/exponentiation.hpp"
-#include "math/expressions/terms/multiplication.hpp"
-#include "math/expressions/terms/variable.hpp"
+#include "math/expressions/operations.hpp"
 #include <cmath>
 
 namespace cas::math {
+    // instantiateOperations(Ln)
+
     Ln::Ln(const Expression& argument)
         : argument(argument.copy()) {
     }
@@ -40,9 +39,7 @@ namespace cas::math {
         return new Ln(argument);
     }
 
-    Expression* Ln::differentiate(const Variable* var) const {
-        Expression* dArg = argument->differentiate(var);
-
-        return new Multiplication(new Exponentiation(argument, new Constant(-1)), dArg);
+    Expression* Ln::getDerivative() const {
+        return divide(1, arguments[0]);
     }
 } // namespace cas::math

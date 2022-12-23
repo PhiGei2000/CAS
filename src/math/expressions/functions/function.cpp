@@ -1,6 +1,6 @@
 #include "math/expressions/functions/function.hpp"
 
-#include "math/expressions/terms/variable.hpp"
+#include "math/expressions/expressions.hpp"
 
 #include <sstream>
 #include <vector>
@@ -40,7 +40,21 @@ namespace cas::math {
         return vars;
     }
 
+    template<int u>
+    Expression* Function<u>::differentiate(const Variable* var) const {
+        Expression* result = getDerivative();
+        
+        for (int i = 0; i < u; i++) {
+            Expression* dArg = arguments[i]->differentiate(var);
+            Multiplication* prod = new Multiplication(result, dArg);
+            result = prod;
+        }
+
+        return result;
+    }
+
     template bool Function<1>::dependsOn(const Variable&) const;
     template std::string Function<1>::toString() const;
     template std::set<Variable> Function<1>::getVariables() const;
+    template Expression* Function<1>::differentiate(const Variable*) const;
 } // namespace cas::math

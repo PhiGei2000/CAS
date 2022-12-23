@@ -27,10 +27,8 @@ namespace cas::math {
         return new Sinh(arguments[0]);
     }
 
-    Expression* Sinh::differentiate(const Variable* var) const {
-        Expression* dArg = arguments[0]->differentiate(var);
-
-        return new Multiplication(new Cosh(arguments[0]), dArg);
+    Expression* Sinh::getDerivative() const {
+        return new Cosh(arguments[0]);
     }
 #pragma endregion
 
@@ -56,9 +54,7 @@ namespace cas::math {
         return new Cosh(arguments[0]);
     }
 
-    Expression* Cosh::differentiate(const Variable* var) const {
-        Expression* dArg = arguments[0]->differentiate(var);
-
-        return new Multiplication(new Sinh(arguments[0]), dArg);
+    Expression* Cosh::getDerivative() const {
+        return new Sinh(arguments[0]);
     }
 } // namespace cas::math

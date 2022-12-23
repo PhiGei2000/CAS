@@ -41,11 +41,8 @@ namespace cas::math {
 
         virtual std::string toString() const = 0;
 
-        virtual std::set<Variable> getVariables() const = 0;
+        virtual std::set<Variable> getVariables() const = 0;        
     };
 
-    template<typename T>
-    concept ExpressionType = std::derived_from<T, Expression>;
-
-    Expression* assign(Expression* other, Expression* parent);
+    Expression* assign(Expression* other, Expression* parent);    
 } // namespace cas::math

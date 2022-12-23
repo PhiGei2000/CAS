@@ -4,11 +4,6 @@
 
 #include <functional>
 
-template<>
-struct std::less<cas::math::Variable> {
-    constexpr bool operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const;
-};
-
 namespace cas::math {
     using VariableSymbol = char;
 
@@ -35,4 +30,10 @@ namespace cas::math {
 
         bool operator==(const Variable& other) const;
     };
+
 } // namespace cas::math
+
+template<>
+struct std::less<cas::math::Variable> {
+    constexpr bool operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const;
+};

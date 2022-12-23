@@ -5,9 +5,11 @@
 namespace cas::math {
     struct BaseFunction : public Expression {
         virtual std::string getName() const = 0;
+        virtual Expression* getDerivative() const = 0;
+
         virtual ExpressionTypes getType() const {
             return ExpressionTypes::Function;
-        }        
+        }
     };
 
     template<int u>
@@ -20,5 +22,7 @@ namespace cas::math {
         virtual std::string toString() const override;
 
         virtual std::set<Variable> getVariables() const override;
+
+        virtual Expression* differentiate(const Variable* var) const override;
     };
 } // namespace cas::math
