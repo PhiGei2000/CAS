@@ -101,7 +101,8 @@
 			"xstddef": "cpp",
 			"xstring": "cpp",
 			"xtr1common": "cpp",
-			"xutility": "cpp"
+			"xutility": "cpp",
+			"regex": "cpp"
 		},
 		"C_Cpp.clang_format_path": "/usr/bin/clang-format",
 		"cmake.buildTask": false

@@ -26,4 +26,9 @@ namespace cas::math {
     Expression* divide(TLeft left, TRight right) {
         return multiply(left, power(right, -1));
     }
+
+    template<typename T>
+    Expression* sqrt(T expression) {
+        return power(expression, 0.5);
+    }
 } // namespace cas::math

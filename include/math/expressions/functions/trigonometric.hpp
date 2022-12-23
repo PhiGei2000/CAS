@@ -42,10 +42,36 @@ namespace cas::math {
         virtual Expression* getDerivative() const override;
     };
 
+    struct Arccos : public Function<1> {
+      public:
+        Arccos(const Expression& argument);
+        Arccos(Expression* argument);
+
+        virtual std::string getName() const override;
+
+        virtual double getValue() const override;
+        virtual Expression* copy() const override;
+
+        virtual Expression* getDerivative() const override;
+    };
+
     struct Tan : public Function<1> {
       public:
         Tan(const Expression& argument);
         Tan(Expression* argument);
+
+        virtual std::string getName() const override;
+
+        virtual double getValue() const override;
+        virtual Expression* copy() const override;
+
+        virtual Expression* getDerivative() const override;
+    };
+
+    struct Arctan : public Function<1> {
+      public:
+        Arctan(const Expression& argument);
+        Arctan(Expression* argument);
 
         virtual std::string getName() const override;
 
