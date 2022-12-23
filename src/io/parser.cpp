@@ -1,10 +1,13 @@
 #include "io/parser.hpp"
 
+#include <algorithm>
 #include <sstream>
 
 using namespace cas::math;
 
 namespace cas::io {
+    const std::regex Parser::numberRegex = std::regex("^-?\\d+");
+
     Expression* Parser::parseAddition(const std::string& str) {
         std::stringstream ss;
 
@@ -47,6 +50,12 @@ namespace cas::io {
     }
 
     Expression* Parser::parseMultiplication(const std::string& str) {
+        // negative sign
+        if (str.front() == '-' && !std::regex_match(str, numberRegex)) {            
+            Expression* expr = parse(str.substr(1));
+            return new Multiplication(new Constant(-1), expr);
+        }
+
         std::stringstream ss;
 
         // get first factor
@@ -68,7 +77,7 @@ namespace cas::io {
             return parseDivision(str);
         }
 
-        // extract factors from the string        
+        // extract factors from the string
         int index = it - str.begin();
         const std::string& leftStr = ss.str();
         const std::string& rightStr = str.substr(index + 1);
@@ -141,8 +150,7 @@ namespace cas::io {
                 }
             }
 
-            char front = str.front();
-            if ((front <= '9' && front >= '0') || front == '-') {
+            if (std::regex_match(str, numberRegex)) {
                 return parseConstant(str);
             }
             else {
@@ -175,7 +183,7 @@ namespace cas::io {
         return new Constant(value);
     }
 
-    BaseFunction* Parser::parseFunction(const std::string& str) {
+    Expression* Parser::parseFunction(const std::string& str) {
         std::stringstream ss;
 
         // extract function symbol
@@ -206,7 +214,10 @@ namespace cas::io {
             return new Cosh(argumentExpr);
         }
         else if (symbol == "ln") {
-            return new Ln(parse(argument));
+            return new Ln(argumentExpr);
+        }
+        else if (symbol == "exp") {
+            return new Exponentiation(new math::E(), argumentExpr);
         }
 
         throw new std::runtime_error("Function " + symbol + " is not defined");
