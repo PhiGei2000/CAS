@@ -1,6 +1,6 @@
-#include "math/expressions/terms/variable.hpp"
+#include "expressions/terms/variable.hpp"
 
-#include "math/expressions/terms/constant.hpp"
+#include "expressions/terms/constant.hpp"
 
 #include <stdexcept>
 

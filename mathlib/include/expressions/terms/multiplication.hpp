@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/expressions/terms/binaryExpression.hpp"
+#include "expressions/terms/binaryExpression.hpp"
 
 namespace cas::math {
 

@@ -1,6 +1,6 @@
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 
-#include "math/expressions/simplifier.hpp"
+#include "expressions/simplifier.hpp"
 
 #include <math.h>
 #include <sstream>

@@ -1,6 +1,6 @@
-#include "math/expressions/terms/binaryExpression.hpp"
+#include "expressions/terms/binaryExpression.hpp"
 
-#include "math/expressions/terms/variable.hpp"
+#include "expressions/terms/variable.hpp"
 
 #include <iostream>
 

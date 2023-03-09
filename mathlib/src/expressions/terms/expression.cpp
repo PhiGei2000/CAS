@@ -1,6 +1,6 @@
-#include "math/expressions/terms/expression.hpp"
+#include "expressions/terms/expression.hpp"
 
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 
 namespace cas::math {
     no_value_error::no_value_error(const std::string& message)

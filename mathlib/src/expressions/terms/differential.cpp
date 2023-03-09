@@ -1,4 +1,4 @@
-#include "math/expressions/terms/differential.hpp"
+#include "expressions/terms/differential.hpp"
 
 #include "except.hpp"
 

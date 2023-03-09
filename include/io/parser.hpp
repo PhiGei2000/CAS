@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 
 #include <regex>
 

@@ -1,6 +1,6 @@
-#include "math/expressions/functions/hyperbolic.hpp"
+#include "expressions/functions/hyperbolic.hpp"
 
-#include "math/expressions/operations.hpp"
+#include "expressions/operations.hpp"
 
 #include <cmath>
 

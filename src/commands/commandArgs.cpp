@@ -1,7 +1,7 @@
 #include "commands/commandArgs.hpp"
 
 #include "io/parser.hpp"
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 #include "utility.hpp"
 
 #include <sstream>

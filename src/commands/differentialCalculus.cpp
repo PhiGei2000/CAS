@@ -1,6 +1,6 @@
 #include "commands/differentialCalculus.hpp"
 
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 
 namespace cas::commands {
     Expression* D::operator()(Expression* input, Variable* var) const {

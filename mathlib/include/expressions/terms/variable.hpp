@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math/expressions/terms/expression.hpp"
+#include "expressions/terms/expression.hpp"
 
 #include <functional>
 

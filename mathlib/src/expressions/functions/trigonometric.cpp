@@ -1,6 +1,6 @@
-#include "math/expressions/functions/trigonometric.hpp"
+#include "expressions/functions/trigonometric.hpp"
 
-#include "math/expressions/operations.hpp"
+#include "expressions/operations.hpp"
 
 #include <cmath>
 
@@ -103,12 +103,11 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Tan
-    Tan::Tan(const Expression& argument)
-        : Tan(argument.copy()) {
+    Tan::Tan(const Expression& argument) {
+        arguments[0] = assign(argument.copy(), this);
     }
 
-    Tan::Tan(Expression* argument)
-        : BaseFunction::name("tan") {
+    Tan::Tan(Expression* argument) {
         arguments[0] = assign(argument, this);
     }
 

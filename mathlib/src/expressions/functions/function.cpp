@@ -1,6 +1,6 @@
-#include "math/expressions/functions/function.hpp"
+#include "expressions/functions/function.hpp"
 
-#include "math/expressions/expressions.hpp"
+#include "expressions/expressions.hpp"
 
 #include <sstream>
 #include <vector>

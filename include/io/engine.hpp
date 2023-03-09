@@ -5,7 +5,7 @@
 #include <unordered_map>
 
 #include "commands/command.hpp"
-#include "math/expressions/terms/variable.hpp"
+#include "expressions/terms/variable.hpp"
 
 using namespace cas::commands;
 

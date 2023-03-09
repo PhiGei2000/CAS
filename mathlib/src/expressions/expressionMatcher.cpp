@@ -1,6 +1,6 @@
-#include "math/expressions/expressionMatcher.hpp"
+#include "expressions/expressionMatcher.hpp"
 
-#include "math/expressions/terms/binaryExpression.hpp"
+#include "expressions/terms/binaryExpression.hpp"
 
 namespace cas::math {
     ExpressionMatcher::ExpressionMatcher(Expression* pattern)

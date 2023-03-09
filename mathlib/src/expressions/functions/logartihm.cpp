@@ -1,6 +1,6 @@
-#include "math/expressions/functions/logarithm.hpp"
+#include "expressions/functions/logarithm.hpp"
 
-#include "math/expressions/operations.hpp"
+#include "expressions/operations.hpp"
 #include <cmath>
 
 namespace cas::math {

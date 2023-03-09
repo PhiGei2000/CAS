@@ -1,4 +1,4 @@
-#include "math/expressions/simplifier.hpp"
+#include "expressions/simplifier.hpp"
 
 #include <math.h>
 #include <stdexcept>
