@@ -4,7 +4,7 @@
 
 namespace cas::math {
     struct BaseFunction : public Expression {
-        virtual std::string getName() const = 0;
+        const std::string name;
         virtual Expression* getDerivative() const = 0;
 
         virtual ExpressionTypes getType() const {

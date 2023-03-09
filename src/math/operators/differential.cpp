@@ -48,7 +48,6 @@ namespace cas::math {
         Expression* dLeft;
         Expression* dRight;
         switch (expr->getType()) {
-
             case ExpressionTypes::Addition:
                 addition = reinterpret_cast<Addition*>(expr);
                 result = new Addition(D(addition->left, var), D(addition->right, var));
@@ -92,37 +91,12 @@ namespace cas::math {
                 }
                 break;
             case ExpressionTypes::Function:
-                result = DFunction(reinterpret_cast<BaseFunction*>(expr), var);
+                result = reinterpret_cast<BaseFunction*>(expr)->differentiate(&var);
                 break;
             default:
                 return nullptr;
         }
 
         return result;
-    }
-
-    Expression* DFunction(BaseFunction* function, const Variable& var) {
-        const std::string& functionName = function->getName();
-
-        if (functionName == "ln") {
-            Ln* logarithm = reinterpret_cast<Ln*>(function);
-
-            Expression* argument = logarithm->argument->copy();
-            return new Multiplication(new Exponentiation(argument, new Constant(-1)), D(argument, var));
-        }
-        else if (functionName == "sin") {
-            Sin* sin = reinterpret_cast<Sin*>(function);
-
-            Expression* argument = sin->arguments[0]->copy();
-            return new Multiplication(new Cos(argument), D(argument, var));
-        }
-        else if (functionName == "cos") {
-            Cos* cos = reinterpret_cast<Cos*>(function);
-
-            Expression* argument = cos->arguments[0]->copy();
-            return new Multiplication(new Multiplication(new Constant(-1), new Sin(argument)), D(argument, var));
-        }
-
-        throw new std::runtime_error("Function derivative not implemented");
     }
 } // namespace cas::math

@@ -51,7 +51,7 @@ namespace cas::io {
 
     Expression* Parser::parseMultiplication(const std::string& str) {
         // negative sign
-        if (str.front() == '-' && !std::regex_match(str, numberRegex)) {            
+        if (str.front() == '-' && !std::regex_match(str, numberRegex)) {
             Expression* expr = parse(str.substr(1));
             return new Multiplication(new Constant(-1), expr);
         }
@@ -201,17 +201,32 @@ namespace cas::io {
         if (symbol == "sin") {
             return new Sin(argumentExpr);
         }
+        else if (symbol == "arcsin") {
+            return new Arcsin(argumentExpr);
+        }
         else if (symbol == "cos") {
             return new Cos(argumentExpr);
+        }
+        else if (symbol == "arccos") {
+            return new Arccos(argumentExpr);
         }
         else if (symbol == "tan") {
             return new Tan(argumentExpr);
         }
+        else if (symbol == "arctan") {
+            return new Arctan(argumentExpr);
+        }
         else if (symbol == "sinh") {
             return new Sinh(argumentExpr);
         }
+        else if (symbol == "asinh") {
+            return new Asinh(argumentExpr);
+        }
         else if (symbol == "cosh") {
             return new Cosh(argumentExpr);
+        }
+        else if (symbol == "acosh") {
+            return new Acosh(argumentExpr);
         }
         else if (symbol == "ln") {
             return new Ln(argumentExpr);

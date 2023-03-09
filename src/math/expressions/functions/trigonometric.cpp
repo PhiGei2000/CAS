@@ -15,10 +15,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Sin::getName() const {
-        return "sin";
-    }
-
     double Sin::getValue() const {
         double argValue = arguments[0]->getValue();
 
@@ -41,10 +37,6 @@ namespace cas::math {
 
     Arcsin::Arcsin(Expression* argument) {
         arguments[0] = assign(argument, this);
-    }
-
-    std::string Arcsin::getName() const {
-        return "arcsin";
     }
 
     double Arcsin::getValue() const {
@@ -71,10 +63,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Cos::getName() const {
-        return "cos";
-    }
-
     double Cos::getValue() const {
         double argValue = arguments[0]->getValue();
 
@@ -99,10 +87,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Arccos::getName() const {
-        return "arccos";
-    }
-
     double Arccos::getValue() const {
         double argValue = arguments[0]->getValue();
 
@@ -119,16 +103,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Tan
-    Tan::Tan(const Expression& argument) {
-        arguments[0] = assign(argument.copy(), this);
+    Tan::Tan(const Expression& argument)
+        : Tan(argument.copy()) {
     }
 
-    Tan::Tan(Expression* argument) {
+    Tan::Tan(Expression* argument)
+        : BaseFunction::name("tan") {
         arguments[0] = assign(argument, this);
-    }
-
-    std::string Tan::getName() const {
-        return "tan";
     }
 
     double Tan::getValue() const {
@@ -154,10 +135,6 @@ namespace cas::math {
 
     Arctan::Arctan(Expression* argument) {
         arguments[0] = assign(argument, this);
-    }
-
-    std::string Arctan::getName() const {
-        return "arctan";
     }
 
     double Arctan::getValue() const {

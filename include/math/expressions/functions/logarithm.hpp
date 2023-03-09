@@ -4,13 +4,9 @@
 
 namespace cas::math {
     struct Ln : public Function<1> {
-      public:
-        Expression* argument;
-
+      public:        
         Ln(const Expression& argument);
         Ln(Expression* argument);
-
-        virtual std::string getName() const override;
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;

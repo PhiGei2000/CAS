@@ -4,10 +4,10 @@
 
 namespace cas::math {
     struct Sinh : public Function<1> {
+        const std::string name = "sinh";
+
         Sinh(const Expression& argument);
         Sinh(Expression* argument);
-
-        virtual std::string getName() const override;
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
@@ -18,10 +18,10 @@ namespace cas::math {
     };
 
     struct Asinh : public Function<1> {
+        const std::string name = "asinh";
+
         Asinh(const Expression& argument);
         Asinh(Expression* argument);
-
-        virtual std::string getName() const override;
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
@@ -32,10 +32,9 @@ namespace cas::math {
     };
 
     struct Cosh : public Function<1> {
+        const std::string name = "cosh";
         Cosh(const Expression& argument);
         Cosh(Expression* argument);
-
-        virtual std::string getName() const override;
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
@@ -46,10 +45,10 @@ namespace cas::math {
     };
 
     struct Acosh : public Function<1> {
+        const std::string name = "acosh";
+
         Acosh(const Expression& argument);
         Acosh(Expression* argument);
-
-        virtual std::string getName() const override;
 
         virtual double getValue() const override;
         virtual Expression* copy() const override;
@@ -58,4 +57,4 @@ namespace cas::math {
 
         virtual Expression* getDerivative() const override;
     };
-}
+} // namespace cas::math

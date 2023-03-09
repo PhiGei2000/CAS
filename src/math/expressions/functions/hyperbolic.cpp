@@ -14,10 +14,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Sinh::getName() const {
-        return "sinh";
-    }
-
     double Sinh::getValue() const {
         double argValue = arguments[0]->getValue();
         return sinh(argValue);
@@ -30,7 +26,7 @@ namespace cas::math {
     Expression* Sinh::simplify() const {
         if (arguments[0]->getType() == ExpressionTypes::Function) {
             Function* argument = reinterpret_cast<Function*>(arguments[0]);
-            if (argument->getName() == "asinh") {
+            if (argument->name == "asinh") {
                 return argument->arguments[0];
             }
         }
@@ -52,10 +48,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Asinh::getName() const {
-        return "asinh";
-    }
-
     double Asinh::getValue() const {
         double argValue = arguments[0]->getValue();
         return asinh(argValue);
@@ -68,7 +60,7 @@ namespace cas::math {
     Expression* Asinh::simplify() const {
         if (arguments[0]->getType() == ExpressionTypes::Function) {
             Function* function = reinterpret_cast<Function*>(arguments[0]);
-            if (function->getName() == "sinh") {
+            if (function->name == "sinh") {
                 return function->arguments[0];
             }
         }
@@ -90,10 +82,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Cosh::getName() const {
-        return "cosh";
-    }
-
     double Cosh::getValue() const {
         double argValue = arguments[0]->getValue();
         return cosh(argValue);
@@ -106,7 +94,7 @@ namespace cas::math {
     Expression* Cosh::simplify() const {
         if (arguments[0]->getType() == ExpressionTypes::Function) {
             Function* function = reinterpret_cast<Function*>(arguments[0]);
-            if (function->getName() == "acosh") {
+            if (function->name == "acosh") {
                 return function->arguments[0];
             }
         }
@@ -128,10 +116,6 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    std::string Acosh::getName() const {
-        return "acosh";
-    }
-
     double Acosh::getValue() const {
         double argValue = arguments[0]->getValue();
 
@@ -145,8 +129,8 @@ namespace cas::math {
     Expression* Acosh::simplify() const {
         if (arguments[0]->getType() == ExpressionTypes::Function) {
             Function* function = reinterpret_cast<Function*>(arguments[0]);
-            if (function->getName() == "cosh") {
-                return arguments[0];
+            if (function->name == "cosh") {
+                return function->arguments[0];
             }
         }
 

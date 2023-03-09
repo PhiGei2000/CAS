@@ -20,7 +20,7 @@ namespace cas::math {
     template<int u>
     std::string Function<u>::toString() const {
         std::stringstream result;
-        result << getName() << "(" << arguments[0]->toString();
+        result << name << "(" << arguments[0]->toString();
 
         for (int i = 1; i < u; i++) {
             result << ", " << arguments[i]->toString();

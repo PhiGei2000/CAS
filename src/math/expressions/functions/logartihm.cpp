@@ -7,29 +7,25 @@ namespace cas::math {
     // instantiateOperations(Ln)
 
     Ln::Ln(const Expression& argument)
-        : argument(argument.copy()) {
+        : Ln(argument.copy()) {
     }
 
-    Ln::Ln(Expression* argument)
-        : argument(argument) {
-    }
-
-    std::string Ln::getName() const {
-        return "ln";
+    Ln::Ln(Expression* argument) {
+        arguments[0] = assign(argument, this);
     }
 
     double Ln::getValue() const {
-        double argumentValue = argument->getValue();
+        double argumentValue = arguments[0]->getValue();
 
         return log(argumentValue);
     }
 
     Expression* Ln::copy() const {
-        return new Ln(argument->copy());
+        return new Ln(arguments[0]->copy());
     }
 
     Expression* Ln::simplify() const {
-        Expression* argument = this->argument->simplify();
+        Expression* argument = this->arguments[0]->simplify();
 
         if (NamedConstant* c = dynamic_cast<NamedConstant*>(argument)) {
             if (c->toString() == "e")
