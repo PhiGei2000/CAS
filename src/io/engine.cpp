@@ -1,57 +1,36 @@
 #include "io/engine.hpp"
 
 #include <iostream>
+#include <regex>
 #include <sstream>
 #include <stdexcept>
 
-#include "commands/commands.hpp"
-
 namespace cas {
-    void Engine::setupCommands() {
-        this->addCommand<commands::D>("D");
-        this->addCommand<commands::Df>("Df");
-        this->addCommand<commands::Simplify>("Simplify");
-    }
-
     Engine::Engine() {
         setupCommands();
     }
 
-
-    template<CommandType TCommand>
-    void Engine::addCommand(const std::string& alias) {
-        commands[alias] = new TCommand();
-    }
-
     void Engine::run() const {
-        char buffer[bufferSize];
+        char buffer[bufferSize];        
 
         while (true) {
             std::cout << ">";
 
             std::cin.getline(buffer, bufferSize);
 
-            std::string input = buffer;
+            std::string input = removeWhiteSpaces(input);
             if (input == "exit") {
                 return;
             }
 
             try {
-                const CommandArgs& data = parseCommand(input);
+                size_t commandArgsBegin = input.find(commandArgBrackets[0]);
+                size_t commandArgsEnd = input.find_last_of(commandArgBrackets[1]) - 1;
 
-                try {
-                    const basic_command* command = commands.at(data.alias);
+                const std::string& alias = input.substr(0, commandArgsBegin);
+                const std::string& argStr = input.substr(commandArgsBegin + 1, commandArgsEnd - commandArgsBegin);
 
-                    Expression* result = command->execute(data);
-                    Expression* simplified = result->simplify();
-                    std::cout << simplified->toString() << std::endl;
-
-                    delete result;
-                    delete simplified;
-                }
-                catch (const std::out_of_range&) {
-                    std::cout << "Command \"" << data.alias << "\" not found" << std::endl;
-                }
+                commands.at(alias).executeCommand(argStr);
             }
             catch (const std::runtime_error& e) {
                 std::cout << e.what() << std::endl;

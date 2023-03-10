@@ -202,7 +202,7 @@ namespace cas::math {
 
         Expression* result = nullptr;
         if (parts.variables.size() > 0) {
-            auto getTerm = [&](std::unordered_map<char, double>::const_iterator it) -> Expression* {
+            auto getTerm = [&](std::unordered_map<VariableSymbol, double>::const_iterator it) -> Expression* {
                 double exp = (*it).second;
                 if (exp == 1) {
                     return new Variable((*it).first);
@@ -407,7 +407,7 @@ namespace cas::math {
                     case ExpressionTypes::NamedConstant:
                     case ExpressionTypes::Variable: {
                         const Variable* var = reinterpret_cast<const Variable*>(summand);
-                        ProductParts parts = ProductParts{1, std::unordered_map<char, double>{{var->getSymbol(), 1}}, {}};
+                        ProductParts parts = ProductParts{1, std::unordered_map<VariableSymbol, double>{{var->getSymbol(), 1}}, {}};
 
                         auto it = combinedTerms.begin();
                         while (it != combinedTerms.end()) {

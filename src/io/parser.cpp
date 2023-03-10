@@ -174,7 +174,7 @@ namespace cas::io {
             return new E();
         }
 
-        return new Variable(str.front());
+        return new Variable(str);
     }
 
     Constant* Parser::parseConstant(const std::string& str) {

@@ -2,7 +2,7 @@
 
 #include "command.hpp"
 
-#include "expressions/expressions.hpp"
+#include <mathlib/mathlib.hpp>
 
 using namespace cas::math;
 

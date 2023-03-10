@@ -4,7 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${default}",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/mathlib/include"                
             ],
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",

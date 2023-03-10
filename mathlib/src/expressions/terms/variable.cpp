@@ -4,10 +4,6 @@
 
 #include <stdexcept>
 
-constexpr bool std::less<cas::math::Variable>::operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const {
-    return lhs.getSymbol() < rhs.getSymbol();
-}
-
 namespace cas::math {
 
     Variable::Variable(VariableSymbol character)
@@ -43,7 +39,7 @@ namespace cas::math {
     }
 
     std::string Variable::toString() const {
-        return std::string(1, symbol);
+        return symbol;
     }
 
     std::set<Variable> Variable::getVariables() const {

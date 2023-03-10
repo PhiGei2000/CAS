@@ -10,7 +10,7 @@ namespace cas::math {
       private:
         struct ProductParts {
             double coefficient = 1;
-            std::unordered_map<char, double> variables = {};
+            std::unordered_map<VariableSymbol, double> variables = {};
             std::vector<Expression*> restTerms = {};
 
             void multiply(const ProductParts& parts);

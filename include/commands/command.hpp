@@ -1,26 +1,50 @@
 #pragma once
-#include <concepts>
+#include <functional>
+#include <string>
 
-#include "commandArgs.hpp"
-#include <mathlib.hpp>
-
-using namespace cas::math;
+#include "utility.hpp"
 
 namespace cas::commands {
-    class basic_command {
-      public:
-        virtual cas::math::Expression* execute(const CommandArgs& args) const = 0;
-    };
-
-    template<ExpressionType... TArgs>
-    class Command : public basic_command {      
-      protected:
-        virtual cas::math::Expression* operator()(TArgs*... args) const = 0;
-
-      public:
-        cas::math::Expression* execute(const CommandArgs& args) const override;
-    };
-
     template<typename T>
-    concept CommandType = std::derived_from<T, basic_command>;
+    T parseArg(const std::string& arg);
+
+    template<typename TRes, typename... TArgs>
+    struct Command {
+      protected:
+        std::function<TRes*(TArgs*...)> callback;
+
+      public:
+        inline TRes* execute(const std::string& argStr) const {
+            const std::vector<std::string>& argV = cas::splitString(argStr, ",");
+
+            std::index_sequence<sizeof...(TArgs)> indices = std::make_index_sequence<sizeof...(TArgs)>();
+            return callback(parseArg<TArgs>(argV[indices])...);
+        }
+    };
+
+    template<typename TRes, typename... TArgs>
+    using CommandCallback = std::function<void(TRes*)>;
+
+    template<typename TRes, typename... TArgs>
+    constexpr CommandCallback<TRes> DefaultCallback = [](TRes* result) {};
+
+    struct CommandWrapper {
+      private:
+        std::function<void(const std::string&)> functional;
+
+      public:
+        template<typename TRes, typename... TArgs>
+        CommandWrapper(Command<TRes, TArgs...> command, CommandCallback<TRes> callback = DefaultCallback<TRes>) {
+            functional = [&](const std::string& argStr) {
+                TRes* result = command.execute(argStr);
+                callback(result);
+
+                delete result;
+            };
+        }
+
+        void executeCommand(const std::string& argStr) const {
+            functional(argStr);
+        }
+    };
 } // namespace cas::commands

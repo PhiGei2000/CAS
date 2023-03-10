@@ -1,6 +1,5 @@
 #pragma once
-
-#include "expressions/expressions.hpp"
+#include <mathlib/mathlib.hpp>
 
 #include <regex>
 

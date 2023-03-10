@@ -2,13 +2,14 @@
 
 #include "command.hpp"
 
-#include "expressions/expressions.hpp"
+#include <mathlib/mathlib.hpp>
 
 using namespace cas::math;
 
 namespace cas::commands {
-    class Simplify : public Command<Expression> {
-      protected:
-        virtual Expression* operator()(Expression* input) const override;
-    };
+    static const Command<Expression> simplify = Command<Expression>(
+      [](Expression* expr) {
+        return expr->simplify();
+      }
+    );
 } // namespace cas::commands
