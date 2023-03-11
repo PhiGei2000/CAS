@@ -5,36 +5,33 @@
 #include <sstream>
 #include <stdexcept>
 
+#include "io/ioStream.hpp"
+
 namespace cas {
     Engine::Engine() {
         setupCommands();
     }
 
     void Engine::run() const {
-        char buffer[bufferSize];        
+        bool running = true;
 
-        while (true) {
-            std::cout << ">";
-
-            std::cin.getline(buffer, bufferSize);
-
-            std::string input = removeWhiteSpaces(input);
-            if (input == "exit") {
-                return;
+        while (running) {
+            io::IOStream::Command command = io::IOStream::readCommand();
+            if (command.alias == "exit") {
+                running = false;
+                continue;
             }
 
             try {
-                size_t commandArgsBegin = input.find(commandArgBrackets[0]);
-                size_t commandArgsEnd = input.find_last_of(commandArgBrackets[1]) - 1;
-
-                const std::string& alias = input.substr(0, commandArgsBegin);
-                const std::string& argStr = input.substr(commandArgsBegin + 1, commandArgsEnd - commandArgsBegin);
-
-                commands.at(alias).executeCommand(argStr);
+                commands.at(command.alias).executeCommand(command.args);
             }
             catch (const std::runtime_error& e) {
                 std::cout << e.what() << std::endl;
                 continue;
+            }
+            catch (const std::out_of_range& e) {
+                std::cout << "Command \"" << command.alias << "\" not found!" << std::endl;
+                continue;                
             }
         }
     }

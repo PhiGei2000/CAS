@@ -2,8 +2,6 @@
 #include <functional>
 #include <string>
 
-#include "utility.hpp"
-
 namespace cas::commands {
     template<typename T>
     T parseArg(const std::string& arg);
@@ -14,9 +12,7 @@ namespace cas::commands {
         std::function<TRes*(TArgs*...)> callback;
 
       public:
-        inline TRes* execute(const std::string& argStr) const {
-            const std::vector<std::string>& argV = cas::splitString(argStr, ",");
-
+        inline TRes* execute(const std::vector<std::string>& argV) const {            
             std::index_sequence<sizeof...(TArgs)> indices = std::make_index_sequence<sizeof...(TArgs)>();
             return callback(parseArg<TArgs>(argV[indices])...);
         }
@@ -30,21 +26,21 @@ namespace cas::commands {
 
     struct CommandWrapper {
       private:
-        std::function<void(const std::string&)> functional;
+        std::function<void(const std::vector<std::string>&)> functional;
 
       public:
         template<typename TRes, typename... TArgs>
         CommandWrapper(Command<TRes, TArgs...> command, CommandCallback<TRes> callback = DefaultCallback<TRes>) {
-            functional = [&](const std::string& argStr) {
-                TRes* result = command.execute(argStr);
+            functional = [&](const std::vector<std::string>& argV) {
+                TRes* result = command.execute(argV);
                 callback(result);
 
                 delete result;
             };
         }
 
-        void executeCommand(const std::string& argStr) const {
-            functional(argStr);
+        void executeCommand(const std::vector<std::string>& argV) const {
+            functional(argV);
         }
     };
 } // namespace cas::commands
