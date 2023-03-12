@@ -4,7 +4,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "commands/command.hpp"
+#include "commands/commandWrapper.hpp"
 #include <mathlib/mathlib.hpp>
 
 using namespace cas::commands;
@@ -17,6 +17,7 @@ namespace cas {
 
         std::unordered_map<std::string, CommandWrapper> commands;
         std::unordered_map<cas::math::VariableSymbol, cas::math::Expression*> vars;
+        bool running = false;
 
         void setupCommands();
 
@@ -26,8 +27,8 @@ namespace cas {
         template<typename TRes, typename... TArgs>
         inline void addCommand(const std::string& alias, Command<TRes, TArgs...>& command, CommandCallback<TRes>& callback = DefaultCallback<TRes>) {
             commands[alias] = CommandWrapper(command, callback);
-        }
+        }                
 
-        void run() const;
+        void run();
     };
 } // namespace cas

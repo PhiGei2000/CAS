@@ -12,18 +12,18 @@ namespace cas {
         setupCommands();
     }
 
-    void Engine::run() const {
-        bool running = true;
+    void Engine::run() {
+        running = true;
 
         while (running) {
             io::IOStream::Command command = io::IOStream::readCommand();
-            if (command.alias == "exit") {
-                running = false;
-                continue;
-            }
+            // if (command.alias == "exit") {
+            //     running = false;
+            //     continue;
+            // }
 
             try {
-                commands.at(command.alias).executeCommand(command.args);
+                commands.at(command.alias).executeCommand(this, command.args);
             }
             catch (const std::runtime_error& e) {
                 std::cout << e.what() << std::endl;

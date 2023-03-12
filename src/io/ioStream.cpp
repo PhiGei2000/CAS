@@ -59,4 +59,8 @@ namespace cas::io {
         std::getline(std::cin, line, delimiter);
         return line;
     }
+
+    void IOStream::writeLine(const std::string& str) {
+        std::cout << str << std::endl;
+    }
 } // namespace cas::io
