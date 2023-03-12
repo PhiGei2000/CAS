@@ -6,10 +6,13 @@
 
 using namespace cas::math;
 
-namespace cas::commands {
-    static const Command<Expression> simplify = Command<Expression>(
-      [](Expression* expr) {
-        return expr->simplify();
-      }
-    );
-} // namespace cas::commands
+namespace cas {
+    class Engine;
+
+    namespace commands {
+        static const Command<Expression*, Expression*> simplify = Command<Expression*, Expression*>(
+            [](Engine* engine, Expression* expr) {
+                return expr->simplify();
+            });
+    }
+} // namespace cas

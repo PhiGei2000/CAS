@@ -25,7 +25,7 @@ namespace cas {
         Engine();
 
         template<typename TRes, typename... TArgs>
-        inline void addCommand(const std::string& alias, Command<TRes, TArgs...>& command, CommandCallback<TRes>& callback = DefaultCallback<TRes>) {
+        inline void addCommand(const std::string& alias, const Command<TRes, TArgs...>& command, CommandCallback<TRes>& callback = DefaultCallback<TRes>) {
             commands[alias] = CommandWrapper(command, callback);
         }                
 

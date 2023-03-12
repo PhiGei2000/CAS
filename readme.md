@@ -20,6 +20,15 @@ Requirements:
     ./build/cas
 
 ## Commands
+All commands have the form ``commandName[arg1,arg2,...]`` and must terminated by a semicolon. If no variables are needed, the parentheses are optional.
+
+### Engine functions
+| Command | Description | Example |
+| --- | --- | --- |
+| set[var, expr] | Assigns the expression expr to the specified variable for later use | ``set[x,12]`` |
+| listVars[] | Lists the currently stored variables and their values | |
+| exit[] | Shuts down the engine | |
+
 ### Differential calculus
 
 | Command | Description | Example |

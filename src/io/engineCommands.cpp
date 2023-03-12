@@ -1,5 +1,8 @@
 #include "io/engine.hpp"
 
+#include "commands/differentialCalculus.hpp"
+#include "commands/termManipulation.hpp"
+
 #include "io/ioStream.hpp"
 #include <mathlib/mathlib.hpp>
 
@@ -10,6 +13,14 @@ namespace cas {
     void Engine::setupCommands() {
         CommandCallback<std::string> printStr = [&](std::string str) {
             io::IOStream::writeLine(str);
+        };
+
+        CommandCallback<math::Expression*> printExpression = [&](math::Expression* expr) {
+            Expression* simplified = expr->simplify();
+            io::IOStream::writeLine(simplified->toString());
+
+            delete expr;
+            delete simplified;
         };
 
         Command<std::string> exitCommand = Command<std::string>([](Engine* engine) {
@@ -48,5 +59,9 @@ namespace cas {
                 return ss.str();
             });
         addCommand("listVars", listVarsCommand, printStr);
+
+        addCommand("D", commands::differentiate, printExpression);
+        addCommand("Df", commands::differential, printExpression);
+        addCommand("simplify", commands::simplify, printExpression);
     }
 } // namespace cas

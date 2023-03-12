@@ -20,7 +20,7 @@ namespace cas::commands {
         }
 
         template<typename TRes, typename... TArgs>
-        inline CommandWrapper(Command<TRes, TArgs...> command, CommandCallback<TRes> callback = DefaultCallback<TRes>) {
+        inline CommandWrapper(const Command<TRes, TArgs...>& command, CommandCallback<TRes> callback = DefaultCallback<TRes>) {
             functional = [command, callback](Engine* engine, const std::vector<std::string>& argV) {
                 TRes result = command.execute(engine, argV);
 
