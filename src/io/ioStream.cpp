@@ -3,6 +3,8 @@
 #include <iostream>
 
 namespace cas::io {
+    std::ofstream IOStream::log = std::ofstream("commandLog.log");
+
     void IOStream::removeWhitespaces(std::string& str) {
         for (auto it = str.begin(); it != str.end();) {
             if (*it == '\n' || *it == ' ' || *it == '\t') {
@@ -15,7 +17,7 @@ namespace cas::io {
     }
 
     IOStream::Command IOStream::readCommand() {
-        std::cout << ">";
+        write(">");
 
         std::string input = readLine(';');
         removeWhitespaces(input);
@@ -57,10 +59,18 @@ namespace cas::io {
     std::string IOStream::readLine(char delimiter) {
         std::string line;
         std::getline(std::cin, line, delimiter);
+
+        log << line << delimiter << std::endl;
         return line;
     }
 
     void IOStream::writeLine(const std::string& str) {
         std::cout << str << std::endl;
+        log << str << std::endl;
+    }
+
+    void IOStream::write(const std::string& str) {
+        std::cout << str;
+        log << str;
     }
 } // namespace cas::io

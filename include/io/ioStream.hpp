@@ -1,11 +1,14 @@
 #pragma once
 #include <istream>
 #include <vector>
+#include <fstream>
 
 namespace cas::io {
     class IOStream {
       protected:
         static void removeWhitespaces(std::string& str);
+
+        static std::ofstream log;
         
       public:
         struct Command {
@@ -18,5 +21,7 @@ namespace cas::io {
         static std::string readLine(char delimiter = '\n');
 
         static void writeLine(const std::string& str);
+
+        static void write(const std::string& str);
     };
 } // namespace cas::io
