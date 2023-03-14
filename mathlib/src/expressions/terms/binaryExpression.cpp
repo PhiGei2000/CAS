@@ -29,7 +29,7 @@ namespace cas::math {
         return left->dependsOn(var) || right->dependsOn(var);
     }
 
-    void BinaryExpression::substitute(Expression* expr, Expression* newExpr) {
+    void BinaryExpression::replace(Expression* expr, Expression* newExpr) {
         if (left == expr) {
             delete left;
 
@@ -41,6 +41,38 @@ namespace cas::math {
 
             right = newExpr->copy();
             right->parent = this;
+        }
+        else {
+            left->replace(expr, newExpr);
+            right->replace(expr, newExpr);
+        }
+    }
+
+    void BinaryExpression::setVariable(Variable* var, Expression* expr) {
+        if (left->getType() == ExpressionTypes::Variable) {
+            Variable* leftVar = static_cast<Variable*>(left);
+            if (*leftVar == *var) {
+                delete left;
+
+                left = expr->copy();
+                left->parent = this;
+            }
+        }
+        else {
+            left->setVariable(var, expr);
+        }
+
+        if (right->getType() == ExpressionTypes::Variable) {
+            Variable* rightVar = static_cast<Variable*>(right);
+            if (*rightVar == *var) {
+                delete right;
+
+                right = expr->copy();
+                right->parent = this;
+            }
+        }
+        else {
+            right->setVariable(var, expr);
         }
     }
 

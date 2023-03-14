@@ -85,5 +85,6 @@ namespace cas {
         addCommand("simplify", commands::simplify, printExpression);
         addCommand("match", commands::matchCommand, printExpressionMatch);
         addCommand("matchRecurse", commands::matchRecurseCommand, printExpressionMatch);
+        addCommand("substitute", commands::substituteCommand, printExpression);
     }
 } // namespace cas

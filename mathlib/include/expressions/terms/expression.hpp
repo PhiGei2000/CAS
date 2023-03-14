@@ -40,7 +40,8 @@ namespace cas::math {
         }
 
         virtual Expression* simplify() const;
-        virtual void substitute(Expression* expression, Expression* newExpression);
+        virtual void replace(Expression* expression, Expression* newExpression);
+        virtual void setVariable(Variable* symbol, Expression* expression);
 
         virtual Expression* differentiate(const Variable* var) const = 0;
 

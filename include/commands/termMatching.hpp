@@ -1,10 +1,9 @@
 #pragma once
-
 #include "command.hpp"
 
 #include <mathlib/mathlib.hpp>
 
-using namespace cas::math;
+                                using namespace cas::math;
 
 namespace cas::commands {
     Command<ExpressionMatch, Expression*, Expression*> matchCommand = Command<ExpressionMatch, Expression*, Expression*>(
@@ -17,4 +16,9 @@ namespace cas::commands {
             return ExpressionMatcher::match(expr, pattern, true);
         }
     );
-}
+
+    Command<Expression*, Expression*, Expression*, Expression*> substituteCommand = Command<Expression*, Expression*, Expression*, Expression*>(
+        [](Engine* engine, Expression* expr, Expression* pattern, Expression* substitution) {
+            return ExpressionMatcher::substitute(expr, pattern, substitution);
+        });
+} // namespace cas::commands

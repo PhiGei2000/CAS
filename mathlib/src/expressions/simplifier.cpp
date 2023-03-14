@@ -339,7 +339,7 @@ namespace cas::math {
         std::vector<Expression*> summands;
         getSummands(simplifiedSum, &summands);
 
-        std::vector<ProductParts> combinedTerms = {};
+        std::vector<ProductParts> combinedTerms;
         for (const auto& summand : summands) {
             ExpressionTypes type = summand->getType();
 
@@ -391,8 +391,12 @@ namespace cas::math {
                 case ExpressionTypes::Constant: {
                     double value = summand->getValue();
 
+                    // find term without variables
                     auto it = combinedTerms.begin();
-                    while (it != combinedTerms.end() || (*it).variables.size() == 0) {
+                    while (it != combinedTerms.end()) {
+                        if ((*it).variables.size() == 0)
+                            break;
+
                         it++;
                     }
 

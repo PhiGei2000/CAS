@@ -35,7 +35,14 @@ namespace cas::math {
     }
 
     std::string Addition::toString() const {
-        return left->toString() + "+" + right->toString();
+        const std::string& rightString = right->toString();
+
+        if (rightString.front() == '-') {
+            return left->toString() + rightString;
+        }
+        else {
+            return left->toString() + "+" + rightString;
+        }
     }
 
 } // namespace cas::math

@@ -21,7 +21,8 @@ namespace cas::math {
             return true;
         }
 
-        virtual void substitute(Expression* expression, Expression* newExpression) override;
+        virtual void replace(Expression* expression, Expression* newExpression) override;
+        virtual void setVariable(Variable* var, Expression* expression) override;
 
         virtual std::set<Variable> getVariables() const override;
     };

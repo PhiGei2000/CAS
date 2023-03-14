@@ -3,15 +3,15 @@
 #include "expressions/expressions.hpp"
 
 namespace cas::math {
-    ExpressionMatch::ExpressionMatch(bool success, std::map<Variable*, Expression*> variables)
-        : success(success) {
+    ExpressionMatch::ExpressionMatch(bool success, Expression* node, std::map<Variable*, Expression*> variables)
+        : success(success), node(node) {
         for (const auto [var, expr] : variables) {
             this->variables[static_cast<Variable*>(var->copy())] = expr->copy();
         }
     }
 
     ExpressionMatch::ExpressionMatch(const ExpressionMatch& other)
-        : ExpressionMatch(other.success, other.variables) {
+        : ExpressionMatch(other.success, other.node, other.variables) {
     }
 
     ExpressionMatch::~ExpressionMatch() {
@@ -29,6 +29,7 @@ namespace cas::math {
         }
 
         success = other.success;
+        node = other.node;
         for (const auto [var, expr] : variables) {
             delete var;
             delete expr;
@@ -43,6 +44,10 @@ namespace cas::math {
     }
 
     ExpressionMatch operator&(const ExpressionMatch& left, const ExpressionMatch& right) {
+        // if (left.node->parent != right.node->parent) {
+        //     std::__throw_runtime_error("Both matches must have the same parent node");
+        // }
+
         ExpressionMatch result = left;
 
         for (const auto [var, expr] : right.variables) {
@@ -97,15 +102,15 @@ namespace cas::math {
         switch (pattern->getType()) {
             case ExpressionTypes::Constant: {
                 try {
-                    return ExpressionMatch(expr->getValue() == pattern->getValue());
+                    return ExpressionMatch(expr->getValue() == pattern->getValue(), expr);
                 }
                 catch (no_value_error) {
-                    return ExpressionMatch(false);
+                    return ExpressionMatch(false, nullptr);
                 }
             }
             case ExpressionTypes::Variable: {
                 Variable* var = dynamic_cast<Variable*>(pattern->copy());
-                return ExpressionMatch{true, {{var, expr}}};
+                return ExpressionMatch{true, expr, {{var, expr}}};
             }
             default: break;
         }
@@ -113,7 +118,7 @@ namespace cas::math {
         if (pattern->isBinary()) {
             if (pattern->getType() != expr->getType()) {
                 if (!recurse)
-                    return ExpressionMatch(false);
+                    return ExpressionMatch(false, nullptr);
 
                 std::vector<Expression*> children = expr->getChildren();
                 for (const auto child : children) {
@@ -123,7 +128,7 @@ namespace cas::math {
                     }
                 }
 
-                return false;
+                return ExpressionMatch(false, nullptr, {});
             }
 
             // if the expression types are equal expr has to be a binary expression too
@@ -134,7 +139,9 @@ namespace cas::math {
             ExpressionMatch rightMatch = match(binaryExpr->right, binaryPattern->right);
 
             if (leftMatch.success && rightMatch.success) {
-                return leftMatch & rightMatch;
+                ExpressionMatch result = leftMatch & rightMatch;
+                result.node = expr;
+                return result;
             }
 
             if (binaryPattern->commutative) {
@@ -142,14 +149,28 @@ namespace cas::math {
                 rightMatch = match(binaryExpr->right, binaryPattern->left);
 
                 if (leftMatch.success && rightMatch.success) {
-                    return leftMatch & rightMatch;
+                    ExpressionMatch result = leftMatch & rightMatch;
+                    result.node = expr;
+                    return result;
                 }
             }
         }
 
-        return ExpressionMatch(false);
+        return ExpressionMatch(false, nullptr);
     }
 
     Expression* ExpressionMatcher::substitute(Expression* expr, Expression* pattern, Expression* substitution) {
+        Expression* result = expr->copy();
+        ExpressionMatch match = ExpressionMatcher::match(result, pattern, true);
+
+        if (match.success) {
+            result->replace(match.node, substitution);
+
+            for (auto [var, value] : match.variables) {
+                result->setVariable(var, value);
+            }
+        }
+
+        return result;
     }
 } // namespace cas::math

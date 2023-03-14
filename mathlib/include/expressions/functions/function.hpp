@@ -11,7 +11,7 @@ namespace cas::math {
         const std::string name;
         virtual Expression* getDerivative() const = 0;
 
-        virtual ExpressionTypes getType() const {
+        inline virtual ExpressionTypes getType() const {
             return ExpressionTypes::Function;
         }
     };
@@ -21,11 +21,11 @@ namespace cas::math {
       public:
         Expression* arguments[u];
 
-        virtual std::vector<Expression*> getChildren() const override {
+        inline virtual std::vector<Expression*> getChildren() const override {
             return std::vector<Expression*>(std::begin(arguments), std::end(arguments));
         }
 
-        virtual bool dependsOn(const Variable& var) const override {
+        inline virtual bool dependsOn(const Variable& var) const override {
             for (const Expression* arg : arguments) {
                 if (arg->dependsOn(var)) {
                     return true;
@@ -35,7 +35,36 @@ namespace cas::math {
             return false;
         }
 
-        virtual std::string toString() const override {
+        inline virtual void replace(Expression* expr, Expression* newExpr) override {
+            for (int i = 0; i < u; i++) {
+                if (arguments[i] == expr) {
+                    delete arguments[i];
+                    arguments[i] = newExpr->copy();
+                }
+                else {
+                    arguments[i]->replace(expr, newExpr);
+                }
+            }
+        }
+
+        inline virtual void setVariable(Variable* var, Expression* expr) override {
+            for (int i = 0; i < u; i++) {
+                if (arguments[i]->getType() == ExpressionTypes::Variable) {
+                    Variable* argVar = static_cast<Variable*>(arguments[i]);
+                    if (*argVar == *var) {
+                        delete argVar;
+
+                        arguments[i] = expr->copy();
+                        arguments[i]->parent = this;
+                    }
+                }
+                else {
+                    arguments[i]->setVariable(var, expr);
+                }
+            }
+        }
+
+        inline virtual std::string toString() const override {
             std::stringstream result;
             result << name << "(" << arguments[0]->toString();
 
@@ -47,7 +76,7 @@ namespace cas::math {
             return result.str();
         }
 
-        virtual std::set<Variable> getVariables() const override {
+        inline virtual std::set<Variable> getVariables() const override {
             std::set<Variable> vars = arguments[0]->getVariables();
             for (int i = 1; i < u; i++) {
                 vars.merge(arguments[i]->getVariables());
@@ -56,7 +85,7 @@ namespace cas::math {
             return vars;
         }
 
-        virtual Expression* differentiate(const Variable* var) const override {
+        inline virtual Expression* differentiate(const Variable* var) const override {
             Expression* result = getDerivative();
 
             for (int i = 0; i < u; i++) {

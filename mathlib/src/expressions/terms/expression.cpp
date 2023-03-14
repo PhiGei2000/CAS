@@ -18,7 +18,10 @@ namespace cas::math {
         return this->copy();
     }
 
-    void Expression::substitute(Expression* expr, Expression* newExpr) {
+    void Expression::replace(Expression* expr, Expression* newExpr) {
+    }
+
+    void Expression::setVariable(Variable* symbol, Expression* expr) {
     }
 
     Expression* assign(Expression* other, Expression* parent) {
