@@ -2,6 +2,7 @@
 
 #include "commands/differentialCalculus.hpp"
 #include "commands/termManipulation.hpp"
+#include "commands/termMatching.hpp"
 
 #include "io/ioStream.hpp"
 #include <mathlib/mathlib.hpp>
@@ -21,6 +22,25 @@ namespace cas {
 
             delete expr;
             delete simplified;
+        };
+
+        CommandCallback<math::ExpressionMatch> printExpressionMatch = [&](math::ExpressionMatch match) {
+            std::stringstream ss;
+
+            const char separator = ' ';
+            const int symbolWidth = 10;
+
+            ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << "Variable"
+               << " | "
+               << "Value";
+
+            for (const auto& [var, expr] : match.variables) {
+                ss << std::endl;
+                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var->getSymbol() << " | ";
+                ss << expr->toString();
+            }
+
+            io::IOStream::writeLine(ss.str());
         };
 
         Command<std::string> exitCommand = Command<std::string>([](Engine* engine) {
@@ -63,5 +83,7 @@ namespace cas {
         addCommand("D", commands::differentiate, printExpression);
         addCommand("Df", commands::differential, printExpression);
         addCommand("simplify", commands::simplify, printExpression);
+        addCommand("match", commands::matchCommand, printExpressionMatch);
+        addCommand("matchRecurse", commands::matchRecurseCommand, printExpressionMatch);
     }
 } // namespace cas

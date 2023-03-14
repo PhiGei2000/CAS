@@ -7,5 +7,14 @@
 using namespace cas::math;
 
 namespace cas::commands {
-    class Compare : public Command<
+    Command<ExpressionMatch, Expression*, Expression*> matchCommand = Command<ExpressionMatch, Expression*, Expression*>(
+        [](Engine* engine, Expression* expr, Expression* pattern) {
+            return ExpressionMatcher::match(expr, pattern);
+        });
+
+    Command<ExpressionMatch, Expression*, Expression*> matchRecurseCommand = Command<ExpressionMatch, Expression*, Expression*>(
+        [](Engine* engine, Expression* expr, Expression* pattern) {
+            return ExpressionMatcher::match(expr, pattern, true);
+        }
+    );
 }

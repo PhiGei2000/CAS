@@ -1,8 +1,9 @@
 #pragma once
 
+#include <set>
 #include <stdexcept>
 #include <string>
-#include <set>
+#include <vector>
 
 namespace cas::math {
     enum class ExpressionTypes {
@@ -31,8 +32,12 @@ namespace cas::math {
         virtual double getValue() const = 0;
         virtual Expression* copy() const = 0;
         virtual ExpressionTypes getType() const = 0;
+        virtual std::vector<Expression*> getChildren() const;
 
         virtual bool dependsOn(const Variable& var) const = 0;
+        virtual constexpr bool isBinary() const {
+            return false;
+        }
 
         virtual Expression* simplify() const;
         virtual void substitute(Expression* expression, Expression* newExpression);
@@ -41,8 +46,8 @@ namespace cas::math {
 
         virtual std::string toString() const = 0;
 
-        virtual std::set<Variable> getVariables() const = 0;        
+        virtual std::set<Variable> getVariables() const = 0;
     };
 
-    Expression* assign(Expression* other, Expression* parent);    
+    Expression* assign(Expression* other, Expression* parent);
 } // namespace cas::math

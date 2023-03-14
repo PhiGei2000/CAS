@@ -21,6 +21,10 @@ namespace cas::math {
         delete right;
     }
 
+    std::vector<Expression*> BinaryExpression::getChildren() const {
+        return {left, right};
+    }
+
     bool BinaryExpression::dependsOn(const Variable& var) const {
         return left->dependsOn(var) || right->dependsOn(var);
     }

@@ -335,41 +335,18 @@ namespace cas::math {
         }
 
         Addition* simplifiedSum = new Addition(left, right);
-        if (left->getType() == ExpressionTypes::Addition || right->getType() == ExpressionTypes::Addition) {
-            std::vector<Expression*> summands;
-            getSummands(simplifiedSum, &summands);
+        // if (left->getType() == ExpressionTypes::Addition || right->getType() == ExpressionTypes::Addition) {
+        std::vector<Expression*> summands;
+        getSummands(simplifiedSum, &summands);
 
-            std::vector<ProductParts> combinedTerms = {};
-            for (const auto& summand : summands) {
-                ExpressionTypes type = summand->getType();
+        std::vector<ProductParts> combinedTerms = {};
+        for (const auto& summand : summands) {
+            ExpressionTypes type = summand->getType();
 
-                switch (type) {
-                    case ExpressionTypes::Exponentiation: {
-                        try {
-                            ProductParts parts = getExpProductParts(reinterpret_cast<const Exponentiation*>(summand));
-
-                            auto it = combinedTerms.begin();
-                            while (it != combinedTerms.end()) {
-                                if (ProductParts::areLike(*it, parts)) {
-                                    break;
-                                }
-
-                                it++;
-                            }
-
-                            if (it == combinedTerms.end()) {
-                                combinedTerms.push_back(parts);
-                            }
-                            else {
-                                (*it).coefficient += parts.coefficient;
-                            }
-                        }
-                        catch (const std::runtime_error&) {
-                            combinedTerms.push_back(ProductParts{1, {}, {summand}});
-                        }
-                    } break;
-                    case ExpressionTypes::Multiplication: {
-                        ProductParts parts = getProductParts(reinterpret_cast<const Multiplication*>(summand));
+            switch (type) {
+                case ExpressionTypes::Exponentiation: {
+                    try {
+                        ProductParts parts = getExpProductParts(reinterpret_cast<const Exponentiation*>(summand));
 
                         auto it = combinedTerms.begin();
                         while (it != combinedTerms.end()) {
@@ -386,65 +363,91 @@ namespace cas::math {
                         else {
                             (*it).coefficient += parts.coefficient;
                         }
-                    } break;
-
-                    case ExpressionTypes::Constant: {
-                        double value = summand->getValue();
-
-                        auto it = combinedTerms.begin();
-                        while (it != combinedTerms.end() || (*it).variables.size() == 0) {
-                            it++;
-                        }
-
-                        if (it == combinedTerms.end()) {
-                            combinedTerms.push_back(ProductParts{value, {}});
-                        }
-                        else {
-                            (*it).coefficient += value;
-                        }
-                    } break;
-
-                    case ExpressionTypes::NamedConstant:
-                    case ExpressionTypes::Variable: {
-                        const Variable* var = reinterpret_cast<const Variable*>(summand);
-                        ProductParts parts = ProductParts{1, std::unordered_map<VariableSymbol, double>{{var->getSymbol(), 1}}, {}};
-
-                        auto it = combinedTerms.begin();
-                        while (it != combinedTerms.end()) {
-                            if (!ProductParts::areLike(*it, parts))
-                                it++;
-                        }
-
-                        if (it == combinedTerms.end()) {
-                            combinedTerms.push_back(parts);
-                        }
-                        else {
-                            (*it).coefficient += parts.coefficient;
-                        }
-                    } break;
-                    default: {
+                    }
+                    catch (const std::runtime_error&) {
                         combinedTerms.push_back(ProductParts{1, {}, {summand}});
-                    } break;
-                }
+                    }
+                } break;
+                case ExpressionTypes::Multiplication: {
+                    ProductParts parts = getProductParts(reinterpret_cast<const Multiplication*>(summand));
+
+                    auto it = combinedTerms.begin();
+                    while (it != combinedTerms.end()) {
+                        if (ProductParts::areLike(*it, parts)) {
+                            break;
+                        }
+
+                        it++;
+                    }
+
+                    if (it == combinedTerms.end()) {
+                        combinedTerms.push_back(parts);
+                    }
+                    else {
+                        (*it).coefficient += parts.coefficient;
+                    }
+                } break;
+
+                case ExpressionTypes::Constant: {
+                    double value = summand->getValue();
+
+                    auto it = combinedTerms.begin();
+                    while (it != combinedTerms.end() || (*it).variables.size() == 0) {
+                        it++;
+                    }
+
+                    if (it == combinedTerms.end()) {
+                        combinedTerms.push_back(ProductParts{value, {}});
+                    }
+                    else {
+                        (*it).coefficient += value;
+                    }
+                } break;
+
+                case ExpressionTypes::NamedConstant:
+                case ExpressionTypes::Variable: {
+                    const Variable* var = reinterpret_cast<const Variable*>(summand);
+                    ProductParts parts = ProductParts{1, std::unordered_map<VariableSymbol, double>{{var->getSymbol(), 1}}, {}};
+
+                    auto it = combinedTerms.begin();
+                    while (it != combinedTerms.end()) {
+                        if (ProductParts::areLike(*it, parts)) {
+                            break;
+                        }
+
+                        it++;
+                    }
+
+                    if (it == combinedTerms.end()) {
+                        combinedTerms.push_back(parts);
+                    }
+                    else {
+                        (*it).coefficient += parts.coefficient;
+                    }
+                } break;
+                default: {
+                    combinedTerms.push_back(ProductParts{1, {}, {summand}});
+                } break;
             }
-
-            Expression* result = nullptr;
-            auto it = combinedTerms.rbegin();
-
-            while (it != combinedTerms.rend()) {
-                if (result == nullptr) {
-                    result = getProductFromParts(*it);
-                }
-                else {
-                    Addition* sum = new Addition(getProductFromParts(*it), result);
-                    result = sum;
-                }
-
-                it++;
-            }
-
-            return result;
         }
+
+        Expression* result = nullptr;
+        auto it = combinedTerms.rbegin();
+
+        while (it != combinedTerms.rend()) {
+            if (result == nullptr) {
+                result = getProductFromParts(*it);
+            }
+            else {
+                Addition* sum = new Addition(getProductFromParts(*it), result);
+                result = sum;
+            }
+
+            it++;
+        }
+
+        return result;
+        // }
 
         return simplifiedSum;
     }

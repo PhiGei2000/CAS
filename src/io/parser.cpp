@@ -61,6 +61,8 @@ namespace cas::io {
         // get first factor
         int bracketCounter = 0;
         auto it = str.begin();
+        
+        // TODO: Add parsing for short form 2x=2*x
         while (!(it == str.end() || (*it) == '*' && bracketCounter == 0)) {
             ss << *it;
 

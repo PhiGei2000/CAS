@@ -10,6 +10,10 @@ namespace cas::math {
     Expression::~Expression() {
     }
 
+    std::vector<Expression*> Expression::getChildren() const {
+        return {};
+    }
+
     Expression* Expression::simplify() const {
         return this->copy();
     }

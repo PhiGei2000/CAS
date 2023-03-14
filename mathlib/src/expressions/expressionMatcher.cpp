@@ -1,97 +1,155 @@
 #include "expressions/expressionMatcher.hpp"
 
-#include "expressions/terms/binaryExpression.hpp"
+#include "expressions/expressions.hpp"
 
 namespace cas::math {
-    ExpressionMatcher::ExpressionMatcher(Expression* pattern)
-        : pattern(pattern) {
-        const std::set<Variable> vars = pattern->getVariables();
-        for (const Variable& var : vars) {
-            variable_storage[var] = nullptr;
+    ExpressionMatch::ExpressionMatch(bool success, std::map<Variable*, Expression*> variables)
+        : success(success) {
+        for (const auto [var, expr] : variables) {
+            this->variables[static_cast<Variable*>(var->copy())] = expr->copy();
         }
     }
 
-    ExpressionMatcher::~ExpressionMatcher() {
-        delete pattern;
+    ExpressionMatch::ExpressionMatch(const ExpressionMatch& other)
+        : ExpressionMatch(other.success, other.variables) {
+    }
 
-        for (const auto [var, expr] : variable_storage) {
+    ExpressionMatch::~ExpressionMatch() {
+        for (const auto [var, expr] : variables) {
+            delete var;
             delete expr;
         }
+
+        variables.clear();
+    }
+
+    ExpressionMatch& ExpressionMatch::operator=(const ExpressionMatch& other) {
+        if (this == &other) {
+            return *this;
+        }
+
+        success = other.success;
+        for (const auto [var, expr] : variables) {
+            delete var;
+            delete expr;
+        }
+        variables.clear();
+
+        for (const auto [var, expr] : other.variables) {
+            variables[static_cast<Variable*>(var->copy())] = expr->copy();
+        }
+
+        return *this;
+    }
+
+    ExpressionMatch operator&(const ExpressionMatch& left, const ExpressionMatch& right) {
+        ExpressionMatch result = left;
+
+        for (const auto [var, expr] : right.variables) {
+            if (result.variables.contains(var)) {
+                // TODO: Add multi variable occurence in patterns
+                std::__throw_logic_error("A variable occures twice in a pattern");
+            }
+
+            result.variables[static_cast<Variable*>(var->copy())] = expr->copy();
+        }
+
+        return result;
     }
 
     bool ExpressionMatcher::matches(Expression* expr, Expression* pattern) {
-        // check if both expressions are numeric and have the same value
-        try {
-            if (expr->getValue() == pattern->getValue())
-                return true;
-        }
-        catch (no_value_error) {
+        switch (pattern->getType()) {
+            case ExpressionTypes::Constant: {
+                try {
+                    return expr->getValue() == pattern->getValue();
+                }
+                catch (no_value_error) {
+                    return false;
+                }
+            }
+            case ExpressionTypes::Variable: return true;
+            default: break;
         }
 
-        if (pattern->getType() == ExpressionTypes::Variable) {
-            Variable* patternVar = reinterpret_cast<Variable*>(pattern);            
-
-            if (variable_storage[*patternVar] == nullptr) {
-                variable_storage[*patternVar] = expr->copy();
-                return true;
+        if (pattern->isBinary()) {
+            if (pattern->getType() != expr->getType()) {
+                return false;
             }
 
-            return matches(expr, variable_storage[*patternVar]);
-        }
-
-        // check if both expressions have the same type
-        if (expr->getType() != pattern->getType())
-            return false;
-
-        // check if pattern contains a binary expression
-        BinaryExpression* binaryPattern = dynamic_cast<BinaryExpression*>(pattern);
-        if (binaryPattern != nullptr) {
-
-            // check if expr is also binary
+            // if the expression types are equal expr has to be a binary expression too
+            BinaryExpression* binaryPattern = dynamic_cast<BinaryExpression*>(pattern);
             BinaryExpression* binaryExpr = dynamic_cast<BinaryExpression*>(expr);
-            if (binaryExpr == nullptr)
-                return false;
-
-            // check expression recursive
-            if (matches(binaryExpr->left, binaryPattern->left) && matches(binaryExpr->right, binaryPattern->right))
-                return true;
 
             if (binaryPattern->commutative) {
-                if (matches(binaryExpr->left, binaryPattern->right) && matches(binaryExpr->right, binaryPattern->left))
-                    return true;
+                return matches(binaryExpr->left, binaryPattern->left) && matches(binaryExpr->right, binaryPattern->right) ||
+                       matches(binaryExpr->left, binaryPattern->right) && matches(binaryExpr->right, binaryPattern->left);
+            }
+            else {
+                return matches(binaryExpr->left, binaryPattern->left) && matches(binaryExpr->right, binaryPattern->right);
             }
         }
 
         return false;
     }
 
-    void ExpressionMatcher::clear_variables() {
-        for (auto [var, _] : variable_storage) {
-            delete variable_storage[var];
-            variable_storage[var] = nullptr;
+    ExpressionMatch ExpressionMatcher::match(Expression* expr, Expression* pattern, bool recurse) {
+        // TODO: Add function matching
+        switch (pattern->getType()) {
+            case ExpressionTypes::Constant: {
+                try {
+                    return ExpressionMatch(expr->getValue() == pattern->getValue());
+                }
+                catch (no_value_error) {
+                    return ExpressionMatch(false);
+                }
+            }
+            case ExpressionTypes::Variable: {
+                Variable* var = dynamic_cast<Variable*>(pattern->copy());
+                return ExpressionMatch{true, {{var, expr}}};
+            }
+            default: break;
         }
-    }
 
-    bool ExpressionMatcher::matches(Expression* expr) {
-        clear_variables();
+        if (pattern->isBinary()) {
+            if (pattern->getType() != expr->getType()) {
+                if (!recurse)
+                    return ExpressionMatch(false);
 
-        return matches(expr, pattern);
-    }
+                std::vector<Expression*> children = expr->getChildren();
+                for (const auto child : children) {
+                    ExpressionMatch match = ExpressionMatcher::match(child, pattern, true);
+                    if (match.success) {
+                        return match;
+                    }
+                }
 
-    ExpressionMatch ExpressionMatcher::match(Expression* expr) {
-        clear_variables();
+                return false;
+            }
 
-        bool success = matches(expr);
+            // if the expression types are equal expr has to be a binary expression too
+            BinaryExpression* binaryPattern = dynamic_cast<BinaryExpression*>(pattern);
+            BinaryExpression* binaryExpr = dynamic_cast<BinaryExpression*>(expr);
 
-        return ExpressionMatch{success, variable_storage};
-    }
+            ExpressionMatch leftMatch = match(binaryExpr->left, binaryPattern->left);
+            ExpressionMatch rightMatch = match(binaryExpr->right, binaryPattern->right);
 
-    void ExpressionMatcher::replace(Expression* expr, Expression* subexpr) {
-        if (matches(expr)) {
-            Expression* parent = expr->parent;
-            parent->substitute(expr, subexpr);
+            if (leftMatch.success && rightMatch.success) {
+                return leftMatch & rightMatch;
+            }
 
-            return;
+            if (binaryPattern->commutative) {
+                leftMatch = match(binaryExpr->left, binaryPattern->right);
+                rightMatch = match(binaryExpr->right, binaryPattern->left);
+
+                if (leftMatch.success && rightMatch.success) {
+                    return leftMatch & rightMatch;
+                }
+            }
         }
+
+        return ExpressionMatch(false);
+    }
+
+    Expression* ExpressionMatcher::substitute(Expression* expr, Expression* pattern, Expression* substitution) {
     }
 } // namespace cas::math

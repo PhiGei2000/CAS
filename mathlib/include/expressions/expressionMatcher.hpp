@@ -7,31 +7,25 @@
 #include <map>
 
 namespace cas::math {
-
     struct ExpressionMatch {
         bool success;
-        std::map<Variable, Expression*> variables;
+        std::map<Variable*, Expression*> variables;
+
+        ExpressionMatch(bool success, std::map<Variable*, Expression*> variables = {});
+        ExpressionMatch(const ExpressionMatch& other);
+        ~ExpressionMatch();
+
+        ExpressionMatch& operator=(const ExpressionMatch& other);
     };
 
-    class ExpressionMatcher {
-      private:
-        std::map<Variable, Expression*> variable_storage;
+    ExpressionMatch operator&(const ExpressionMatch& left, const ExpressionMatch& right);
 
-        bool matches(Expression* expr, Expression* pattern);
+    class ExpressionMatcher {        
+      public:        
+        static bool matches(Expression* expr, Expression* pattern);
 
-        void clear_variables();
-
-      public:
-        Expression* pattern;
-
-        ExpressionMatcher(Expression* pattern);
-        ~ExpressionMatcher();
-
-        bool matches(Expression* expression);
-
-        ExpressionMatch match(Expression* expression);
-
-        // Replaces subexpressions inside the expression with the specified subexpression
-        void replace(Expression* expression, Expression* subexpression);
+        static ExpressionMatch match(Expression* expression, Expression* pattern, bool recurse = false);        
+        
+        static Expression* substitute(Expression* expr, Expression* pattern, Expression* substitution);
     };
 } // namespace cas::math
