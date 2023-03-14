@@ -7,7 +7,7 @@ enable_testing()
 set(CMAKE_CXX_STANDARD 23)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    add_compile_definitions(DEBUG)
+add_compile_definitions(DEBUG)
 endif()
 
 add_subdirectory(mathlib)
@@ -18,9 +18,12 @@ file(GLOB_RECURSE SOURCES ./src/**.cpp)
 
 add_executable(cas ${SOURCES})
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 23)
+set_property(TARGET cas PROPERTY ENABLE_EXPORTS 1)
 
 target_link_libraries(cas PUBLIC mathlib)
 target_include_directories(cas PUBLIC mathlib/include)
+
+# add_subdirectory(test)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
