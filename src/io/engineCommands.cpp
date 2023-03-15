@@ -12,16 +12,18 @@
 
 namespace cas {
     void Engine::setupCommands() {
+#pragma region Callbacks
         CommandCallback<std::string> printStr = [&](std::string str) {
             io::IOStream::writeLine(str);
         };
 
         CommandCallback<math::Expression*> printExpression = [&](math::Expression* expr) {
-            Expression* simplified = expr->simplify();
-            io::IOStream::writeLine(simplified->toString());
+            // Expression* simplified = expr->simplify();
+            // io::IOStream::writeLine(simplified->toString());
+            io::IOStream::writeLine(expr->toString());
 
             delete expr;
-            delete simplified;
+            // delete simplified;
         };
 
         CommandCallback<math::ExpressionMatch> printExpressionMatch = [&](math::ExpressionMatch match) {
@@ -36,12 +38,36 @@ namespace cas {
 
             for (const auto& [var, expr] : match.variables) {
                 ss << std::endl;
-                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var->getSymbol() << " | ";
+                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var << " | ";
                 ss << expr->toString();
             }
 
             io::IOStream::writeLine(ss.str());
         };
+
+        CommandCallback<std::vector<math::ExpressionMatch>> printExpressionMatches = [&](std::vector<math::ExpressionMatch> matches) {
+            std::stringstream ss;
+            ss << "Found " << matches.size() << " matches" << std::endl;
+
+            const char separator = ' ';
+            const int symbolWidth = 10;
+
+            for (const auto match : matches) {
+                ss << "Match: " << *match.node << std::endl;
+                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << "Variable"
+                   << " | "
+                   << "Value";
+
+                for (const auto& [var, expr] : match.variables) {
+                    ss << std::endl;
+                    ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var << " | ";
+                    ss << expr->toString();
+                }
+                ss << std::endl;
+            }
+            io::IOStream::writeLine(ss.str());
+        };
+#pragma endregion
 
         Command<std::string> exitCommand = Command<std::string>([](Engine* engine) {
             engine->running = false;
@@ -85,6 +111,7 @@ namespace cas {
         addCommand("simplify", commands::simplify, printExpression);
         addCommand("match", commands::matchCommand, printExpressionMatch);
         addCommand("matchRecurse", commands::matchRecurseCommand, printExpressionMatch);
+        addCommand("matchAll", commands::matchAllCommand, printExpressionMatches);
         addCommand("substitute", commands::substituteCommand, printExpression);
     }
 } // namespace cas

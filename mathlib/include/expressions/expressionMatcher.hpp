@@ -9,23 +9,26 @@
 namespace cas::math {
     struct ExpressionMatch {
         bool success;
-        std::map<Variable*, Expression*> variables;
+        std::map<VariableSymbol, Expression*> variables;
         Expression* node;
 
-        ExpressionMatch(bool success, Expression* node, std::map<Variable*, Expression*> variables = {});
+        ExpressionMatch(bool success, Expression* node, std::map<VariableSymbol, Expression*> variables = {});
         ExpressionMatch(const ExpressionMatch& other);
         ~ExpressionMatch();
 
         ExpressionMatch& operator=(const ExpressionMatch& other);
     };
 
-    ExpressionMatch operator&(const ExpressionMatch& left, const ExpressionMatch& right);
-
     class ExpressionMatcher {
+      protected:
+        static ExpressionMatch combineMatches(const ExpressionMatch& first, const ExpressionMatch& second);
+
       public:
         static bool matches(Expression* expr, Expression* pattern);
 
-        static ExpressionMatch match(Expression* expression, Expression* pattern, bool recurse = false);
+        static ExpressionMatch match(Expression* expression, Expression* pattern, bool recurse = false, std::map<VariableSymbol, Expression*> variables = {});
+
+        static std::vector<ExpressionMatch> matchAll(Expression* expression, Expression* pattern);
 
         static Expression* substitute(Expression* expr, Expression* pattern, Expression* substitution);
     };

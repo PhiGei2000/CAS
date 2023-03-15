@@ -40,6 +40,7 @@ namespace cas::math {
                 if (arguments[i] == expr) {
                     delete arguments[i];
                     arguments[i] = newExpr->copy();
+                    arguments[i]->parent = this;
                 }
                 else {
                     arguments[i]->replace(expr, newExpr);

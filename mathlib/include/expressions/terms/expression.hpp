@@ -38,6 +38,7 @@ namespace cas::math {
         virtual constexpr bool isBinary() const {
             return false;
         }
+        virtual Expression* getRoot();
 
         virtual Expression* simplify() const;
         virtual void replace(Expression* expression, Expression* newExpression);
@@ -51,4 +52,6 @@ namespace cas::math {
     };
 
     Expression* assign(Expression* other, Expression* parent);
+    std::ostream& operator<<(std::ostream& os, const Expression& expr);
+    std::ostream& operator<<(std::ostream& os, Expression* expr);
 } // namespace cas::math

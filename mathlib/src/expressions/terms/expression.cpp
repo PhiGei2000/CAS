@@ -18,6 +18,13 @@ namespace cas::math {
         return this->copy();
     }
 
+    Expression* Expression::getRoot() {
+        if (parent == nullptr)
+            return this;
+
+        return parent->getRoot();
+    }
+
     void Expression::replace(Expression* expr, Expression* newExpr) {
     }
 
@@ -36,4 +43,11 @@ namespace cas::math {
         return expr;
     }
 
+    std::ostream& operator<<(std::ostream& os, const Expression& expr) {
+        return os << expr.toString();
+    }
+
+    std::ostream& operator<<(std::ostream& os, Expression* expr) {
+        return os << expr->toString();
+    }
 } // namespace cas::math

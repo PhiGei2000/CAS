@@ -18,7 +18,6 @@ namespace cas::math {
 
         virtual bool dependsOn(const Variable& var) const override;
 
-
         virtual double getValue() const override;
         virtual Expression* copy() const override;
         virtual ExpressionTypes getType() const override;
@@ -31,7 +30,6 @@ namespace cas::math {
 
         bool operator==(const Variable& other) const;
     };
-
 } // namespace cas::math
 
 template<>
