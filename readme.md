@@ -25,7 +25,9 @@ All commands have the form ``commandName[arg1,arg2,...]`` and must terminated by
 ### Engine functions
 | Command | Description | Example |
 | --- | --- | --- |
-| set[var, expr] | Assigns the expression expr to the specified variable for later use | ``set[x,12]`` |
+| set[var, expr] | Assigns the expression expr to the specified variable for later use | ``set[x,12]`` or ``x=12``|
+| get[var] | Gets the expression stored in the specified variable | ``get[x]`` or ``x`` |
+| ans[] | Returns the result of the last stored calculation | |
 | listVars[] | Lists the currently stored variables and their values | |
 | exit[] | Shuts down the engine | |
 
