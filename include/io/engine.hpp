@@ -5,21 +5,32 @@
 #include <unordered_map>
 
 #include "commands/commandWrapper.hpp"
+
 #include <mathlib/mathlib.hpp>
 
+using namespace cas::math;
 using namespace cas::commands;
 
 namespace cas {
     class Engine {
-      private:
-        static constexpr unsigned int bufferSize = 512;
-        static constexpr char commandArgBrackets[2] = {'[', ']'};
+      protected:
+        struct Callbacks {
+            static CommandCallback<std::string> printStringCallback;
+            static CommandCallback<Expression*> printExpressionCallback;
+            static CommandCallback<ExpressionMatch> printExpressionMatchCallback;
+            static CommandCallback<std::vector<ExpressionMatch>> printExpressionMatchesCallback;
+        };
 
         std::unordered_map<std::string, CommandWrapper> commands;
         std::unordered_map<cas::math::VariableSymbol, cas::math::Expression*> vars;
         bool running = false;
+        Expression* ans = nullptr;
 
         void setupCommands();
+
+        void handleVariableInput(const std::string& input);
+
+        friend struct StoreableCommandWrapper;
 
       public:
         Engine();
@@ -27,7 +38,7 @@ namespace cas {
         template<typename TRes, typename... TArgs>
         inline void addCommand(const std::string& alias, const Command<TRes, TArgs...>& command, CommandCallback<TRes>& callback = DefaultCallback<TRes>) {
             commands[alias] = CommandWrapper(command, callback);
-        }                
+        }
 
         void run();
     };

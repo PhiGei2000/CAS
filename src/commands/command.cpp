@@ -14,4 +14,9 @@ namespace cas::commands {
     cas::math::Variable* parseArg(const std::string& argStr) {
         return new Variable(argStr);
     }
+
+    template<>
+    cas::math::VariableSymbol parseArg(const std::string& argStr) {
+        return argStr;
+    }
 }

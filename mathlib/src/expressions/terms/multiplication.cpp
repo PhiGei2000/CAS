@@ -66,7 +66,8 @@ namespace cas::math {
 
                         result += "^" + simpNegExp->toString();
 
-                        delete negExp, simpNegExp;
+                        delete negExp;
+                        delete simpNegExp;
                     }
 
                     return result;
