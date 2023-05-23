@@ -37,3 +37,4 @@ CMakeSettings.json
 out/
 
 build/
+commandLog.log
