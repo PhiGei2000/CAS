@@ -8,7 +8,7 @@ namespace cas::math {
         Exponentiation(const Expression& left, const Expression& right);
         Exponentiation(Expression* base, Expression* exponent);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
         virtual ExpressionTypes getType() const override;
 

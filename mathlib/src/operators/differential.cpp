@@ -32,12 +32,12 @@ namespace cas::math {
             return result;
         }
 
-        return new Constant(0);
+        return new Number(0);
     }
 
     Expression* D(Expression* expr, const Variable& var) {
         if (!expr->dependsOn(var)) {
-            return new Constant(0);
+            return new Number(0);
         }
 
         Expression* result = nullptr;
@@ -62,10 +62,10 @@ namespace cas::math {
             case ExpressionTypes::Variable:
                 variable = reinterpret_cast<Variable*>(expr);
                 if (variable->getSymbol() == var.getSymbol()) {
-                    result = new Constant(1);
+                    result = new Number(1);
                 }
                 else {
-                    result = new Constant(0);
+                    result = new Number(0);
                 }
                 break;
             case ExpressionTypes::Exponentiation:
@@ -73,10 +73,10 @@ namespace cas::math {
                 if (exponentiation->right->getType() == ExpressionTypes::Constant) {
                     double exponentValue = exponentiation->right->getValue();
                     if (exponentValue == 0) {
-                        return new Constant(0);
+                        return new Number(0);
                     }
                     else {
-                        result = new Multiplication(new Constant(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Constant(exponentValue - 1)), D(exponentiation->left, var)));
+                        result = new Multiplication(new Number(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Number(exponentValue - 1)), D(exponentiation->left, var)));
                     }
                 }
                 else {

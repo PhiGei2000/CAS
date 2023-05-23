@@ -18,7 +18,7 @@ namespace cas {
         static const Command<Expression*, Expression*> differential = Command<Expression*, Expression*>(
             [](Engine* engine, Expression* expr) {
                 std::set<Variable> vars = expr->getVariables();
-                Expression* result = new Constant(0);
+                Expression* result = new Number(0);
 
                 if (vars.size() > 0) {
                     delete result;

@@ -9,7 +9,7 @@ namespace cas::math {
         Multiplication(const Expression& left, const Expression& right);
         Multiplication(Expression* left, Expression* right);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
         virtual ExpressionTypes getType() const override;
 

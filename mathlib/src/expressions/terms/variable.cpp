@@ -32,10 +32,10 @@ namespace cas::math {
 
     Expression* Variable::differentiate(const Variable* var) const {
         if (*this == *var) {
-            return new Constant(1);
+            return new Number(1);
         }
 
-        return new Constant(0);
+        return new Number(0);
     }
 
     std::string Variable::toString() const {

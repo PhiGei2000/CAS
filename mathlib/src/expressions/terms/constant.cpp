@@ -9,31 +9,31 @@
 
 
 namespace cas::math {
-    Constant::Constant(double value)
+    Number::Number(double value)
         : value(value) {
     }
 
-    double Constant::getValue() const {
+    double Number::getValue() const {
         return value;
     }
 
-    Expression* Constant::copy() const {
-        return new Constant(value);
+    Expression* Number::copy() const {
+        return new Number(value);
     }
 
-    ExpressionTypes Constant::getType() const {
+    ExpressionTypes Number::getType() const {
         return ExpressionTypes::Constant;
     }
 
-    bool Constant::dependsOn(const Variable& var) const {
+    bool Number::dependsOn(const Variable& var) const {
         return false;
     }
 
-    Expression* Constant::differentiate(const Variable* var) const {
-        return new Constant(0);
+    Expression* Number::differentiate(const Variable* var) const {
+        return new Number(0);
     }
 
-    std::string Constant::toString() const {
+    std::string Number::toString() const {
         std::string str = std::to_string(value);
 
         // remove leading zeros
@@ -49,30 +49,7 @@ namespace cas::math {
         return str;
     }
 
-    std::set<Variable> Constant::getVariables() const {
+    std::set<Variable> Number::getVariables() const {
         return {};
     }
-
-#pragma region NamedConstants
-    NamedConstant::NamedConstant(const std::string& symbol, double value)
-        : symbol(symbol), Constant(value) {
-    }
-
-    Expression* NamedConstant::copy() const {
-        return new NamedConstant(symbol, value);
-    }
-
-    ExpressionTypes NamedConstant::getType() const {
-        return ExpressionTypes::NamedConstant;
-    }
-
-    std::string NamedConstant::toString() const {
-        return symbol;
-    }
-
-    E::E()
-        : NamedConstant("e", std::numbers::e) {
-    }
-
-#pragma endregion
 } // namespace cas::math

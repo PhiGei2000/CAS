@@ -16,7 +16,7 @@ namespace cas::io {
             static Expression* parseExponentiation(const std::string& str);
 
             static Expression* parseSymbol(const std::string& str);
-            static Constant* parseConstant(const std::string& str);
+            static Number* parseConstant(const std::string& str);
 
             static Expression* parseFunction(const std::string& str);
 
