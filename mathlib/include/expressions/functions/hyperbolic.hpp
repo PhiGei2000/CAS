@@ -9,7 +9,7 @@ namespace cas::math {
         Sinh(const Expression& argument);
         Sinh(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* simplify() const override;
@@ -23,7 +23,7 @@ namespace cas::math {
         Asinh(const Expression& argument);
         Asinh(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* simplify() const override;
@@ -36,7 +36,7 @@ namespace cas::math {
         Cosh(const Expression& argument);
         Cosh(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* simplify() const override;
@@ -50,7 +50,7 @@ namespace cas::math {
         Acosh(const Expression& argument);
         Acosh(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* simplify() const override;

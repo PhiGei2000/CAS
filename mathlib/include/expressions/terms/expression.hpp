@@ -29,7 +29,7 @@ namespace cas::math {
 
         virtual ~Expression();
 
-        virtual double getValue() const = 0;
+        virtual Number getValue() const = 0;
         virtual Expression* copy() const = 0;
         virtual ExpressionTypes getType() const = 0;
         virtual std::vector<Expression*> getChildren() const;

@@ -8,7 +8,7 @@ namespace cas::math {
         Sin(const Expression& argument);
         Sin(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;
@@ -19,7 +19,7 @@ namespace cas::math {
         Arcsin(const Expression& argument);
         Arcsin(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;
@@ -30,7 +30,7 @@ namespace cas::math {
         Cos(const Expression& argument);
         Cos(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;
@@ -41,29 +41,29 @@ namespace cas::math {
         Arccos(const Expression& argument);
         Arccos(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;
     };
 
     struct Tan : public Function<1> {
-      public:      
+      public:
         Tan(const Expression& argument);
         Tan(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;
     };
 
     struct Arctan : public Function<1> {
-      public:        
+      public:
         Arctan(const Expression& argument);
         Arctan(Expression* argument);
 
-        virtual double getValue() const override;
+        virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
         virtual Expression* getDerivative() const override;

@@ -27,7 +27,7 @@ namespace cas::math {
 
         std::vector<Expression*> poweredTerms;
         for (auto term : restTerms) {
-            Exponentiation* power = new Exponentiation(term, new Constant(exponent));
+            Exponentiation* power = new Exponentiation(term, new Number(exponent));
 
             poweredTerms.push_back(power);
         }
@@ -96,7 +96,7 @@ namespace cas::math {
             } break;
 
             case ExpressionTypes::Constant: {
-                Constant* c = reinterpret_cast<Constant*>(prod->left);
+                Number* c = reinterpret_cast<Number*>(prod->left);
                 parts.coefficient *= c->getValue();
             } break;
 
@@ -128,7 +128,7 @@ namespace cas::math {
             } break;
 
             case ExpressionTypes::Constant: {
-                Constant* c = reinterpret_cast<Constant*>(prod->right);
+                Number* c = reinterpret_cast<Number*>(prod->right);
                 parts.coefficient *= c->getValue();
             } break;
 
@@ -176,7 +176,7 @@ namespace cas::math {
             } break;
 
             case ExpressionTypes::Constant: {
-                Constant* c = reinterpret_cast<Constant*>(exp->left);
+                Number* c = reinterpret_cast<Number*>(exp->left);
 
                 parts.coefficient *= pow(c->getValue(), exponent);
             } break;
@@ -197,7 +197,7 @@ namespace cas::math {
 
     Expression* Simplifier::getProductFromParts(const Simplifier::ProductParts& parts) {
         if (parts.variables.size() == 0 && parts.restTerms.size() == 0) {
-            return new Constant(parts.coefficient);
+            return new Number(parts.coefficient);
         }
 
         Expression* result = nullptr;
@@ -208,10 +208,10 @@ namespace cas::math {
                     return new Variable((*it).first);
                 }
                 else if (exp == 0) {
-                    return new Constant(0);
+                    return new Number(0);
                 }
 
-                Constant* exponent = new Constant(exp);
+                Number* exponent = new Number(exp);
                 Variable* variable = new Variable((*it).first);
 
                 return new Exponentiation(variable, exponent);
@@ -246,7 +246,7 @@ namespace cas::math {
         }
 
         if (parts.coefficient != 1) {
-            Constant* coefficient = new Constant(parts.coefficient);
+            Number* coefficient = new Number(parts.coefficient);
             Multiplication* p = new Multiplication(coefficient, result);
             result = p;
         }
@@ -319,7 +319,7 @@ namespace cas::math {
             if (right->getType() == ExpressionTypes::Constant) {
                 double value = leftValue + right->getValue();
 
-                return new Constant(value);
+                return new Number(value);
             }
             // ignore first summand if it is zero
             else if (leftValue == 0) {
@@ -466,7 +466,7 @@ namespace cas::math {
             double leftValue = left->getValue();
             if (right->getType() == ExpressionTypes::Constant) {
                 double value = leftValue * right->getValue();
-                return new Constant(value);
+                return new Number(value);
             }
             // ignore fist factor if it is one
             else if (leftValue == 1) {
@@ -474,7 +474,7 @@ namespace cas::math {
             }
             // if one factor is zero then the product is zero
             else if (leftValue == 0) {
-                return new Constant(0);
+                return new Number(0);
             }
         }
 
@@ -487,7 +487,7 @@ namespace cas::math {
             }
             // if one factor is zero then the product is zero
             else if (rightValue == 0) {
-                return new Constant(0);
+                return new Number(0);
             }
         }
 
@@ -520,11 +520,11 @@ namespace cas::math {
             double value = right->getValue();
 
             if (left->getType() == ExpressionTypes::Constant) {
-                return new Constant(pow(left->getValue(), value));
+                return new Number(pow(left->getValue(), value));
             }
 
             if (value == 0)
-                return new Constant(1);
+                return new Number(1);
             else if (value == 1)
                 return left;
         }

@@ -25,7 +25,7 @@ namespace cas {
 
     template<NumericType T>
     math::Expression* toExpression(T expr) {
-        return new math::Constant(expr);
+        return new math::Number(expr);
     }
 
     template<VariableSymbolType T>

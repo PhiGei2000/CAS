@@ -43,7 +43,7 @@ namespace cas::io {
             right = parseAddition(rightStr);
         }
         else {
-            right = new Multiplication(new Constant(-1), parseAddition(rightStr));
+            right = new Multiplication(new Number(-1), parseAddition(rightStr));
         }
 
         return new Addition(left, right);
@@ -53,7 +53,7 @@ namespace cas::io {
         // negative sign
         if (str.front() == '-' && !std::regex_match(str, numberRegex)) {
             Expression* expr = parse(str.substr(1));
-            return new Multiplication(new Constant(-1), expr);
+            return new Multiplication(new Number(-1), expr);
         }
 
         std::stringstream ss;
@@ -61,7 +61,7 @@ namespace cas::io {
         // get first factor
         int bracketCounter = 0;
         auto it = str.begin();
-        
+
         // TODO: Add parsing for short form 2x=2*x
         while (!(it == str.end() || (*it) == '*' && bracketCounter == 0)) {
             ss << *it;
@@ -116,7 +116,7 @@ namespace cas::io {
         std::string rightStr = str.substr(index + 1);
 
         Expression* left = parseExponentiation(leftStr);
-        Expression* right = new Exponentiation(parseExponentiation(rightStr), new Constant(-1));
+        Expression* right = new Exponentiation(parseExponentiation(rightStr), new Number(-1));
 
         return new Multiplication(left, right);
     }
@@ -179,10 +179,10 @@ namespace cas::io {
         return new Variable(str);
     }
 
-    Constant* Parser::parseConstant(const std::string& str) {
+    Number* Parser::parseConstant(const std::string& str) {
         double value = std::stod(str);
 
-        return new Constant(value);
+        return new Number(value);
     }
 
     Expression* Parser::parseFunction(const std::string& str) {

@@ -29,7 +29,7 @@ namespace cas::math {
 
         if (NamedConstant* c = dynamic_cast<NamedConstant*>(argument)) {
             if (c->toString() == "e")
-                return new Constant(1);
+                return new Number(1);
         }
 
         return new Ln(argument);

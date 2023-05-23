@@ -40,7 +40,7 @@ namespace cas::math {
                 new Multiplication(right,
                     new Multiplication(dBase,
                         new Exponentiation(left,
-                            new Constant(-1))))));
+                            new Number(-1))))));
     }
 
     std::string Exponentiation::toString() const {
