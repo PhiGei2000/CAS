@@ -2,7 +2,7 @@
 
 #include "functions.hpp"
 #include "terms/addition.hpp"
-#include "terms/constant.hpp"
+#include "terms/number.hpp"
 #include "terms/differential.hpp"
 #include "terms/exponentiation.hpp"
 #include "terms/multiplication.hpp"

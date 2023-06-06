@@ -1,9 +1,8 @@
 #pragma once
-#include "expressions/terms/constant.hpp"
+#include "../number.hpp"
 
-#if WIN32
+
 #include <numbers>
-#endif
 
 namespace cas::math{
     struct NamedConstant : public Number {
@@ -17,7 +16,7 @@ namespace cas::math{
         }
 
         inline virtual Expression* copy() const override {
-          return new NamedConstant(symbol, value);
+          return new NamedConstant(symbol, realValue);
         }
 
         inline virtual ExpressionTypes getType() const override {

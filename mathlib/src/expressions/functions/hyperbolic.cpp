@@ -14,9 +14,9 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Sinh::getValue() const {
-        double argValue = arguments[0]->getValue();
-        return sinh(argValue);
+    Number Sinh::getValue() const {
+        Number argValue = arguments[0]->getValue();
+        return sinh(argValue.realValue);
     }
 
     Expression* Sinh::copy() const {
@@ -48,9 +48,9 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Asinh::getValue() const {
-        double argValue = arguments[0]->getValue();
-        return asinh(argValue);
+    Number Asinh::getValue() const {
+        Number argValue = arguments[0]->getValue();
+        return asinh(argValue.realValue);
     }
 
     Expression* Asinh::copy() const {
@@ -82,9 +82,9 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Cosh::getValue() const {
-        double argValue = arguments[0]->getValue();
-        return cosh(argValue);
+    Number Cosh::getValue() const {
+        Number argValue = arguments[0]->getValue();
+        return cosh(argValue.realValue);
     }
 
     Expression* Cosh::copy() const {
@@ -116,10 +116,9 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Acosh::getValue() const {
-        double argValue = arguments[0]->getValue();
-
-        return acosh(argValue);
+    Number Acosh::getValue() const {
+        Number argValue = arguments[0]->getValue();
+        return acosh(argValue.realValue);
     }
 
     Expression* Acosh::copy() const {

@@ -97,7 +97,7 @@ namespace cas::math {
 
             case ExpressionTypes::Constant: {
                 Number* c = reinterpret_cast<Number*>(prod->left);
-                parts.coefficient *= c->getValue();
+                parts.coefficient *= c->getValue().realValue;
             } break;
 
             case ExpressionTypes::Variable: {
@@ -129,7 +129,7 @@ namespace cas::math {
 
             case ExpressionTypes::Constant: {
                 Number* c = reinterpret_cast<Number*>(prod->right);
-                parts.coefficient *= c->getValue();
+                parts.coefficient *= c->getValue().realValue;
             } break;
 
             case ExpressionTypes::Variable: {
@@ -149,7 +149,7 @@ namespace cas::math {
         ProductParts parts;
         double exponent = NAN;
         try {
-            exponent = exp->right->getValue();
+            exponent = exp->right->getValue().realValue;
         }
         catch (std::exception e) {
             throw std::runtime_error("Only constants are allowed as exponents");
@@ -178,7 +178,7 @@ namespace cas::math {
             case ExpressionTypes::Constant: {
                 Number* c = reinterpret_cast<Number*>(exp->left);
 
-                parts.coefficient *= pow(c->getValue(), exponent);
+                parts.coefficient *= pow(c->getValue().realValue, exponent);
             } break;
 
             case ExpressionTypes::Variable: {
@@ -315,9 +315,9 @@ namespace cas::math {
 
         // evaluate numerical values if the summands are constants
         if (left->getType() == ExpressionTypes::Constant) {
-            double leftValue = left->getValue();
+            double leftValue = left->getValue().realValue;
             if (right->getType() == ExpressionTypes::Constant) {
-                double value = leftValue + right->getValue();
+                double value = leftValue + right->getValue().realValue;
 
                 return new Number(value);
             }
@@ -329,7 +329,7 @@ namespace cas::math {
 
         // ignore second summand if it is zero
         if (right->getType() == ExpressionTypes::Constant) {
-            double rightValue = right->getValue();
+            double rightValue = right->getValue().realValue;
             if (rightValue == 0)
                 return left;
         }
@@ -389,7 +389,7 @@ namespace cas::math {
                 } break;
 
                 case ExpressionTypes::Constant: {
-                    double value = summand->getValue();
+                    double value = summand->getValue().realValue;
 
                     // find term without variables
                     auto it = combinedTerms.begin();
@@ -463,9 +463,9 @@ namespace cas::math {
 
         // evaluate numerical values if the factors are constants
         if (left->getType() == ExpressionTypes::Constant) {
-            double leftValue = left->getValue();
+            double leftValue = left->getValue().realValue;
             if (right->getType() == ExpressionTypes::Constant) {
-                double value = leftValue * right->getValue();
+                double value = leftValue * right->getValue().realValue;
                 return new Number(value);
             }
             // ignore fist factor if it is one
@@ -479,7 +479,7 @@ namespace cas::math {
         }
 
         if (right->getType() == ExpressionTypes::Constant) {
-            double rightValue = right->getValue();
+            double rightValue = right->getValue().realValue;
 
             // ignore second factor if it is one
             if (rightValue == 1) {
@@ -517,10 +517,10 @@ namespace cas::math {
         Expression* right = exp->right->simplify();
 
         if (right->getType() == ExpressionTypes::Constant) {
-            double value = right->getValue();
+            double value = right->getValue().realValue;
 
             if (left->getType() == ExpressionTypes::Constant) {
-                return new Number(pow(left->getValue(), value));
+                return new Number(pow(left->getValue().realValue, value));
             }
 
             if (value == 0)

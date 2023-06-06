@@ -14,8 +14,8 @@ namespace cas::math {
         : BinaryExpression(left, right) {
     }
 
-    double Addition::getValue() const {
-        return left->getValue() + right->getValue();
+    Number Addition::getValue() const {
+        return left->getValue().realValue + right->getValue().realValue;
     }
 
     Expression* Addition::copy() const {

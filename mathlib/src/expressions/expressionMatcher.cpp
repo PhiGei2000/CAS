@@ -108,8 +108,8 @@ namespace cas::math {
         switch (pattern->getType()) {
             case ExpressionTypes::Constant: {
                 try {
-                    double patternValue = pattern->getValue();
-                    double value = expr->getValue();
+                    Number patternValue = pattern->getValue();
+                    Number value = expr->getValue();
 
                     return ExpressionMatch(patternValue == value, expr, {});
                 }

@@ -18,6 +18,7 @@ namespace cas::math {
     };
 
     struct Variable;
+    struct Number;
 
     struct no_value_error : public std::runtime_error {
         no_value_error(const std::string& message);

@@ -15,9 +15,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Sin::getValue() const {
-        double argValue = arguments[0]->getValue();
-
+    Number Sin::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
         return sin(argValue);
     }
 
@@ -39,9 +38,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Arcsin::getValue() const {
-        double argValue = arguments[0]->getValue();
-
+    Number Arcsin::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
         return asin(argValue);
     }
 
@@ -63,8 +61,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Cos::getValue() const {
-        double argValue = arguments[0]->getValue();
+    Number Cos::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
 
         return cos(argValue);
     }
@@ -87,8 +85,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Arccos::getValue() const {
-        double argValue = arguments[0]->getValue();
+    Number Arccos::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
 
         return acos(argValue);
     }
@@ -111,8 +109,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Tan::getValue() const {
-        double argValue = arguments[0]->getValue();
+    Number Tan::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
 
         return tan(argValue);
     }
@@ -136,8 +134,8 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Arctan::getValue() const {
-        double argValue = arguments[0]->getValue();
+    Number Arctan::getValue() const {
+        double argValue = arguments[0]->getValue().realValue;
 
         return atan(argValue);
     }

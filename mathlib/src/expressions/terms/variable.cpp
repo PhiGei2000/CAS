@@ -1,6 +1,6 @@
 #include "expressions/terms/variable.hpp"
 
-#include "expressions/terms/constant.hpp"
+#include "expressions/terms/number.hpp"
 
 #include <stdexcept>
 
@@ -18,7 +18,7 @@ namespace cas::math {
         return symbol == var.symbol;
     }
 
-    double Variable::getValue() const {
+    Number Variable::getValue() const {
         throw no_value_error("Cannot get value of a variable");
     }
 

@@ -5,6 +5,7 @@ include(CTest)
 enable_testing()
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} -stdlib=libc++)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_compile_definitions(DEBUG)

@@ -71,12 +71,12 @@ namespace cas::math {
             case ExpressionTypes::Exponentiation:
                 exponentiation = reinterpret_cast<Exponentiation*>(expr);
                 if (exponentiation->right->getType() == ExpressionTypes::Constant) {
-                    double exponentValue = exponentiation->right->getValue();
+                    Number exponentValue = exponentiation->right->getValue();
                     if (exponentValue == 0) {
                         return new Number(0);
                     }
                     else {
-                        result = new Multiplication(new Number(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Number(exponentValue - 1)), D(exponentiation->left, var)));
+                        result = new Multiplication(new Number(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Number(exponentValue.realValue - 1)), D(exponentiation->left, var)));
                     }
                 }
                 else {
