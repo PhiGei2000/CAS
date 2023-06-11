@@ -2,12 +2,31 @@
 
 #include "expressions/expressions.hpp"
 
+#if DEBUG
+#include <iostream>
+#include "debug/debugTools.hpp"
+#endif
+
 namespace cas::math {
     no_value_error::no_value_error(const std::string& message)
         : std::runtime_error(message) {
     }
 
+#if DEBUG
+    unsigned int Expression::expressionCounter = 0;
+
+    Expression::Expression() {
+        expressionCounter++;
+
+        memLog << "created expression " << (void*)this << " total:" << expressionCounter << " " << __builtin_return_address(0) << std::endl;
+    }
+#endif
+
     Expression::~Expression() {
+#if DEBUG
+        expressionCounter--;
+        memLog << "deleted expression " << (void*)this << " total:" << expressionCounter << " " << __builtin_return_address(0) << std::endl;
+#endif
     }
 
     std::vector<Expression*> Expression::getChildren() const {

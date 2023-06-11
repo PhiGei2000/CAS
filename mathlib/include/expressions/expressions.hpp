@@ -7,6 +7,7 @@
 #include "terms/exponentiation.hpp"
 #include "terms/multiplication.hpp"
 #include "terms/variable.hpp"
+#include "terms/numeric/constants.hpp"
 
 #include <concepts>
 

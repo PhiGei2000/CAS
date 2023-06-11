@@ -28,6 +28,10 @@ namespace cas::math {
       public:
         Expression* parent = nullptr;
 
+#if DEBUG
+        static unsigned int expressionCounter;
+        Expression();
+#endif
         virtual ~Expression();
 
         virtual Number getValue() const = 0;

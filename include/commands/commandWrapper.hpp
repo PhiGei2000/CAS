@@ -25,6 +25,16 @@ namespace cas::commands {
             };
         }
 
+        template<typename... TArgs>
+        inline CommandWrapper(const Command<cas::math::Expression*, TArgs...>& command, CommandCallback<cas::math::Expression*> callback = DefaultCallback<cas::math::Expression*>) {
+            functional = [command, callback](Engine* engine, const std::vector<std::string>& argV) {
+                cas::math::Expression* expr = command.execute(engine, argV);
+
+                callback(expr);
+                delete expr;
+            };
+        }
+
         inline void executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
             functional(engine, argV);
         }

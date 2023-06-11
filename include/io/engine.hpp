@@ -30,7 +30,7 @@ namespace cas {
 
         void handleVariableInput(const std::string& input);
 
-        friend struct StoreableCommandWrapper;
+        friend struct cas::commands::StoreableCommandWrapper;
 
       public:
         Engine();
