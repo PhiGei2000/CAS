@@ -1,6 +1,7 @@
 #include "io/ioStream.hpp"
 
 #include <iostream>
+#include <string>
 
 namespace cas::io {
     std::ofstream IOStream::log = std::ofstream("commandLog.log");

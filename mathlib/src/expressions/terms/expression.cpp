@@ -3,8 +3,11 @@
 #include "expressions/expressions.hpp"
 
 #if DEBUG
-#include <iostream>
 #include "debug/debugTools.hpp"
+#include <iostream>
+#if WIN32
+#include <intrin.h>
+#endif
 #endif
 
 namespace cas::math {
@@ -18,14 +21,26 @@ namespace cas::math {
     Expression::Expression() {
         expressionCounter++;
 
-        memLog << "created expression " << (void*)this << " total:" << expressionCounter << " " << __builtin_return_address(0) << std::endl;
+        memLog << "created expression " << (void*)this << " total:" << expressionCounter << " "
+#if WIN32
+               << _ReturnAddress()
+#else
+               << __builtin_return_address(0)
+#endif               
+               << std::endl;
     }
 #endif
 
     Expression::~Expression() {
 #if DEBUG
         expressionCounter--;
-        memLog << "deleted expression " << (void*)this << " total:" << expressionCounter << " " << __builtin_return_address(0) << std::endl;
+        memLog << "deleted expression " << (void*)this << " total:" << expressionCounter << " "
+#if WIN32
+               << _ReturnAddress()
+#else
+               << __builtin_return_address(0)
+#endif
+               << std::endl;
 #endif
     }
 

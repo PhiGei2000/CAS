@@ -11,6 +11,11 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 add_compile_definitions(DEBUG)
 endif()
 
+if (MSVC)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+endif()
+
 add_subdirectory(mathlib)
 
 include_directories(./include)
@@ -29,3 +34,5 @@ target_include_directories(cas PUBLIC mathlib/include)
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
+
+
