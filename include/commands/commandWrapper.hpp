@@ -6,10 +6,16 @@
 
 #include <iostream>
 
+namespace cas {
+    class Engine;
+}
+
 namespace cas::commands {
     struct CommandWrapper {
       protected:
         std::function<void(Engine*, const std::vector<std::string>&)> functional;
+
+        static void saveAns(Engine* engine, cas::math::Expression* result);
 
       public:
         inline CommandWrapper() {
@@ -31,29 +37,12 @@ namespace cas::commands {
                 cas::math::Expression* expr = command.execute(engine, argV);
 
                 callback(expr);
-                delete expr;
+                saveAns(engine, expr);
             };
         }
 
         inline void executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
             functional(engine, argV);
         }
-    };
-
-    struct StoreableCommandWrapper : public CommandWrapper {
-        template<typename... TArgs>
-        inline StoreableCommandWrapper(const Command<cas::math::Expression*, TArgs...>& command, CommandCallback<math::Expression*> callback = DefaultCallback<math::Expression*>, bool storeResult = true) {
-            functional = [command, callback, storeResult](Engine* engine, const std::vector<std::string>& argV) {
-                math::Expression* result = command.execute(engine, argV);
-                if (storeResult) {
-                    storeVariable(engine, result);
-                }
-
-                callback(result);
-            };
-        }
-
-      protected:
-        static void storeVariable(Engine* engine, math::Expression* expr);
     };
 } // namespace cas::commands
