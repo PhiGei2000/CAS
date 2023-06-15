@@ -1,5 +1,4 @@
 #pragma once
-#include <functional>
 #include <map>
 #include <string>
 #include <unordered_map>
@@ -30,7 +29,7 @@ namespace cas {
 
         void handleVariableInput(const std::string& input);
 
-        friend struct StoreableCommandWrapper;
+        friend struct cas::commands::CommandWrapper;
 
       public:
         Engine();

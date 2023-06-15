@@ -14,8 +14,8 @@ namespace cas::math {
         : BinaryExpression(base, exponent, false) {
     }
 
-    double Exponentiation::getValue() const {
-        return pow(left->getValue(), right->getValue());
+    Number Exponentiation::getValue() const {
+        return pow(left->getValue().realValue, right->getValue().realValue);
     }
 
     Expression* Exponentiation::copy() const {

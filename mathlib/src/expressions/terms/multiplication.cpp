@@ -11,8 +11,8 @@ namespace cas::math {
         : BinaryExpression(left, right) {
     }
 
-    double Multiplication::getValue() const {
-        return left->getValue() * right->getValue();
+    Number Multiplication::getValue() const {
+        return left->getValue().realValue * right->getValue().realValue;
     }
 
     Expression* Multiplication::copy() const {
@@ -54,7 +54,7 @@ namespace cas::math {
             Exponentiation* exp = reinterpret_cast<Exponentiation*>(right);
 
             if (exp->right->getType() == ExpressionTypes::Constant) {
-                double value = exp->right->getValue();
+                double value = exp->right->getValue().realValue;
 
                 if (value < 0) {
                     result += "/";

@@ -34,7 +34,7 @@ namespace cas::math {
 
 template<>
 struct std::less<cas::math::Variable> {
-    inline constexpr bool operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const {
+    inline bool operator()(const cas::math::Variable& lhs, const cas::math::Variable& rhs) const {
         const cas::math::VariableSymbol lhsSymbol = lhs.getSymbol();
         const cas::math::VariableSymbol rhsSymbol = rhs.getSymbol();
 

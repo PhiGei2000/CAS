@@ -6,10 +6,16 @@
 
 #include <iostream>
 
+namespace cas {
+    class Engine;
+}
+
 namespace cas::commands {
     struct CommandWrapper {
       protected:
         std::function<void(Engine*, const std::vector<std::string>&)> functional;
+
+        static void saveAns(Engine* engine, cas::math::Expression* result);
 
       public:
         inline CommandWrapper() {
@@ -25,25 +31,18 @@ namespace cas::commands {
             };
         }
 
-        inline void executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
-            functional(engine, argV);
-        }
-    };
-
-    struct StoreableCommandWrapper : public CommandWrapper {
         template<typename... TArgs>
-        inline StoreableCommandWrapper(const Command<cas::math::Expression*, TArgs...>& command, CommandCallback<math::Expression*> callback = DefaultCallback<math::Expression*>, bool storeResult = true) {
-            functional = [command, callback, storeResult](Engine* engine, const std::vector<std::string>& argV) {
-                math::Expression* result = command.execute(engine, argV);
-                if (storeResult) {
-                    storeVariable(engine, result);
-                }
+        inline CommandWrapper(const Command<cas::math::Expression*, TArgs...>& command, CommandCallback<cas::math::Expression*> callback = DefaultCallback<cas::math::Expression*>) {
+            functional = [command, callback](Engine* engine, const std::vector<std::string>& argV) {
+                cas::math::Expression* expr = command.execute(engine, argV);
 
-                callback(result);
+                callback(expr);
+                saveAns(engine, expr);
             };
         }
 
-      protected:
-        static void storeVariable(Engine* engine, math::Expression* expr);
+        inline void executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
+            functional(engine, argV);
+        }
     };
 } // namespace cas::commands

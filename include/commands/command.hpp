@@ -20,7 +20,26 @@ namespace cas::commands {
 
         template<std::size_t... I>
         inline TRes executeWithArgs(Engine* engine, const std::vector<std::string>& argV, std::index_sequence<I...>) const {
-            return callback(engine, parseArg<TArgs>(argV[I])...);
+            std::tuple<TArgs...> args = std::make_tuple(std::move(parseArg<TArgs>(argV[I]))...);
+
+            TRes result = callback(engine, std::get<I>(args)...);
+            deleteArgs(std::get<I>(args)...);
+            return result;
+        }
+
+        template<typename T1, typename... T>
+        inline static void deleteArgs(T1 arg, T... args) {
+            if constexpr (std::is_pointer<T1>::value) {
+                delete arg;
+            }
+            deleteArgs(args...);
+        }
+
+        template<typename T1>
+        inline static void deleteArgs(T1 arg) {
+            if constexpr(std::is_pointer<T1>::value) {
+                delete arg;
+            }
         }
 
       public:

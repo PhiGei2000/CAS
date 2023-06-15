@@ -315,9 +315,9 @@ namespace cas::math {
 
         // evaluate numerical values if the summands are constants
         if (left->getType() == ExpressionTypes::Constant) {
-            double leftValue = left->getValue();
+            double leftValue = left->getValue().realValue;
             if (right->getType() == ExpressionTypes::Constant) {
-                double value = leftValue + right->getValue();
+                double value = leftValue + right->getValue().realValue;
 
                 return new Number(value);
             }

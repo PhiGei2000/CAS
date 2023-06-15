@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "hash_map": "cpp",
+        "chrono": "cpp",
+        "algorithm": "cpp",
+        "iterator": "cpp",
+        "format": "cpp",
+        "numeric": "cpp",
+        "regex": "cpp"
+    }
+}

@@ -21,11 +21,11 @@ namespace cas::math{
         }
 
         inline virtual ExpressionTypes getType() const override {
-          return ExpressionTypes::NamedConstant;
+            return ExpressionTypes::NamedConstant;
         }
 
         inline virtual std::string toString() const override {
-          return symbol;
+            return symbol;
         }
     };
 
@@ -36,4 +36,4 @@ namespace cas::math{
 
         }
     };
-}
+} // namespace cas::math

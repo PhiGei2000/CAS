@@ -18,14 +18,15 @@ namespace cas {
 
         Command<Expression*, VariableSymbol, Expression*> setVariableCommand = Command<Expression*, VariableSymbol, Expression*>(
             [](cas::Engine* engine, VariableSymbol symbol, Expression* expr) {
-                if (engine->vars.contains(symbol)) {
-                    delete engine->vars[symbol];
-                }
+                // No need of this part. The expression should be stored in the ans pointer. So it gets deleted automatically
+                // if (engine->vars.contains(symbol)) {
+                //    delete engine->vars[symbol];
+                // }
 
-                engine->vars[symbol] = expr;
-                return expr->copy();
+                engine->vars[symbol] = expr->copy();
+                return engine->vars[symbol];
             });
-        
+
         Command<Expression*, VariableSymbol> getVariableCommand = Command<Expression*, VariableSymbol>(
             [](Engine* engine, VariableSymbol symbol) {
                 return engine->vars.at(symbol)->copy();
@@ -34,12 +35,11 @@ namespace cas {
         Command<Expression*> ansCommand = Command<Expression*>(
             [](Engine* engine) {
                 return engine->ans->copy();
-            }
-        );
+            });
 
-        commands["set"] = StoreableCommandWrapper(setVariableCommand, Callbacks::printExpressionCallback);
-        commands["get"] = StoreableCommandWrapper(getVariableCommand, Callbacks::printExpressionCallback);
-        commands["ans"] = StoreableCommandWrapper(ansCommand, Callbacks::printExpressionCallback);
+        addCommand("set", setVariableCommand, Callbacks::printExpressionCallback);
+        addCommand("get", getVariableCommand, Callbacks::printExpressionCallback);
+        addCommand("ans", ansCommand, Callbacks::printExpressionCallback);
 
         while (running) {
             io::IOStream::Command command = io::IOStream::readCommand();

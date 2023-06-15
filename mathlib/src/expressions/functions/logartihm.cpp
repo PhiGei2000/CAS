@@ -1,6 +1,7 @@
 #include "expressions/functions/logarithm.hpp"
 
 #include "expressions/operations.hpp"
+#include "expressions/terms/numeric/constants.hpp"
 #include <cmath>
 
 namespace cas::math {
@@ -14,10 +15,9 @@ namespace cas::math {
         arguments[0] = assign(argument, this);
     }
 
-    double Ln::getValue() const {
-        double argumentValue = arguments[0]->getValue();
-
-        return log(argumentValue);
+    Number Ln::getValue() const {
+        Number argumentValue = arguments[0]->getValue();
+        return log(argumentValue.realValue);
     }
 
     Expression* Ln::copy() const {
