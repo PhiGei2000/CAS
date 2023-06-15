@@ -18,12 +18,13 @@ namespace cas {
 
         Command<Expression*, VariableSymbol, Expression*> setVariableCommand = Command<Expression*, VariableSymbol, Expression*>(
             [](cas::Engine* engine, VariableSymbol symbol, Expression* expr) {
-                if (engine->vars.contains(symbol)) {
-                    delete engine->vars[symbol];
-                }
+                // No need of this part. The expression should be stored in the ans pointer. So it gets deleted automatically
+                // if (engine->vars.contains(symbol)) {
+                //    delete engine->vars[symbol];
+                // }
 
-                engine->vars[symbol] = expr;
-                return expr->copy();
+                engine->vars[symbol] = expr->copy();
+                return engine->vars[symbol];
             });
 
         Command<Expression*, VariableSymbol> getVariableCommand = Command<Expression*, VariableSymbol>(
