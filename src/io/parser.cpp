@@ -5,6 +5,12 @@
 
 using namespace cas::math;
 
+namespace std {
+    bool isSymbol(int ch) {
+        return isalpha(ch) || ch == '{' || ch == '}' || ch == '_';
+    }
+} // namespace std
+
 namespace cas::io {
     const std::regex Parser::numberRegex = std::regex("^-?\\d+");
 
@@ -60,9 +66,9 @@ namespace cas::io {
 
         // get first factor
         int bracketCounter = 0;
+        int indexOffset = 1;
         auto it = str.begin();
-
-        // TODO: Add parsing for short form 2x=2*x
+        
         while (!(it == str.end() || (*it) == '*' && bracketCounter == 0)) {
             ss << *it;
 
@@ -70,6 +76,15 @@ namespace cas::io {
                 bracketCounter++;
             else if (*it == ')')
                 bracketCounter--;
+
+            // parse short form (e.g. 2x)
+            if (bracketCounter == 0) {
+                if (std::isdigit(*it) && std::isSymbol(*(it + 1))) {
+                    indexOffset = 0;
+                    it++;
+                    break;
+                }
+            }
 
             it++;
         }
@@ -82,7 +97,7 @@ namespace cas::io {
         // extract factors from the string
         int index = it - str.begin();
         const std::string& leftStr = ss.str();
-        const std::string& rightStr = str.substr(index + 1);
+        const std::string& rightStr = str.substr(index + indexOffset);
 
         // create result
         Expression* left = parseDivision(leftStr);
@@ -175,11 +190,17 @@ namespace cas::io {
         if (str == "e") {
             return new E();
         }
+        else if (str == "i") {
+            return new I();
+        }
 
         return new Variable(str);
     }
 
     Number* Parser::parseConstant(const std::string& str) {
+        if (str.contains("i")) {
+        }
+
         double value = std::stod(str);
 
         return new Number(value);
