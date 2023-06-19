@@ -76,7 +76,7 @@ namespace cas::math {
                         return new Number(0);
                     }
                     else {
-                        result = new Multiplication(new Number(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Number(exponentValue - 1)), D(exponentiation->left, var)));
+                        result = new Multiplication(new Number(exponentValue), new Multiplication(new Exponentiation(exponentiation->left->copy(), new Number(exponentValue - 1.0)), D(exponentiation->left, var)));
                     }
                 }
                 else {

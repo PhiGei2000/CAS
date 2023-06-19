@@ -1,5 +1,5 @@
 #pragma once
-#include "expressions/terms/constant.hpp"
+#include "expressions/terms/number.hpp"
 
 #if WIN32
 #include <numbers>
@@ -17,7 +17,7 @@ namespace cas::math{
         }
 
         inline virtual Expression* copy() const override {
-          return new NamedConstant(symbol, value);
+          return new NamedConstant(symbol, realValue);
         }
 
         inline virtual ExpressionTypes getType() const override {

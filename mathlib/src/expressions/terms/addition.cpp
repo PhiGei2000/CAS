@@ -27,7 +27,8 @@ namespace cas::math {
     }
 
     Expression* Addition::simplify() const {
-        return Simplifier::simplifyAddition(this);
+        //return Simplifier::simplifyAddition(this);
+        return copy();
     }
 
     Expression* Addition::differentiate(const Variable* var) const {

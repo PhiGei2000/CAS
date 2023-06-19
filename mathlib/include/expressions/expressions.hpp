@@ -8,6 +8,7 @@
 #include "terms/multiplication.hpp"
 #include "terms/variable.hpp"
 #include "terms/numeric/constants.hpp"
+#include "terms/numeric/complex.hpp"
 
 #include <concepts>
 

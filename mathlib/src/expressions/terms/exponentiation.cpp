@@ -15,7 +15,7 @@ namespace cas::math {
     }
 
     Number Exponentiation::getValue() const {
-        return pow(left->getValue().realValue, right->getValue().realValue);
+        return pow(left->getValue(), right->getValue());
     }
 
     Expression* Exponentiation::copy() const {
@@ -27,7 +27,8 @@ namespace cas::math {
     }
 
     Expression* Exponentiation::simplify() const {
-        return Simplifier::simplifyExponentiation(this);
+        //return Simplifier::simplifyExponentiation(this);
+        return copy();
     }
 
     Expression* Exponentiation::differentiate(const Variable* var) const {

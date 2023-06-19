@@ -24,7 +24,8 @@ namespace cas::math {
     }
 
     Expression* Multiplication::simplify() const {
-        return Simplifier::simplifyMultiplication(this);
+        //return Simplifier::simplifyMultiplication(this);
+        return copy();
     }
 
     Expression* Multiplication::differentiate(const Variable* var) const {

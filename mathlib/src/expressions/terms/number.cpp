@@ -5,7 +5,6 @@
 #if WIN32
 #include <numbers>
 #endif
-#include <cmath>
 
 
 namespace cas::math {
@@ -53,7 +52,4 @@ namespace cas::math {
         return {};
     }
 
-    bool Number::operator==(const Number& other) const {
-        return realValue == other.realValue;
-    }
 } // namespace cas::math

@@ -2,10 +2,11 @@
 
 #include "expression.hpp"
 
+#include <cmath>
+
 namespace cas::math {
 
-    struct Number : public Expression {      
-      public:
+    struct Number : public Expression {
         double realValue;
 
         Number(double realValue);
@@ -21,8 +22,12 @@ namespace cas::math {
         virtual std::string toString() const override;
 
         virtual std::set<Variable> getVariables() const override;
-
-        virtual bool operator==(const Number& other) const;
+        
+        inline operator double() const {
+            return realValue;
+        }
     };
 
+    template<typename T>
+    concept NumericType = std::is_base_of_v<Number, T>;
 } // namespace cas::math
