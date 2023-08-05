@@ -21,7 +21,6 @@ namespace cas::io {
         write(">");
 
         std::string input = readLine(';');
-        removeWhitespaces(input);
 
         std::string alias;
         std::vector<std::string> argV;
@@ -30,6 +29,7 @@ namespace cas::io {
         if (bracketPosition != std::string::npos) {
             // read alias
             alias = input.substr(0, bracketPosition);
+            removeWhitespaces(alias);
 
             // read arguments
             size_t bracketEnd = input.find_last_of(']');

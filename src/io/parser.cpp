@@ -68,8 +68,8 @@ namespace cas::io {
         int bracketCounter = 0;
         int indexOffset = 1;
         auto it = str.begin();
-        
-        while (!(it == str.end() || (*it) == '*' && bracketCounter == 0)) {
+
+        while (!(it == str.end() || ((*it) == '*' || (*it) == ' ') && bracketCounter == 0)) {
             ss << *it;
 
             if (*it == '(')
