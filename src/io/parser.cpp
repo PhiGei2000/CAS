@@ -79,11 +79,12 @@ namespace cas::io {
 
             // parse short form (e.g. 2x)
             if (bracketCounter == 0) {
-                if (std::isdigit(*it) && std::isSymbol(*(it + 1))) {
-                    indexOffset = 0;
-                    it++;
-                    break;
-                }
+                if (it + 1 < str.end())
+                    if (std::isdigit(*it) && std::isSymbol(*(it + 1))) {
+                        indexOffset = 0;
+                        it++;
+                        break;
+                    }
             }
 
             it++;

@@ -111,7 +111,7 @@ namespace cas::math {
                     Number patternValue = pattern->getValue();
                     Number value = expr->getValue();
 
-                    return ExpressionMatch(patternValue == value, expr, {});
+                    return ExpressionMatch(patternValue == value, expr->copy(), {});
                 }
                 catch (no_value_error) {
                     return ExpressionMatch(false, nullptr);
@@ -134,7 +134,7 @@ namespace cas::math {
                     }
                 }
 
-                return ExpressionMatch{true, expr, {{var->getSymbol(), expr}}};
+                return ExpressionMatch{true, expr->copy(), {{var->getSymbol(), expr}}};
             }
             case ExpressionTypes::Function: {
                 if (expr->getType() != ExpressionTypes::Function) {
@@ -183,7 +183,7 @@ namespace cas::math {
                 ExpressionMatch result = combineMatches(leftMatch, rightMatch);
 
                 if (result.success) {
-                    result.node = expr;
+                    result.node = expr->copy();
                     return result;
                 }
             }
