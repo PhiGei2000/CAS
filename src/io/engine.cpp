@@ -13,23 +13,28 @@ namespace cas {
         setupCommands();
     }
 
+    CommandWrapper Engine::getCommand(const std::string& alias) const {
+        return commands.at(alias);
+    }
+
     void Engine::run() {
         running = true;
 
-        Command<Expression*, VariableSymbol, Expression*> setVariableCommand = Command<Expression*, VariableSymbol, Expression*>(
-            [](cas::Engine* engine, VariableSymbol symbol, Expression* expr) {
+        Command<Expression*, Variable*, Expression*> setVariableCommand = Command<Expression*, Variable*, Expression*>(
+            [](cas::Engine* engine, Variable* var, Expression* expr) {
                 // No need of this part. The expression should be stored in the ans pointer. So it gets deleted automatically
                 // if (engine->vars.contains(symbol)) {
                 //    delete engine->vars[symbol];
                 // }
+                VariableSymbol symbol = var->getSymbol();
 
                 engine->vars[symbol] = expr->copy();
                 return engine->vars[symbol];
             });
 
-        Command<Expression*, VariableSymbol> getVariableCommand = Command<Expression*, VariableSymbol>(
-            [](Engine* engine, VariableSymbol symbol) {
-                return engine->vars.at(symbol)->copy();
+        Command<Expression*, Variable*> getVariableCommand = Command<Expression*, Variable*>(
+            [](Engine* engine, Variable* var) {
+                return engine->vars.at(var->getSymbol())->copy();
             });
 
         Command<Expression*> ansCommand = Command<Expression*>(
@@ -37,15 +42,16 @@ namespace cas {
                 return engine->ans->copy();
             });
 
-        addCommand("set", setVariableCommand, Callbacks::printExpressionCallback);
-        addCommand("get", getVariableCommand, Callbacks::printExpressionCallback);
-        addCommand("ans", ansCommand, Callbacks::printExpressionCallback);
+        addCommand("set", setVariableCommand);
+        addCommand("get", getVariableCommand);
+        addCommand("ans", ansCommand);
 
         while (running) {
             io::IOStream::Command command = io::IOStream::readCommand();
 
             try {
-                commands.at(command.alias).executeCommand(this, command.args);
+                CommandResult result = commands.at(command.alias).executeCommand(this, command.args);
+                handleCommandResult(result);
             }
             catch (const std::runtime_error& e) {
                 std::cout << e.what() << std::endl;

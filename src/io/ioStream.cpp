@@ -21,7 +21,10 @@ namespace cas::io {
         write(">");
 
         std::string input = readLine(';');
+        return parseCommand(input);
+    }
 
+    IOStream::Command IOStream::parseCommand(const std::string& input) {
         std::string alias;
         std::vector<std::string> argV;
 
@@ -36,17 +39,30 @@ namespace cas::io {
             std::string args = input.substr(bracketPosition + 1, bracketEnd - bracketPosition - 1);
 
             // split argument string
-            size_t current = 0;
-            size_t next = args.find(',');
-            while (next != std::string::npos) {
-                argV.push_back(args.substr(current, next - current));
+            auto it = args.begin();
 
-                current = next + 1;
-                next = args.find(',', current);
+            size_t begin = 0;
+            size_t end;
+
+            int bracketCounter = 0;
+            while (it != args.end()) {
+                if (*it == '[') {
+                    bracketCounter++;
+                }
+                else if (*it == ']') {
+                    bracketCounter--;
+                }
+                else if (*it == ',' && bracketCounter == 0) {
+                    end = it - args.begin();
+
+                    argV.push_back(args.substr(begin, end - begin));
+                    begin = end + 1;
+                }
+
+                it++;
             }
 
-            // add last argument
-            argV.push_back(args.substr(current));
+            argV.push_back(args.substr(begin));
         }
         else {
             alias = input;

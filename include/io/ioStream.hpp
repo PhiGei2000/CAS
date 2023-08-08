@@ -9,7 +9,7 @@ namespace cas::io {
         static void removeWhitespaces(std::string& str);
 
         static std::ofstream log;
-        
+
       public:
         struct Command {
             std::string alias;
@@ -17,6 +17,8 @@ namespace cas::io {
         };
 
         static Command readCommand();
+
+        static Command parseCommand(const std::string& str);
 
         static std::string readLine(char delimiter = '\n');
 

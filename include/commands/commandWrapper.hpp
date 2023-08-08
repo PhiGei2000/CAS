@@ -1,6 +1,6 @@
 #pragma once
 #include "command.hpp"
-#include "commandCallback.hpp"
+#include "commandResult.hpp"
 
 #include <mathlib/mathlib.hpp>
 
@@ -13,36 +13,38 @@ namespace cas {
 namespace cas::commands {
     struct CommandWrapper {
       protected:
-        std::function<void(Engine*, const std::vector<std::string>&)> functional;
+        std::function<CommandResult(Engine*, const std::vector<std::string>&)> functional;
 
         static void saveAns(Engine* engine, cas::math::Expression* result);
 
       public:
         inline CommandWrapper() {
-            functional = [](Engine* engine, const std::vector<std::string>& argV) {};
+            functional = [](Engine* engine, const std::vector<std::string>& argV) {
+                return CommandResult(std::string(""));
+            };
         }
 
-        template<typename TRes, typename... TArgs>
-        inline CommandWrapper(const Command<TRes, TArgs...>& command, CommandCallback<TRes> callback = DefaultCallback<TRes>) {
-            functional = [command, callback](Engine* engine, const std::vector<std::string>& argV) {
+        template<CommandResultType TRes, typename... TArgs>
+        inline CommandWrapper(const Command<TRes, TArgs...>& command) {
+            functional = [command](Engine* engine, const std::vector<std::string>& argV) {
                 TRes result = command.execute(engine, argV);
 
-                callback(result);
+                return CommandResult(result);
             };
         }
 
         template<typename... TArgs>
-        inline CommandWrapper(const Command<cas::math::Expression*, TArgs...>& command, CommandCallback<cas::math::Expression*> callback = DefaultCallback<cas::math::Expression*>) {
-            functional = [command, callback](Engine* engine, const std::vector<std::string>& argV) {
+        inline CommandWrapper(const Command<cas::math::Expression*, TArgs...>& command) {
+            functional = [command](Engine* engine, const std::vector<std::string>& argV) {
                 cas::math::Expression* expr = command.execute(engine, argV);
 
-                callback(expr);
                 saveAns(engine, expr);
+                return CommandResult(expr);
             };
         }
 
-        inline void executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
-            functional(engine, argV);
+        inline CommandResult executeCommand(Engine* engine, const std::vector<std::string>& argV) const {
+            return functional(engine, argV);
         }
     };
 } // namespace cas::commands

@@ -20,7 +20,7 @@ namespace cas {
 
             return "shutting down!";
         });
-        addCommand("exit", exitCommand, Callbacks::printStringCallback);
+        addCommand("exit", exitCommand);
 
         Command<std::string> listVarsCommand = Command<std::string>(
             [](Engine* engine) {
@@ -41,14 +41,14 @@ namespace cas {
 
                 return ss.str();
             });
-        addCommand("listVars", listVarsCommand, Callbacks::printStringCallback);
+        addCommand("listVars", listVarsCommand);
 
-        addCommand("D", commands::differentiate, Callbacks::printExpressionCallback);
-        addCommand("Df", commands::differential, Callbacks::printExpressionCallback);
-        addCommand("simplify", commands::simplify, Callbacks::printExpressionCallback);
-        addCommand("match", commands::matchCommand, Callbacks::printExpressionMatchCallback);
-        addCommand("matchRecurse", commands::matchRecurseCommand, Callbacks::printExpressionMatchCallback);
-        addCommand("matchAll", commands::matchAllCommand, Callbacks::printExpressionMatchesCallback);
-        addCommand("substitute", commands::substituteCommand, Callbacks::printExpressionCallback);
+        addCommand("D", commands::differentiate);
+        addCommand("Df", commands::differential);
+        addCommand("simplify", commands::simplify);
+        addCommand("match", commands::matchCommand);
+        addCommand("matchRecurse", commands::matchRecurseCommand);
+        addCommand("matchAll", commands::matchAllCommand);
+        addCommand("substitute", commands::substituteCommand);
     }
 } // namespace cas

@@ -1,4 +1,6 @@
 #pragma once
+#include "commandResult.hpp"
+
 #include <functional>
 #include <string>
 
@@ -8,19 +10,23 @@ namespace cas {
 
 namespace cas::commands {
     template<typename T>
-    T parseArg(const std::string& arg);
+    T parseArg(Engine* engine, const std::string& arg);
 
-    template<typename TRes, typename... TArgs>
+    bool isNestedCommand(const std::string& arg);
+
+    CommandResult executeNestedCommand(Engine* engine, const std::string& command);
+
+    template<CommandResultType TRes, typename... TArgs>
     using CommandFunctor = std::function<TRes(Engine*, TArgs...)>;
 
-    template<typename TRes, typename... TArgs>
+    template<CommandResultType TRes, typename... TArgs>
     struct Command {
       protected:
         CommandFunctor<TRes, TArgs...> callback;
 
         template<std::size_t... I>
         inline TRes executeWithArgs(Engine* engine, const std::vector<std::string>& argV, std::index_sequence<I...>) const {
-            std::tuple<TArgs...> args = std::make_tuple(std::move(parseArg<TArgs>(argV[I]))...);
+            std::tuple<TArgs...> args = std::make_tuple(std::move(parseArg<TArgs>(engine, argV[I]))...);
 
             TRes result = callback(engine, std::get<I>(args)...);
             deleteArgs(std::get<I>(args)...);
@@ -37,7 +43,7 @@ namespace cas::commands {
 
         template<typename T1>
         inline static void deleteArgs(T1 arg) {
-            if constexpr(std::is_pointer<T1>::value) {
+            if constexpr (std::is_pointer<T1>::value) {
                 delete arg;
             }
         }
@@ -55,6 +61,10 @@ namespace cas::commands {
             else {
                 return executeWithArgs(engine, argV, Indices{});
             }
+        }
+
+        inline TRes execute(Engine* engine, TArgs... args) {
+            return callback(engine, args...);
         }
     };
 

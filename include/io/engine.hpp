@@ -14,10 +14,9 @@ namespace cas {
     class Engine {
       protected:
         struct Callbacks {
-            static CommandCallback<std::string> printStringCallback;
-            static CommandCallback<Expression*> printExpressionCallback;
-            static CommandCallback<ExpressionMatch> printExpressionMatchCallback;
-            static CommandCallback<std::vector<ExpressionMatch>> printExpressionMatchesCallback;
+            static Command<std::string, std::string> printStringCallback;
+            static Command<std::string, Expression*> printExpressionCallback;
+            static Command<std::string, std::vector<ExpressionMatch>> printExpressionMatchCallback;
         };
 
         std::unordered_map<std::string, CommandWrapper> commands;
@@ -29,15 +28,19 @@ namespace cas {
 
         void handleVariableInput(const std::string& input);
 
+        void handleCommandResult(CommandResult& result);
+
         friend struct cas::commands::CommandWrapper;
 
       public:
         Engine();
 
         template<typename TRes, typename... TArgs>
-        inline void addCommand(const std::string& alias, const Command<TRes, TArgs...>& command, CommandCallback<TRes>& callback = DefaultCallback<TRes>) {
-            commands[alias] = CommandWrapper(command, callback);
+        inline void addCommand(const std::string& alias, const Command<TRes, TArgs...>& command) {
+            commands[alias] = CommandWrapper(command);
         }
+
+        CommandWrapper getCommand(const std::string& alias) const;
 
         void run();
     };
