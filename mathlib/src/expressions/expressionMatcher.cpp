@@ -195,6 +195,7 @@ namespace cas::math {
                 combinedVars.insert(leftMatch.variables.begin(), leftMatch.variables.end());
                 rightMatch = match(binaryExpr->right, binaryPattern->left, false, combinedVars);
 
+                // check if swapped expression matches the pattern
                 if (leftMatch.success && rightMatch.success) {
                     ExpressionMatch result = combineMatches(leftMatch, rightMatch);
 
@@ -204,28 +205,30 @@ namespace cas::math {
                     }
                 }
 
-                if (binaryExpr->left->getType() == expr->getType()) {
-                    BinaryExpression* leftSwap = static_cast<BinaryExpression*>(binaryExpr->copy());
-                    BinaryExpression* leftChild = static_cast<BinaryExpression*>(leftSwap->left);
-                    leftSwap->right = assign(static_cast<BinaryExpression*>(binaryExpr->left)->right, leftSwap);
-                    leftChild->right = assign(binaryExpr->right, leftChild);
+                if (recurse) {
+                    if (binaryExpr->left->getType() == expr->getType()) {
+                        BinaryExpression* leftSwap = static_cast<BinaryExpression*>(binaryExpr->copy());
+                        BinaryExpression* leftChild = static_cast<BinaryExpression*>(leftSwap->left);
+                        leftSwap->right = assign(static_cast<BinaryExpression*>(binaryExpr->left)->right, leftSwap);
+                        leftChild->right = assign(binaryExpr->right, leftChild);
 
-                    ExpressionMatch match = ExpressionMatcher::match(leftSwap, pattern, recurse, variables);
-                    delete leftSwap;
-                    if (match.success)
-                        return match;
-                }
+                        ExpressionMatch match = ExpressionMatcher::match(leftSwap, pattern, recurse, variables);
+                        delete leftSwap;
+                        if (match.success)
+                            return match;
+                    }
 
-                if (binaryExpr->right->getType() == expr->getType()) {
-                    BinaryExpression* rightSwap = static_cast<BinaryExpression*>(binaryExpr->copy());
-                    BinaryExpression* rightChild = static_cast<BinaryExpression*>(rightSwap->right);
-                    rightSwap->left = assign(static_cast<BinaryExpression*>(binaryExpr->right)->left, rightSwap);
-                    rightChild->left = assign(binaryExpr->left, rightChild);
+                    if (binaryExpr->right->getType() == expr->getType()) {
+                        BinaryExpression* rightSwap = static_cast<BinaryExpression*>(binaryExpr->copy());
+                        BinaryExpression* rightChild = static_cast<BinaryExpression*>(rightSwap->right);
+                        rightSwap->left = assign(static_cast<BinaryExpression*>(binaryExpr->right)->left, rightSwap);
+                        rightChild->left = assign(binaryExpr->left, rightChild);
 
-                    ExpressionMatch match = ExpressionMatcher::match(rightSwap, pattern, recurse, variables);
-                    delete rightSwap;
-                    if (match.success)
-                        return match;
+                        ExpressionMatch match = ExpressionMatcher::match(rightSwap, pattern, recurse, variables);
+                        delete rightSwap;
+                        if (match.success)
+                            return match;
+                    }
                 }
             }
         }

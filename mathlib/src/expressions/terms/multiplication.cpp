@@ -23,11 +23,6 @@ namespace cas::math {
         return ExpressionTypes::Multiplication;
     }
 
-    Expression* Multiplication::simplify() const {
-        //return Simplifier::simplifyMultiplication(this);
-        return copy();
-    }
-
     Expression* Multiplication::differentiate(const Variable* var) const {
         // calculate the derivative of the two factors
         Expression* dLeft = left->differentiate(var);

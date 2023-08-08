@@ -1,6 +1,7 @@
 #include "expressions/terms/expression.hpp"
 
 #include "expressions/expressions.hpp"
+#include "expressions/simplifier.hpp"
 
 #if DEBUG
 #include "debug/debugTools.hpp"
@@ -21,13 +22,13 @@ namespace cas::math {
     Expression::Expression() {
         expressionCounter++;
 
-        memLog << "created expression " << (void*)this << " total:" << expressionCounter << " "
+        // memLog << "created expression " << (void*)this << " total:" << expressionCounter << " "
 #if WIN32
-               << _ReturnAddress()
+            //    << _ReturnAddress()
 #else
                << __builtin_return_address(0)
-#endif               
-               << std::endl;
+#endif
+            //    << std::endl;
     }
 #endif
 
@@ -49,7 +50,7 @@ namespace cas::math {
     }
 
     Expression* Expression::simplify() const {
-        return this->copy();
+        return Simplifier::simplify(this);
     }
 
     Expression* Expression::getRoot() {

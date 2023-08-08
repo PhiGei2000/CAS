@@ -26,11 +26,6 @@ namespace cas::math {
         return ExpressionTypes::Exponentiation;
     }
 
-    Expression* Exponentiation::simplify() const {
-        //return Simplifier::simplifyExponentiation(this);
-        return copy();
-    }
-
     Expression* Exponentiation::differentiate(const Variable* var) const {
         Expression* dBase = left->differentiate(var);
         Expression* dExp = right->differentiate(var);
