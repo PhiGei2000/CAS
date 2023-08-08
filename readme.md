@@ -3,7 +3,7 @@
 A simple computer algebra system similar to mathematica written in C++.
 ### Features
 - [ ] Differential calculus
-- [ ] Store expressions into variables
+- [x] Store expressions into variables
 - [ ] Equation solving
 - [ ] ...
 
@@ -15,7 +15,7 @@ Requirements:
 ### Clone the repository
     git clone https://github.com/PhiGei2000/cas.git && cd ./cas
 ### Run CMake and build the project
-    cmake --build ./build 
+    cmake --build ./build
 ### Run the application
     ./build/cas
 
@@ -35,11 +35,21 @@ All commands have the form ``commandName[arg1,arg2,...]`` and must terminated by
 
 | Command | Description | Example |
 | --- | --- | --- |
-| D[function, variable] | Calculates the derivative of the given function with respect to the given variable | ``D[2*x,x] = 2`` |
-| Df[function] | Calculates the exterior differential of the given function | ``Df[2*x*y] = 2*y*dx+2*x*dy`` |
+| D[function, variable] | Calculates the derivative of the given function with respect to the given variable | ``D[2*x,x]`` gives ``2`` |
+| Df[function] | Calculates the exterior differential of the given function | ``Df[2*x*y]`` gives ``2*y*dx+2*x*dy`` |
+
+### Term manipulation and term matching
+
+| Command | Description | Example |
+| --- | --- | --- |
+| simplify[expression] | Simplifies the given expression by using replace rules | ``simplify[0*x+2*1]`` gives ``2`` |
+| match[expression, pattern] | Determines, if the given expression matches the pattern and lists the values of the variables in the pattern found in the expression | ``match[(a+b)^2,x^2]`` gives ``x=a+b`` |
+| matchRecurse[expression, pattern] | Does the same thing like match but only recursive on the expression | ``matchRecurse[a+(b+c)^2,x^2]`` gives ``x=b+c`` |
+| matchAll[expression, pattern] | Does the same thing like matchRecurse but gives all matches back | ``matchAll[a^2+(b+c)^2,x^2]`` gives ``x=a`` and ``x=b+c`` |
+| substitute[expression, pattern, newValue] | Substitutes all occurences of the pattern with the new value. The variables in the new value are going to be replaced by the values of the variables found in the expression | ``substitute[(a+b)^2,(x+y)^2,x^2+2*x*y+y^2]`` gives ``a^2+2*a*b+b^2`` |
 
 ## Issues
 Feel free to report issues to the [issue section](https://github.com/PhiGei2000/cas/issues)
 
-## License 
+## License
 This code is licensed under the [GPL-3.0 license](https://github.com/PhiGei2000/cas/blob/master/LICENSE)
