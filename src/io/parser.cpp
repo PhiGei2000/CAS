@@ -15,42 +15,15 @@ namespace cas::io {
     const std::regex Parser::numberRegex = std::regex("^-?\\d+");
 
     Expression* Parser::parseAddition(const std::string& str) {
-        std::stringstream ss;
-
-        // get first summand
-        int bracketCounter = 0;
-        auto it = str.begin();
-        while (!(it == str.end() || ((*it) == '+' || ((*it) == '-' && it != str.begin())) && bracketCounter == 0)) {
-            ss << *it;
-
-            if (*it == '(')
-                bracketCounter++;
-            else if (*it == ')')
-                bracketCounter--;
-
-            it++;
-        }
+        const auto& [leftStr, rightStr, symbol] = parseOperation<'+', '-'>(str);
 
         // no addition symbol found
-        if (it == str.end()) {
+        if (symbol == '\0') {
             return parseMultiplication(str);
-        }
-
-        // extract summands from the string
-        char op = *it;
-
-        int index = it - str.begin();
-        const std::string& leftStr = ss.str();
-        const std::string& rightStr = str.substr(index + 1);
+        }        
 
         Expression* left = parseMultiplication(leftStr);
-        Expression* right;
-        if (op == '+') {
-            right = parseAddition(rightStr);
-        }
-        else {
-            right = new Multiplication(new Number(-1), parseAddition(rightStr));
-        }
+        Expression* right = symbol == '+' ? parseAddition(rightStr) : new Multiplication(new Number(-1), parseAddition(rightStr));        
 
         return new Addition(left, right);
     }
@@ -108,28 +81,11 @@ namespace cas::io {
     }
 
     Expression* Parser::parseDivision(const std::string& str) {
-        std::stringstream ss;
-        auto it = str.begin();
-        int bracketCounter = 0;
+        const auto& [leftStr, rightStr, symbol] = parseOperation<'/'>(str);
 
-        while (!(it == str.end() || (*it) == '/' && bracketCounter == 0)) {
-            ss << *it;
-
-            if (*it == '(')
-                bracketCounter++;
-            else if (*it == ')')
-                bracketCounter--;
-
-            it++;
+        if (symbol == '\0') {
+            return parseExponentiation(leftStr);
         }
-
-        if (it == str.end()) {
-            return parseExponentiation(str);
-        }
-
-        int index = it - str.begin();
-        std::string leftStr = ss.str();
-        std::string rightStr = str.substr(index + 1);
 
         Expression* left = parseExponentiation(leftStr);
         Expression* right = new Exponentiation(parseExponentiation(rightStr), new Number(-1));
@@ -138,24 +94,9 @@ namespace cas::io {
     }
 
     Expression* Parser::parseExponentiation(const std::string& str) {
-        std::stringstream ss;
-
-        // get first factor
-        int bracketCounter = 0;
-        auto it = str.begin();
-        while (!(it == str.end() || (*it) == '^' && bracketCounter == 0)) {
-            ss << *it;
-
-            if (*it == '(')
-                bracketCounter++;
-            else if (*it == ')')
-                bracketCounter--;
-
-            it++;
-        }
-
+        const auto& [leftStr, rightStr, symbol] = parseOperation<'^'>(str);
         // no exponentiation symbol found
-        if (it == str.end()) {
+        if (symbol == '\0') {
             // inner expression
             if (str.front() == '(' && str.back() == ')') {
                 return parseAddition(str.substr(1, str.length() - 2));
@@ -175,11 +116,6 @@ namespace cas::io {
                 return parseFunction(str);
             }
         }
-
-        // extract parts from the string
-        int index = it - str.begin();
-        const std::string& leftStr = ss.str();
-        const std::string& rightStr = str.substr(index + 1);
 
         Expression* left = parseExponentiation(leftStr);
         Expression* right = parseAddition(getBracketContent(rightStr));
