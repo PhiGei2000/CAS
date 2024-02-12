@@ -11,8 +11,6 @@ namespace cas::math {
         virtual Number getValue() const override;
         virtual Expression* copy() const override;
 
-        virtual Expression* simplify() const override;
-
         virtual Expression* getDerivative() const override;
     };
 

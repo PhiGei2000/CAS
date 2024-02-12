@@ -9,6 +9,10 @@
 namespace cas::math {
     struct BaseFunction : public Expression {
         const std::string name;
+        inline BaseFunction(const std::string& name)
+            : name(name) {
+        }
+
         virtual Expression* getDerivative() const = 0;
 
         inline virtual ExpressionTypes getType() const {
@@ -20,6 +24,10 @@ namespace cas::math {
     struct Function : public BaseFunction {
       public:
         Expression* arguments[u];
+
+        inline Function(const std::string& name)
+            : BaseFunction(name) {
+        }
 
         inline virtual std::vector<Expression*> getChildren() const override {
             return std::vector<Expression*>(std::begin(arguments), std::end(arguments));

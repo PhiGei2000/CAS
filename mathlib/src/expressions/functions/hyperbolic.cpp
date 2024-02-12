@@ -6,11 +6,13 @@
 
 namespace cas::math {
 #pragma region Sinh
-    Sinh::Sinh(const Expression& argument) {
+    Sinh::Sinh(const Expression& argument)
+        : Function<1>("sinh") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Sinh::Sinh(Expression* argument) {
+    Sinh::Sinh(Expression* argument)
+        : Function<1>("sinh") {
         arguments[0] = assign(argument, this);
     }
 
@@ -40,11 +42,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Asinh
-    Asinh::Asinh(const Expression& argument) {
+    Asinh::Asinh(const Expression& argument)
+        : Function<1>("asinh") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Asinh::Asinh(Expression* argument) {
+    Asinh::Asinh(Expression* argument)
+        : Function<1>("asinh") {
         arguments[0] = assign(argument, this);
     }
 
@@ -74,11 +78,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Cosh
-    Cosh::Cosh(const Expression& argument) {
+    Cosh::Cosh(const Expression& argument)
+        : Function<1>("cosh") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Cosh::Cosh(Expression* argument) {
+    Cosh::Cosh(Expression* argument)
+        : Function<1>("cosh") {
         arguments[0] = assign(argument, this);
     }
 
@@ -112,7 +118,8 @@ namespace cas::math {
         : Acosh(argument.copy()) {
     }
 
-    Acosh::Acosh(Expression* argument) {
+    Acosh::Acosh(Expression* argument)
+        : Function<1>("acosh") {
         arguments[0] = assign(argument, this);
     }
 

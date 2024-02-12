@@ -11,7 +11,8 @@ namespace cas::math {
         : Ln(argument.copy()) {
     }
 
-    Ln::Ln(Expression* argument) {
+    Ln::Ln(Expression* argument)
+        : Function<1>("ln") {
         arguments[0] = assign(argument, this);
     }
 
@@ -22,17 +23,6 @@ namespace cas::math {
 
     Expression* Ln::copy() const {
         return new Ln(arguments[0]->copy());
-    }
-
-    Expression* Ln::simplify() const {
-        Expression* argument = this->arguments[0]->simplify();
-
-        if (NamedConstant* c = dynamic_cast<NamedConstant*>(argument)) {
-            if (c->toString() == "e")
-                return new Number(1);
-        }
-
-        return new Ln(argument);
     }
 
     Expression* Ln::getDerivative() const {

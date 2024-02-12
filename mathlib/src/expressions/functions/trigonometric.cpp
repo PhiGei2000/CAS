@@ -7,11 +7,13 @@
 namespace cas::math {
 
 #pragma region Sin
-    Sin::Sin(const Expression& argument) {
+    Sin::Sin(const Expression& argument)
+        : Function<1>("sin") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Sin::Sin(Expression* argument) {
+    Sin::Sin(Expression* argument)
+        : Function<1>("sin") {
         arguments[0] = assign(argument, this);
     }
 
@@ -30,11 +32,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Arcsin
-    Arcsin::Arcsin(const Expression& argument) {
+    Arcsin::Arcsin(const Expression& argument)
+        : Function<1>("arcsin") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Arcsin::Arcsin(Expression* argument) {
+    Arcsin::Arcsin(Expression* argument)
+        : Function<1>("arcsin") {
         arguments[0] = assign(argument, this);
     }
 
@@ -53,11 +57,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Cos
-    Cos::Cos(const Expression& argument) {
+    Cos::Cos(const Expression& argument)
+        : Function<1>("cos") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Cos::Cos(Expression* argument) {
+    Cos::Cos(Expression* argument)
+        : Function<1>("cos") {
         arguments[0] = assign(argument, this);
     }
 
@@ -77,11 +83,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Arccos
-    Arccos::Arccos(const Expression& argument) {
+    Arccos::Arccos(const Expression& argument)
+        : Function<1>("arccos") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Arccos::Arccos(Expression* argument) {
+    Arccos::Arccos(Expression* argument)
+        : Function<1>("arccos") {
         arguments[0] = assign(argument, this);
     }
 
@@ -101,11 +109,13 @@ namespace cas::math {
 #pragma endregion
 
 #pragma region Tan
-    Tan::Tan(const Expression& argument) {
+    Tan::Tan(const Expression& argument)
+        : Function<1>("tan") {
         arguments[0] = assign(argument.copy(), this);
     }
 
-    Tan::Tan(Expression* argument) {
+    Tan::Tan(Expression* argument)
+        : Function<1>("tan") {
         arguments[0] = assign(argument, this);
     }
 
@@ -130,7 +140,8 @@ namespace cas::math {
         : Arctan(argument.copy()) {
     }
 
-    Arctan::Arctan(Expression* argument) {
+    Arctan::Arctan(Expression* argument)
+        : Function<1>("arctan") {
         arguments[0] = assign(argument, this);
     }
 
