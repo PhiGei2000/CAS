@@ -24,24 +24,24 @@ namespace cas::math {
 
         // memLog << "created expression " << (void*)this << " total:" << expressionCounter << " "
 #if WIN32
-            //    << _ReturnAddress()
+        //    << _ReturnAddress()
 #else
-               << __builtin_return_address(0)
+        //    << __builtin_return_address(0)
 #endif
-            //    << std::endl;
+        //    << std::endl;
     }
 #endif
 
     Expression::~Expression() {
 #if DEBUG
         expressionCounter--;
-        memLog << "deleted expression " << (void*)this << " total:" << expressionCounter << " "
+        // memLog << "deleted expression " << (void*)this << " total:" << expressionCounter << " "
 #if WIN32
-               << _ReturnAddress()
+        //    << _ReturnAddress()
 #else
-               << __builtin_return_address(0)
+        //    << __builtin_return_address(0)
 #endif
-               << std::endl;
+        //    << std::endl;
 #endif
     }
 

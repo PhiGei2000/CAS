@@ -26,7 +26,7 @@ include_directories(./include)
 
 file(GLOB_RECURSE SOURCES ./src/**.cpp)
 
-add_executable(cas ${SOURCES})
+add_executable(cas ${SOURCES} expression.natvis)
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 23)
 set_property(TARGET cas PROPERTY ENABLE_EXPORTS 1)
 

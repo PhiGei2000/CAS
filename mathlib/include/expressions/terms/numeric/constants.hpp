@@ -25,6 +25,10 @@ namespace cas::math {
         inline virtual std::string toString() const override {
             return symbol;
         }
+
+        inline bool operator==(const NamedConstant& other) const {
+            return other.symbol == symbol;
+        }
     };
 
     struct E : public NamedConstant {

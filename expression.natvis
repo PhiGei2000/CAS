@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+	<Type Name="cas::math::Addition*">
+		<DisplayString>{*left} + {*right}</DisplayString>
+	</Type>
+
+	<Type Name="cas::math::Multiplication">
+		<DisplayString>{*left} * {*right}</DisplayString>
+	</Type>
+
+	<Type Name="cas::math::Exponentiation">
+		<DisplayString>{*left} ^ {*right}</DisplayString>
+	</Type>
+
+	<Type Name="cas::math::Number">
+		<DisplayString>{realValue}</DisplayString>
+	</Type>
+
+	<Type Name="cas::math::Variable">
+		<DisplayString>{symbol}</DisplayString>
+	</Type>
+</AutoVisualizer>

@@ -13,7 +13,7 @@ namespace cas::math {
     }
 
     template<typename TLeft, typename TRight>
-    Expression* power(TLeft left, TRight right) {
+    inline Expression* power(TLeft left, TRight right) {
         return new Exponentiation(toExpression(left), toExpression(right));
     }
 
@@ -23,12 +23,12 @@ namespace cas::math {
     }
 
     template<typename TLeft, typename TRight>
-    Expression* divide(TLeft left, TRight right) {
+    inline Expression* divide(TLeft left, TRight right) {
         return multiply(left, power(right, -1));
     }
 
     template<typename T>
-    Expression* sqrt(T expression) {
+    inline Expression* sqrt(T expression) {
         return power(expression, 0.5);
     }
 } // namespace cas::math

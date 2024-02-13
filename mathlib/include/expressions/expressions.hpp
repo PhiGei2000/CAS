@@ -17,6 +17,9 @@ namespace cas {
     concept ExpressionType = std::derived_from<T, math::Expression>;
 
     template<typename T>
+    concept BinaryExpressionType = std::derived_from<T, math::BinaryExpression>;
+
+    template<typename T>
     concept NumericType = std::is_floating_point_v<T> || std::is_integral_v<T>;
 
     template<typename T>

@@ -4,9 +4,11 @@
 
 namespace cas::math {
     std::vector<Simplifier::ReplaceRule> Simplifier::replaceRules = {
+        ReplaceRule{new Ln(new E()), new Number(1)},
         ReplaceRule{new Multiplication(new Number(0), new Variable("x")), new Number(0)},
         ReplaceRule{new Multiplication(new Number(1), new Variable("x")), new Variable("x")},
         ReplaceRule{new Addition(new Number(0), new Variable("x")), new Variable("x")},
+        ReplaceRule{new Addition(new Multiplication(new Variable("a"), new Variable("x")), new Multiplication(new Variable("b"), new Variable("x"))), new Multiplication(new Addition(new Variable("a"), new Variable("b")), new Variable("x"))},
     };
 
     Expression* Simplifier::simplify(const Expression* expr) {
