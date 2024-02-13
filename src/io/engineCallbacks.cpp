@@ -21,23 +21,34 @@ namespace cas {
 
     Command<std::string, std::vector<math::ExpressionMatch>> Engine::Callbacks::printExpressionMatchCallback = Command<std::string, std::vector<math::ExpressionMatch>>([](Engine* engine, std::vector<math::ExpressionMatch> matches) {
         std::stringstream ss;
-        ss << "Found " << matches.size() << " matches" << std::endl;
+        unsigned int matchesCount = 0;
+        for (const auto& match : matches) {
+            if (match.success)
+                matchesCount++;
+        }
+
+        ss << "Found " << matchesCount << " matches" << std::endl;
 
         const char separator = ' ';
         const int symbolWidth = 10;
 
         for (const auto match : matches) {
-            ss << "Match: " << *match.node << std::endl;
-            ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << "Variable"
-               << " | "
-               << "Value";
+            if (match.success) {
+                ss << "Match: " << *match.match << std::endl;
+                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << "Variable"
+                   << " | "
+                   << "Value";
 
-            for (const auto& [var, expr] : match.variables) {
+                for (const auto& [var, expr] : match.variables) {
+                    ss << std::endl;
+                    ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var << " | ";
+                    ss << expr->toString();
+                }
                 ss << std::endl;
-                ss << std::left << std::setw(symbolWidth) << std::setfill(separator) << var << " | ";
-                ss << expr->toString();
             }
-            ss << std::endl;
+            else {
+                ss << "No match found";
+            }
         }
         std::string result = ss.str();
 

@@ -29,22 +29,22 @@ namespace cas::commands {
             std::tuple<TArgs...> args = std::make_tuple(std::move(parseArg<TArgs>(engine, argV[I]))...);
 
             TRes result = callback(engine, std::get<I>(args)...);
-            deleteArgs(std::get<I>(args)...);
+            deleteArgs(result, std::get<I>(args)...);
             return result;
         }
 
         template<typename T1, typename... T>
-        inline static void deleteArgs(T1 arg, T... args) {
-            if constexpr (std::is_pointer<T1>::value) {
-                delete arg;
-            }
-            deleteArgs(args...);
+        inline static void deleteArgs(const TRes& result, T1 arg, T... args) {
+            deleteArgs(result, arg);
+
+            deleteArgs(result, args...);
         }
 
         template<typename T1>
-        inline static void deleteArgs(T1 arg) {
+        inline static void deleteArgs(const TRes& result, T1 arg) {
             if constexpr (std::is_pointer<T1>::value) {
-                delete arg;
+                if (!hasReferenceTo(result, arg))
+                    delete arg;
             }
         }
 

@@ -24,4 +24,29 @@ namespace cas::commands {
         math::Expression* expr = nullptr;
         std::vector<math::ExpressionMatch> matches;
     };
+
+    template<CommandResultType TRes, typename T>
+    inline static bool hasReferenceTo(TRes result, T* pointer) {
+        return false;
+    }
+
+    template<>
+    inline bool hasReferenceTo(math::ExpressionMatch result, math::Expression* pointer) {
+        if (result.matchedNode == nullptr) {
+            return false;
+        }
+
+        return result.matchedNode->getRoot() == pointer->getRoot();
+    }
+
+    template<>
+    inline bool hasReferenceTo(std::vector<math::ExpressionMatch> result, math::Expression* pointer) {
+        for (const auto match : result) {
+            if (hasReferenceTo(match, pointer)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 } // namespace cas::commands
